@@ -1,0 +1,25 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Outputs (regenerated each run) and intermediate JSON artifacts
+*.png
+USA_bond_returns_by_grade.json
+USA_yield_spread_by_bond_grade.json
+default_rate_and_lgd_by_grade.json
+latest_by_rating.json
+averages_by_grade.json
+el_diff_adjacent_grades.json
+spread-el_grades.json
+future_projections.json
+irf_contagion_matrix_*.json
+
+# Keep committed data files under data/
+!data/dealer_markup.json
+!data/expected_loss_by_grade.json

@@ -1,0 +1,40 @@
+# Local infrastructure for the heatmap portal (spec §4 Postgres export +
+# spec §1 Redis parse-cache). Bring up with:
+#   docker compose up -d
+#   psql "$DATABASE_URL" -f sql/heatmap_schema.sql
+# The URLs below are what .env.example documents for DATABASE_URL/REDIS_URL.
+# Data lives in named volumes; `docker compose down` keeps it, `down -v` wipes it.
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: publiccredit-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: heatmap
+    ports:
+      - "5432:5432"
+    volumes:
+      - heatmap_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d heatmap"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: publiccredit-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - heatmap_redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  heatmap_pgdata:
+  heatmap_redisdata:

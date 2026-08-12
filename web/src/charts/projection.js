@@ -1,0 +1,173 @@
+/**
+ * Projection chart: cumulative return extrapolated from the live hold-horizon
+ * curves, horizon axis 1 month -> 15 years.
+ *
+ * Mechanics (honest, labeled): the first month is anchored to the observed
+ * hold-curve payout (net bps at the longest evaluated hold — 21 days for
+ * daily series, 1 month for the monthly country series); beyond that the
+ * curve compounds the same annualized edge. Three views: Gross payout / HF
+ * net / Retail net (heatmap tiers 1-3). Period buttons + wheel/pinch zoom via
+ * dataZoom. Each line's legend entry shows the full name + what it stands
+ * for, and clicking an entry toggles exactly that line.
+ */
+import * as echarts from "echarts";
+import { PERIODS, presetToWindow, dataZoomConfig } from "../controls.js";
+import { registerChart, unregisterChart } from "../store.js";
+
+export const PALETTE = [
+  "#12b76a", "#4e5ba6", "#f79009", "#0ea5e9", "#f04438", "#9d4edd",
+  "#0f766e", "#c026d3", "#64748b", "#b45309", "#2563eb", "#7c3aed",
+  "#15803d", "#db2777", "#ca8a04", "#1d4ed8",
+];
+
+const VIEWS = {
+  gross: { col: 1, label: "Gross payout", desc: "Tier 1 · mean |T-day move| on shock days, before any fees" },
+  hf: { col: 2, label: "HF net", desc: "Tier 2 · after dealer markup with prime-broker size discount" },
+  ret: { col: 3, label: "Retail net", desc: "Tier 3 · after full dealer markup and execution friction" },
+};
+
+function firstMonthBps(asset, col) {
+  // daily units: net at the longest evaluated hold (21 days ~ 1 month);
+  // monthly units: net at the 1-month hold
+  const rows = asset.curves || [];
+  const idx = asset.unit === "months" ? 0 : rows.length - 1;
+  const row = rows[idx];
+  if (!row) return null;
+  const v = row[col];
+  return Number.isFinite(v) ? v : null;
+}
+
+function cumulativeSeries(asset, col, totalMonths = 180) {
+  const r1 = firstMonthBps(asset, col); // bps over the first month
+  const edge = asset.edge ? asset.edge[col === 1 ? "gross" : col === 2 ? "hf" : "ret"] : null;
+  if (r1 == null || edge == null) return null;
+  const monthly = edge / 12 / 10000; // annualized bps -> monthly fraction
+  const pts = [[0, 0]];
+  for (let h = 1; h <= totalMonths; h++) {
+    const cum = (1 + r1 / 10000) * Math.pow(1 + monthly, h - 1) - 1;
+    pts.push([h, Math.round(cum * 10000) / 10000 * 100]);
+  }
+  return pts;
+}
+
+export function buildProjectionChart(el, assets, opts = {}) {
+  const id = opts.id || "projection";
+  const view = opts.view || "ret";
+  const initialHidden = opts.initialHidden || new Set();
+  const col = VIEWS[view].col;
+  const totalMonths = 180;
+  const chart = echarts.init(el);
+
+  const rec = registerChart(id, {
+    chart,
+    el,
+    seriesIds: assets.map((a) => a.id),
+    visible: new Set(assets.map((a) => a.id).filter((x) => !initialHidden.has(x))),
+    refresh: null, // set below
+  });
+  const visible = () => rec.visible;
+
+  const buildOption = () => {
+    const series = [];
+    const allVisible = assets.filter((a) => visible().has(a.id));
+    for (let ai = 0; ai < assets.length; ai++) {
+      const a = assets[ai];
+      const show = visible().has(a.id);
+      const pts = cumulativeSeries(a, col, totalMonths);
+      if (!pts) continue;
+      series.push({
+        id: a.id,
+        type: "line",
+        name: a.name,
+        data: pts,
+        showSymbol: false,
+        smooth: false,
+        lineStyle: { width: 2, color: PALETTE[ai % PALETTE.length] },
+        itemStyle: { color: PALETTE[ai % PALETTE.length] },
+        emphasis: { focus: "series" },
+        hidden: !show,
+      });
+    }
+    return {
+      animation: false,
+      grid: { left: 64, right: 24, top: 30, bottom: 48 },
+      tooltip: {
+        trigger: "axis",
+        valueFormatter: (v) => `${Number(v).toFixed(2)}%`,
+        formatter: (params) => {
+          if (!params.length) return "";
+          const h = params[0].value[0];
+          const label =
+            h === 0 ? "today" : h < 12 ? `${h}M` : h % 12 === 0 ? `${h / 12}Y` : `${(h / 12).toFixed(1)}Y`;
+          const rows = params
+            .map((p) => {
+              const a = assets.find((x) => x.id === p.seriesId);
+              const r1 = firstMonthBps(a, col);
+              return `<tr><td style="color:${p.color}">${esc(p.seriesName)}</td><td style="text-align:right;font-variant-numeric:tabular-nums">${p.value[1] != null ? p.value[1].toFixed(2) : "—"}%</td><td style="color:#667085;padding-left:10px">month-1 net ${r1 != null ? r1.toFixed(1) : "—"} bps</td></tr>`;
+            })
+            .join("");
+          const nobs = "";
+          return `<div style="font-weight:600;margin-bottom:4px">Horizon: ${label}${nobs}</div>
+                  <table style="border-collapse:collapse;font-size:12px">${rows}</table>
+                  <div style="font-size:10.5px;color:#98a2b3;margin-top:5px">Extrapolated from live hold-horizon curves — not a forecast</div>`;
+        },
+      },
+      xAxis: {
+        type: "value",
+        name: "Horizon",
+        nameLocation: "middle",
+        nameGap: 26,
+        min: 0,
+        max: totalMonths,
+        axisLabel: {
+          formatter: (v) => {
+            if (v === 0) return "now";
+            if (v < 12) return `${v}M`;
+            if (v % 12 === 0) return `${v / 12}Y`;
+            return `${(v / 12).toFixed(1)}Y`;
+          },
+        },
+        splitLine: { lineStyle: { color: "#eef0f3" } },
+      },
+      yAxis: {
+        type: "value",
+        name: "Cumulative return (%)",
+        nameLocation: "middle",
+        nameGap: 44,
+        axisLabel: { formatter: (v) => `${v}%` },
+        splitLine: { lineStyle: { color: "#eef0f3" } },
+      },
+      dataZoom: dataZoomConfig({ total: totalMonths, unit: "months" }),
+    };
+  };
+
+  let currentOption = buildOption();
+  chart.setOption(currentOption);
+  rec.refresh = () => {
+    currentOption = buildOption();
+    chart.setOption(currentOption, { notMerge: true });
+  };
+
+  rec.applyPreset = (preset) => {
+    chart.dispatchAction({
+      type: "dataZoom",
+      startValue: presetToWindow(preset, totalMonths).startValue,
+      endValue: totalMonths,
+    });
+  };
+
+  const onResize = () => chart.resize();
+  window.addEventListener("resize", onResize);
+  rec.dispose = () => {
+    unregisterChart(id);
+    window.removeEventListener("resize", onResize);
+    chart.dispose();
+  };
+  return rec;
+}
+
+function esc(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+export { VIEWS };

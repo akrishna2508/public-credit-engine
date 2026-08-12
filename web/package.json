@@ -1,0 +1,19 @@
+{
+  "name": "public-credit-web",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "seed": "node scripts/web_seed.mjs",
+    "serve": "node scripts/serve.mjs"
+  },
+  "dependencies": {
+    "echarts": "^5.5.1"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}

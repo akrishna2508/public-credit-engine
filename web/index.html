@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Public Credit — Opportunity Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23101828'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Inter,sans-serif' font-weight='700'>PC</text></svg>" />
+</head>
+<body>
+  <header class="pc-header">
+    <div class="pc-header-inner">
+      <div class="pc-brand">
+        <div class="pc-brand-logo">PC</div>
+        <div>
+          <div class="pc-brand-name">Public Credit — Opportunity Engine</div>
+          <div class="pc-brand-sub">Global public debt markets · live compensation scan</div>
+        </div>
+        <nav class="pc-nav" id="pc-nav">
+          <a href="#/map" data-route="map">Map</a>
+          <a href="#/returns" data-route="returns">Returns</a>
+          <a href="#/history" data-route="history">History</a>
+          <a href="#/signals" data-route="signals">Signals</a>
+        </nav>
+      </div>
+      <div class="pc-stamp">
+        <div class="pc-stamp-label">Data updated</div>
+        <div class="pc-stamp-value" id="pc-stamp">…</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="pc-main">
+    <section class="pc-page" id="page-map"></section>
+    <section class="pc-page" id="page-returns"></section>
+    <section class="pc-page" id="page-history"></section>
+    <section class="pc-page" id="page-country"></section>
+    <section class="pc-page" id="page-signals"></section>
+  </main>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
