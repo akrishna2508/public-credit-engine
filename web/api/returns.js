@@ -19,7 +19,7 @@ import {
   json,
 } from "./_shared.js";
 
-export const config = { runtime: "nodejs20" };
+export const config = { runtime: "nodejs" };
 
 const GRADES = {
   AAA: { id: "BAMLC0A1CAAA", standsFor: "Investment-grade AAA corporate bond option-adjusted spread (ICE BofA)" },

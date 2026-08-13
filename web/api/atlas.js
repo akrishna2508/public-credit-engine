@@ -15,7 +15,7 @@ import {
 } from "./_shared.js";
 
 export const config = {
-  runtime: "nodejs20",
+  runtime: "nodejs",
 };
 
 const ATLAS_COUNTRY_YIELDS = {

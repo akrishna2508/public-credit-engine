@@ -14,7 +14,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { json } from "./_shared.js";
 
-export const config = { runtime: "nodejs20" };
+export const config = { runtime: "nodejs" };
 
 export const IV_Z_MIN_OBS = 20; // config.IV_Z_MIN_OBS
 export const COT_MIN_HISTORY_YEARS = 2; // config.COT_MIN_HISTORY_YEARS

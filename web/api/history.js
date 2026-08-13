@@ -8,7 +8,7 @@
  */
 import { fredCsv, ecbCsv, json, unavailable } from "./_shared.js";
 
-export const config = { runtime: "nodejs20" };
+export const config = { runtime: "nodejs" };
 
 const GRADES = {
   AAA: { id: "BAMLC0A1CAAA", standsFor: "Investment-grade AAA spread — ICE BofA US Corporate Index OAS" },
