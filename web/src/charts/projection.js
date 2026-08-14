@@ -11,7 +11,7 @@
  * for, and clicking an entry toggles exactly that line.
  */
 import * as echarts from "echarts";
-import { PERIODS, presetToWindow, dataZoomConfig } from "../controls.js";
+import { dataZoomConfig } from "../controls.js";
 import { registerChart, unregisterChart } from "../store.js";
 import { cssVar, onThemeChange } from "../theme.js";
 
@@ -68,12 +68,20 @@ export function buildProjectionChart(el, assets, opts = {}) {
   });
   const visible = () => rec.visible;
 
+  // The x-axis is a FORWARD horizon (0 = now, 180 = fifteen years out), so a
+  // period preset windows the NEAR end of the projection: "1Y" means the
+  // first twelve months, not the last twelve. The previous code windowed from
+  // the far end, which collapsed "1M" onto the single final point.
+  const horizon = { end: totalMonths };
+
   const buildOption = () => {
     const series = [];
-    const allVisible = assets.filter((a) => visible().has(a.id));
     for (let ai = 0; ai < assets.length; ai++) {
       const a = assets[ai];
-      const show = visible().has(a.id);
+      // a hidden series is OMITTED, not flagged. ECharts has no `hidden`
+      // series property, so the old `hidden: !show` was silently ignored and
+      // legend clicks did nothing.
+      if (!visible().has(a.id)) continue;
       const pts = cumulativeSeries(a, col, totalMonths);
       if (!pts) continue;
       series.push({
@@ -86,10 +94,10 @@ export function buildProjectionChart(el, assets, opts = {}) {
         lineStyle: { width: 2, color: PALETTE[ai % PALETTE.length] },
         itemStyle: { color: PALETTE[ai % PALETTE.length] },
         emphasis: { focus: "series" },
-        hidden: !show,
       });
     }
     return {
+      series,
       animation: false,
       backgroundColor: "transparent",
       grid: { left: 64, right: 24, top: 30, bottom: 48 },
@@ -109,13 +117,12 @@ export function buildProjectionChart(el, assets, opts = {}) {
             .map((p) => {
               const a = assets.find((x) => x.id === p.seriesId);
               const r1 = firstMonthBps(a, col);
-              return `<tr><td style="color:${p.color}">${esc(p.seriesName)}</td><td style="text-align:right;font-variant-numeric:tabular-nums">${p.value[1] != null ? p.value[1].toFixed(2) : "—"}%</td><td style="color:#667085;padding-left:10px">month-1 net ${r1 != null ? r1.toFixed(1) : "—"} bps</td></tr>`;
+              return `<tr><td style="color:${p.color};padding-right:10px">${esc(p.seriesName)}</td><td style="text-align:right;font-variant-numeric:tabular-nums">${p.value[1] != null ? p.value[1].toFixed(2) : "—"}%</td><td style="color:${cssVar("--text-secondary")};padding-left:10px">month-1 net ${r1 != null ? r1.toFixed(1) : "—"} bps</td></tr>`;
             })
             .join("");
-          const nobs = "";
-          return `<div style="font-weight:600;margin-bottom:4px">Horizon: ${label}${nobs}</div>
-                  <table style="border-collapse:collapse;font-size:12px">${rows}</table>
-                  <div style="font-size:10.5px;color:#98a2b3;margin-top:5px">Extrapolated from live hold-horizon curves — not a forecast</div>`;
+          return `<div style="font-weight:640;margin-bottom:4px">Horizon: ${label}</div>
+                  <table style="border-collapse:collapse;font-size:11.5px">${rows}</table>
+                  <div style="font-size:10.5px;color:${cssVar("--text-faint")};margin-top:5px">Extrapolated from live hold-horizon curves — not a forecast</div>`;
         },
       },
       xAxis: {
@@ -148,7 +155,7 @@ export function buildProjectionChart(el, assets, opts = {}) {
         axisLabel: { color: cssVar("--axis-text"), fontSize: 10.5, formatter: (v) => `${v}%` },
         splitLine: { lineStyle: { color: cssVar("--grid-line") } },
       },
-      dataZoom: dataZoomConfig({ total: totalMonths, unit: "months" }),
+      dataZoom: dataZoomConfig({ mode: "value", startValue: 0, endValue: horizon.end }),
     };
   };
 
@@ -160,11 +167,12 @@ export function buildProjectionChart(el, assets, opts = {}) {
   };
 
   rec.applyPreset = (preset) => {
-    chart.dispatchAction({
-      type: "dataZoom",
-      startValue: presetToWindow(preset, totalMonths).startValue,
-      endValue: totalMonths,
-    });
+    horizon.end = Math.max(1, Math.min(totalMonths, preset.months));
+    // both components must be told, or the slider handles and the plot drift
+    // apart after a preset click
+    for (const dataZoomIndex of [0, 1]) {
+      chart.dispatchAction({ type: "dataZoom", dataZoomIndex, startValue: 0, endValue: horizon.end });
+    }
   };
 
   const onResize = () => chart.resize();

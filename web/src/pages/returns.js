@@ -117,6 +117,10 @@ export async function render(root, ctx = {}) {
         onSelect: (preset) => chartRec && chartRec.applyPreset(preset),
       });
     }
+    // switching market/mode/view builds a NEW chart at full range, so the
+    // still-highlighted preset button would be lying about the visible window
+    const active = pb.current();
+    if (active) chartRec.applyPreset(active);
     const approx = (payload.approximations || []).join(" · ");
     methodNote.innerHTML = `${payload.label || "Extrapolated from live hold-horizon curves — not a forecast"}${
       payload.generated ? ` · as of ${new Date(payload.generated).toUTCString().slice(0, 22)}` : ""

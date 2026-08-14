@@ -29,7 +29,8 @@ export async function render(root) {
     <div class="col-12">
       <div class="pc-card pc-card-pad">
         <div class="pc-card-title">US credit spreads — actual history</div>
-        <div class="pc-card-sub">ICE BofA option-adjusted spreads by grade + Moody's 12-month trailing default rates (FRED). Real data, no extrapolation.</div>
+        <div class="pc-card-sub">ICE BofA option-adjusted spreads by grade, in basis points, plus the trailing default rate in percent on the right-hand axis (FRED). Real observations, no extrapolation.</div>
+        <div class="pc-note" id="us-coverage" style="margin-top:0;margin-bottom:12px"></div>
         <div class="pc-controls" style="margin-bottom:12px"><div id="us-periods"></div></div>
         <div class="grid-12">
           <div class="col-8"><div id="us-chart" style="height:460px"></div></div>
@@ -73,8 +74,27 @@ export async function render(root) {
   const usPayload = await loadHistory({ market: "us", kind: "oas" });
   if (usPayload?.series && Object.keys(usPayload.series).length) {
     const names = Object.keys(usPayload.series);
-    const usRec = buildHistoryChart(usEl, { series: usPayload.series, id: "history-us" });
+    // the grade spreads and the default rate have very different coverage, so
+    // open on the window where the spreads actually exist rather than on a
+    // 20-year axis where they occupy the last sliver
+    const usRec = buildHistoryChart(usEl, { series: usPayload.series, id: "history-us", initialMonths: 36 });
     recs.push(usRec);
+    // report the real coverage instead of the old "15+ years" claim
+    const spans = names
+      .map((n) => usPayload.series[n].points)
+      .filter((p) => p && p.length)
+      .map((p) => [p[0][0], p[p.length - 1][0]]);
+    if (spans.length) {
+      const lo = spans.map((s) => s[0]).sort()[0];
+      const hi = spans.map((s) => s[1]).sort().reverse()[0];
+      const oas = names.filter((n) => usPayload.series[n].unit === "bps");
+      const oasLo = oas.length ? oas.map((n) => usPayload.series[n].points[0][0]).sort()[0] : null;
+      root.querySelector("#us-coverage").textContent =
+        `Coverage ${lo} → ${hi}.` +
+        (oasLo && oasLo > lo
+          ? ` FRED currently publishes the ICE BofA option-adjusted spreads only from ${oasLo}; the default-rate series reaches further back and is drawn dashed against the right-hand axis in percent.`
+          : "");
+    }
     buildLegend(
       usLegendEl,
       names.map((n, i) => ({
@@ -86,6 +106,12 @@ export async function render(root) {
       { onToggle: (id, on) => setSeriesVisible("history-us", id, on) }
     );
     buildPeriodBar(root.querySelector("#us-periods"), {
+      initial: "3Y",
+      periods: [
+        { label: "6M", months: 6 }, { label: "1Y", months: 12 },
+        { label: "3Y", months: 36 }, { label: "5Y", months: 60 },
+        { label: "10Y", months: 120 }, { label: "All", months: 600 },
+      ],
       onSelect: (preset) => usRec.applyPreset(preset.months),
     });
   } else {
