@@ -14,9 +14,13 @@ const MARKETS = [
   { value: "em", label: "Emerging markets" },
   { value: "countries", label: "Countries" },
 ];
+// "pure" means a SINGLE-asset straddle; "spread" means a straddle on the
+// difference between two assets. Neither is a buy-and-hold bond position —
+// the old "Pure assets" label read as if it were, which is why a dealer
+// markup on it looked like a mistake. Holding is priced on the Spreads page.
 const MODES = [
-  { value: "pure", label: "Pure assets" },
-  { value: "spread", label: "Spread pairs" },
+  { value: "pure", label: "Single asset" },
+  { value: "spread", label: "Relative value" },
 ];
 const VIEW_CHIPS = [
   { value: "gross", label: "Gross payout" },
@@ -52,6 +56,10 @@ export async function render(root, ctx = {}) {
   const hidden = new Set();
 
   root.innerHTML = `
+  <div class="pc-hero">
+    <h1>Volatility strategy returns</h1>
+    <p>This page prices a <b>long-volatility straddle</b>, not a bond you buy and hold. Gross is the average absolute move captured on high-volatility days; the net tiers subtract the straddle premium a dealer charges plus execution friction, which is why they can be negative. For what you earn simply by <b>owning</b> credit — spread minus expected loss, with no dealer markup of any kind — see <a href="#/spreads" style="color:var(--accent);font-weight:600">Spreads</a>.</p>
+  </div>
   <div class="pc-card pc-card-pad">
     <div class="pc-controls" style="justify-content:space-between;flex-wrap:wrap;gap:12px">
       <div class="pc-controls">

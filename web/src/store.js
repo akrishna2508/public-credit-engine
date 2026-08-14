@@ -11,6 +11,7 @@ const state = {
   status: null,
   forecast: null,
   opportunities: null,
+  spreads: null,
   meta: null,
   generated: null,
   error: null,
@@ -85,6 +86,17 @@ export async function loadForecast() {
   }
   emit();
   return state.forecast;
+}
+
+export async function loadSpreads() {
+  if (state.spreads) return state.spreads;
+  try {
+    state.spreads = await fetchJSON("/api/spreads");
+  } catch (e) {
+    state.spreads = { status: "UNAVAILABLE", why: String(e.message || e) };
+  }
+  emit();
+  return state.spreads;
 }
 
 export async function loadOpportunities() {

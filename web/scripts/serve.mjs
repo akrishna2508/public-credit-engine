@@ -45,6 +45,7 @@ const handlers = {
   "/api/status": () => import("../api/status.js").then((m) => m.default),
   "/api/forecast": () => import("../api/forecast.js").then((m) => m.default),
   "/api/opportunities": () => import("../api/opportunities.js").then((m) => m.default),
+  "/api/spreads": () => import("../api/spreads.js").then((m) => m.default),
 };
 
 const server = createServer(async (req, res) => {

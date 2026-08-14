@@ -21,10 +21,25 @@ export const PALETTE = [
   "#0f766e", "#c026d3", "#15803d", "#db2777", "#ca8a04", "#1d4ed8",
 ];
 
+// The three tiers differ only in what the straddle costs to put on. Gross
+// assumes you get the option for nothing, which no one does; it is the
+// ceiling, not a return.
 const VIEWS = {
-  gross: { col: 1, label: "Gross payout", desc: "Tier 1 · mean |T-day move| on shock days, before any fees" },
-  hf: { col: 2, label: "HF net", desc: "Tier 2 · after dealer markup with prime-broker size discount" },
-  ret: { col: 3, label: "Retail net", desc: "Tier 3 · after full dealer markup and execution friction" },
+  gross: {
+    col: 1,
+    label: "Gross payout",
+    desc: "Tier 1 · the average absolute move captured on high-volatility days, before paying for the option. A ceiling, not an achievable return.",
+  },
+  hf: {
+    col: 2,
+    label: "HF net",
+    desc: "Tier 2 · after the dealer's straddle premium at institutional size, with the prime-broker volume discount applied.",
+  },
+  ret: {
+    col: 3,
+    label: "Retail net",
+    desc: "Tier 3 · after the full dealer straddle premium and execution friction. Negative means the option costs more than the move it captures.",
+  },
 };
 
 function firstMonthBps(asset, col) {

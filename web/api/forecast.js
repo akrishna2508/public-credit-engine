@@ -19,35 +19,18 @@
  */
 import { fredCsv, json, unavailable, pmap } from "./_shared.js";
 import { alignPanel, runVarPipeline } from "./_var.js";
+import {
+  RATING_ORDER, US_GRADES as OAS, PUBLISHED_LGD as LGD, DR_SERIES, DR_MAPPING,
+  ADJACENT_PAIRS as ADJACENT, FORECAST_HIERARCHY as HIERARCHY, expectedLossByGrade,
+} from "./_universe.js";
 
 export const config = { runtime: "nodejs" };
 
-// config.RATING_ORDER / FRED_OAS_SERIES (primary id per grade)
-const RATING_ORDER = ["AAA", "AA", "A", "BBB", "BB", "B", "CCC"];
-const OAS = {
-  AAA: { id: "BAMLC0A1CAAA", label: "ICE BofA AAA US corporate OAS" },
-  AA: { id: "BAMLC0A2CAA", label: "ICE BofA AA US corporate OAS" },
-  A: { id: "BAMLC0A3CA", label: "ICE BofA A US corporate OAS" },
-  BBB: { id: "BAMLC0A4CBBB", label: "ICE BofA BBB US corporate OAS" },
-  BB: { id: "BAMLH0A0HYM2", label: "ICE BofA US High Yield master II OAS" },
-  B: { id: "BAMLH0A2HYB", label: "ICE BofA Single-B US high-yield OAS" },
-  CCC: { id: "BAMLH0A3HYC", label: "ICE BofA CCC & lower US high-yield OAS" },
-};
-// config.PUBLISHED_LGD
-const LGD = { AAA: 0.4, AA: 0.4, A: 0.414, BBB: 0.435, BB: 0.519, B: 0.621, CCC: 0.682 };
-// config.FRED_DR_SERIES + DR_MAPPING
-const DR_SERIES = { IG_proxy: "DRBLACBS", HY_proxy: "DRCCLACBS" };
-const DR_MAPPING = {
-  AAA: "IG_proxy", AA: "IG_proxy", A: "IG_proxy", BBB: "IG_proxy",
-  BB: "HY_proxy", B: "HY_proxy", CCC: "HY_proxy",
-};
-// config.FORECAST_HIERARCHY, restricted to the pairs that are OAS-vs-OAS
+// The grade ladder, loss assumptions and adjacent rungs all come from
+// _universe.js so this endpoint and /api/spreads can never disagree about
+// what a grade is or what loss is subtracted from it.
 // (BB - Fallen_Angel is an ETF price leg and never enters this panel — the
-// Python pipeline drops it for the same reason)
-const HIERARCHY = ["AA - AAA", "A - AA", "BBB - A", "BB - BBB", "B - BB", "CCC - B"];
-const ADJACENT = [
-  ["AA", "AAA"], ["A", "AA"], ["BBB", "A"], ["BB", "BBB"], ["B", "BB"], ["CCC", "B"],
-];
+// Python pipeline drops it for the same reason.)
 const HORIZON = 12; // config.DEFAULT_FORECAST_HORIZON
 const MAX_LAGS = 12; // config.DEFAULT_MAX_LAGS
 
@@ -78,11 +61,7 @@ export default async function handler(req, res) {
   });
 
   // ---- expected loss per grade, EL difference per adjacent pair ----
-  const expectedLoss = {};
-  for (const g of RATING_ORDER) {
-    const dr = drLatest[DR_MAPPING[g]];
-    expectedLoss[g] = dr ? round8(dr.v * LGD[g]) : null;
-  }
+  const expectedLoss = expectedLossByGrade(drLatest);
   const elDiff = {};
   for (const [riskier, safer] of ADJACENT) {
     const a = expectedLoss[riskier];

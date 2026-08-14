@@ -8,6 +8,7 @@ import { loadAtlas, subscribe, installAuditHandle } from "./store.js";
 import { render as renderMap } from "./pages/map.js";
 import { render as renderOpportunities } from "./pages/opportunities.js";
 import { render as renderForecast } from "./pages/forecast.js";
+import { render as renderSpreads } from "./pages/spreads.js";
 import { render as renderReturns } from "./pages/returns.js";
 import { render as renderHistory } from "./pages/history.js";
 import { render as renderCountry } from "./pages/country.js";
@@ -20,6 +21,7 @@ const PAGES = {
   map: { el: "page-map", render: renderMap },
   opportunities: { el: "page-opportunities", render: renderOpportunities },
   forecast: { el: "page-forecast", render: renderForecast },
+  spreads: { el: "page-spreads", render: renderSpreads },
   returns: { el: "page-returns", render: renderReturns },
   history: { el: "page-history", render: renderHistory },
   country: { el: "page-country", render: renderCountry },

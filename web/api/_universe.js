@@ -136,6 +136,64 @@ export const CREDIT_PANEL = {
   US_CCC: { id: "BAMLH0A3HYC", label: "US high yield — CCC and lower", family: "us" },
 };
 
+/* ==================================================================== */
+/* US credit-grade ladder — single source of truth                       */
+/* ==================================================================== */
+/**
+ * Every endpoint that touches grades, expected loss or spread-minus-EL reads
+ * these, so /api/forecast and /api/spreads can never disagree about what a
+ * grade is or what its loss assumption is. Mirrors config.py.
+ */
+export const RATING_ORDER = ["AAA", "AA", "A", "BBB", "BB", "B", "CCC"];
+
+export const US_GRADES = {
+  AAA: { id: "BAMLC0A1CAAA", label: "ICE BofA AAA US corporate OAS", tier: "IG" },
+  AA: { id: "BAMLC0A2CAA", label: "ICE BofA AA US corporate OAS", tier: "IG" },
+  A: { id: "BAMLC0A3CA", label: "ICE BofA A US corporate OAS", tier: "IG" },
+  BBB: { id: "BAMLC0A4CBBB", label: "ICE BofA BBB US corporate OAS", tier: "IG" },
+  BB: { id: "BAMLH0A0HYM2", label: "ICE BofA US High Yield master II OAS", tier: "HY" },
+  B: { id: "BAMLH0A2HYB", label: "ICE BofA Single-B US high-yield OAS", tier: "HY" },
+  CCC: { id: "BAMLH0A3HYC", label: "ICE BofA CCC & lower US high-yield OAS", tier: "HY" },
+};
+
+/** config.PUBLISHED_LGD — loss given default per grade */
+export const PUBLISHED_LGD = {
+  AAA: 0.4, AA: 0.4, A: 0.414, BBB: 0.435, BB: 0.519, B: 0.621, CCC: 0.682,
+};
+
+/** config.FRED_DR_SERIES + DR_MAPPING — default-rate proxies */
+export const DR_SERIES = { IG_proxy: "DRBLACBS", HY_proxy: "DRCCLACBS" };
+export const DR_MAPPING = {
+  AAA: "IG_proxy", AA: "IG_proxy", A: "IG_proxy", BBB: "IG_proxy",
+  BB: "HY_proxy", B: "HY_proxy", CCC: "HY_proxy",
+};
+
+/** config.ADJACENT_PAIRS, restricted to the OAS-vs-OAS rungs */
+export const ADJACENT_PAIRS = [
+  ["AA", "AAA"], ["A", "AA"], ["BBB", "A"], ["BB", "BBB"], ["B", "BB"], ["CCC", "B"],
+];
+export const FORECAST_HIERARCHY = ADJACENT_PAIRS.map(([a, b]) => `${a} - ${b}`);
+
+/**
+ * Expected loss per grade, in the SAME units the caller asks for.
+ * EL[grade] = latest default-rate proxy x published LGD.
+ * A missing default-rate observation yields null, never 0 — a fabricated zero
+ * would silently overstate compensation for that grade (engine/default_rates).
+ */
+export function expectedLossByGrade(drLatest, { asBps = false } = {}) {
+  const out = {};
+  for (const g of RATING_ORDER) {
+    const dr = drLatest[DR_MAPPING[g]];
+    if (!dr) {
+      out[g] = null;
+      continue;
+    }
+    const el = dr.v * PUBLISHED_LGD[g];
+    out[g] = asBps ? Math.round(el * 10000 * 10000) / 10000 : Math.round(el * 1e8) / 1e8;
+  }
+  return out;
+}
+
 /** World Bank indicators (keyless, annual, explicitly lagged) */
 export const WB_INDICATORS = {
   debtGdp: { id: "GC.DOD.TOTL.GD.ZS", label: "Central government debt (% of GDP)" },
