@@ -1,6 +1,6 @@
 {
  "status": "OK",
- "generated": "2026-08-14T03:00:16.854Z",
+ "generated": "2026-08-14T03:14:17.368Z",
  "schema": "atlas.v2",
  "heatDefinition": "1-month total-return proxy in USD: the unweighted mean of the available legs — sovereign bond price proxy converted to USD, country equity ETF return, and regional EM corporate credit carry. Green means positive compensation over the last month, red negative.",
  "countries": {

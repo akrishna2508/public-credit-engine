@@ -3,22 +3,27 @@
  * grade spreads + default rates, and a sovereign 10Y selector. Each chart has
  * its own period bar and full-name toggleable legend.
  */
-import { loadHistory, setSeriesVisible } from "../store.js";
+import { loadHistory, loadAtlas, setSeriesVisible } from "../store.js";
 import { buildHistoryChart, PALETTE } from "../charts/history.js";
 import { buildLegend } from "../legend.js";
 import { buildPeriodBar } from "../controls.js";
 
-const SOVEREIGNS = [
-  { iso: "DE", name: "Germany" }, { iso: "FR", name: "France" }, { iso: "IT", name: "Italy" },
-  { iso: "ES", name: "Spain" }, { iso: "NL", name: "Netherlands" }, { iso: "BE", name: "Belgium" },
-  { iso: "AT", name: "Austria" }, { iso: "PT", name: "Portugal" }, { iso: "IE", name: "Ireland" },
-  { iso: "FI", name: "Finland" }, { iso: "GR", name: "Greece" }, { iso: "GB", name: "United Kingdom" },
-  { iso: "JP", name: "Japan" }, { iso: "CA", name: "Canada" }, { iso: "AU", name: "Australia" },
-  { iso: "CH", name: "Switzerland" }, { iso: "US", name: "United States" }, { iso: "KR", name: "South Korea" },
-  { iso: "MX", name: "Mexico" }, { iso: "ZA", name: "South Africa" },
-];
+/** every market the live atlas reports a real 10Y series for, grouped by region */
+async function sovereignOptions() {
+  const atlas = await loadAtlas();
+  const rows = Object.values(atlas?.countries || {})
+    .filter((c) => !c.aggregate && c.instruments?.bonds?.status === "OK")
+    .map((c) => ({ iso: c.iso, name: c.name, region: c.regionLabel || c.region || "Other" }))
+    .sort((a, b) => a.region.localeCompare(b.region) || a.name.localeCompare(b.name));
+  if (rows.length) return rows;
+  // atlas unavailable: fall back to the euro-area set that works keyless via ECB
+  return ["DE", "FR", "IT", "ES", "NL", "BE", "AT", "PT", "IE", "FI", "GR"].map((iso) => ({
+    iso, name: iso, region: "Europe",
+  }));
+}
 
 export async function render(root) {
+  const SOVEREIGNS = await sovereignOptions();
   root.innerHTML = `
   <div class="grid-12">
     <div class="col-12">
@@ -35,10 +40,21 @@ export async function render(root) {
     <div class="col-12">
       <div class="pc-card pc-card-pad">
         <div class="pc-card-title">Sovereign 10-year yields — actual history</div>
-        <div class="pc-card-sub">Monthly OECD long-term rates (FRED) / ECB LTIR for euro-area members — 15+ years of real monthly data.</div>
+        <div class="pc-card-sub">Monthly OECD long-term rates (FRED), or the ECB long-term rate for euro-area members — real monthly observations. ${SOVEREIGNS.length} markets have a free 10-year series; those that do not are scored on the map through their equity and credit legs instead.</div>
         <div class="pc-controls" style="margin-bottom:12px">
-          <select id="sovereign-sel" class="pc-btn" style="appearance:none">
-            ${SOVEREIGNS.map((s) => `<option value="${s.iso}">${s.name} (${s.iso})</option>`).join("")}
+          <select id="sovereign-sel" class="pc-btn">
+            ${(() => {
+              const byRegion = {};
+              for (const s of SOVEREIGNS) (byRegion[s.region] = byRegion[s.region] || []).push(s);
+              return Object.entries(byRegion)
+                .map(
+                  ([region, items]) =>
+                    `<optgroup label="${region}">${items
+                      .map((s) => `<option value="${s.iso}">${s.name} (${s.iso})</option>`)
+                      .join("")}</optgroup>`
+                )
+                .join("");
+            })()}
           </select>
           <div id="sovereign-periods"></div>
         </div>

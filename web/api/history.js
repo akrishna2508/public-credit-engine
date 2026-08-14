@@ -7,6 +7,7 @@
  *   /api/history?kind=curve           -> US nominal curve 2/5/10/30 (weekly)
  */
 import { fredCsv, ecbCsv, json, unavailable } from "./_shared.js";
+import { COUNTRIES } from "./_universe.js";
 
 export const config = { runtime: "nodejs" };
 
@@ -54,23 +55,38 @@ export default async function handler(req, res) {
 
   if (country) {
     const iso = country.toUpperCase();
+    const spec = COUNTRIES[iso];
     let rows = null;
-    const fred = await fredCsv(`IRLTLT01${iso}M156N`, { start: "2005-01-01" });
-    if (!fred.unavailable) rows = fred.rows;
-    let source = `FRED IRLTLT01${iso}M156N (OECD long-term rate)`;
+    let source = null;
+
+    // the series id comes from the shared universe: most countries follow the
+    // OECD pattern IRLTLT01<ISO2>M156N, but India and Colombia only exist
+    // under the <ISO3>IRLTLT01STM form, and some have no series at all
+    if (spec?.yield) {
+      const fred = await fredCsv(spec.yield, { start: "2005-01-01" });
+      if (!fred.unavailable && fred.rows?.length) {
+        rows = fred.rows;
+        source = `FRED ${spec.yield} (OECD long-term 10Y rate, monthly)`;
+      }
+    }
     if (!rows && ["DE", "FR", "IT", "ES", "NL", "BE", "AT", "PT", "IE", "FI", "GR"].includes(iso)) {
       const ecb = await ecbCsv(`IRS/M.${iso}.L.L40.CI.0000.EUR.N.Z`, { start: "2005-01-01" });
-      if (!ecb.unavailable) {
+      if (!ecb.unavailable && ecb.rows?.length) {
         rows = ecb.rows;
-        source = `ECB LTIR ${iso} (monthly, ~35y history)`;
+        source = `ECB long-term interest rate ${iso} (monthly, ~35y history)`;
       }
     }
     if (!rows || !rows.length) {
-      return unavailable(res, `No 10-year series for ${iso} (FRED key unset or series unavailable) — try a euro-area country (DE FR IT ES NL BE AT PT IE FI GR) which also works keyless via ECB`);
+      return unavailable(
+        res,
+        spec && !spec.yield
+          ? `No free 10-year government bond series covers ${spec.name}. Its opportunity score on the map is built from the legs that do exist${spec.etf ? ` (the ${spec.etf} equity ETF${spec.credit ? " and the regional EM corporate credit index" : ""})` : ""}.`
+          : `No 10-year series returned for ${iso} — the FRED key may be unset on this deployment.`
+      );
     }
     return json(res, {
       status: "OK",
-      name: OECD_COUNTRIES[iso] || iso,
+      name: spec?.name || OECD_COUNTRIES[iso] || iso,
       iso,
       source,
       start: rows[0].date,
