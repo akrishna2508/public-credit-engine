@@ -1,10 +1,13 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }],
+  "rewrites": [
+    { "source": "/((?!api/|data/|assets/|favicon).*)", "destination": "/index.html" }
+  ],
   "functions": {
     "api/*.js": {
-      "includeFiles": "public/data/**"
+      "includeFiles": "public/data/**",
+      "maxDuration": 60
     }
   }
 }

@@ -1,0 +1,4246 @@
+{
+ "status": "OK",
+ "generated": "2026-08-14T03:00:16.854Z",
+ "schema": "atlas.v2",
+ "heatDefinition": "1-month total-return proxy in USD: the unweighted mean of the available legs — sovereign bond price proxy converted to USD, country equity ETF return, and regional EM corporate credit carry. Green means positive compensation over the last month, red negative.",
+ "countries": {
+  "US": {
+   "name": "United States",
+   "iso": "US",
+   "iso3": "USA",
+   "region": "namerica",
+   "regionLabel": "North America",
+   "heat": 1.573,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 0.085
+    },
+    {
+     "leg": "equity",
+     "value": 3.06
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, equity",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01USM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 4.47,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -1,
+      "3": 22,
+      "12": 9
+     },
+     "yield_z": 1.423,
+     "bond_price_1m_pct": 0.085,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 0.085,
+     "usd_note": "no currency leg — the local price proxy is used as-is"
+    },
+    "fx": {
+     "status": "N/A",
+     "note": "United States — the US dollar is the base currency"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "SPY",
+     "last": 777.8800048828125,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 3.06,
+     "ret_3m_pct": 4.79,
+     "ret_12m_pct": 21.04,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": 0,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 115.77,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 2.95,
+      "year": 2024,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 3.25,
+      "year": 2021,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 3.21,
+      "year": 2021,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "CA": {
+   "name": "Canada",
+   "iso": "CA",
+   "iso3": "CAN",
+   "region": "namerica",
+   "regionLabel": "North America",
+   "heat": 3.121,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.851
+    },
+    {
+     "leg": "equity",
+     "value": 4.39
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, equity",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01CAM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 3.42,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -12.15,
+      "3": -2.09,
+      "12": 10.6
+     },
+     "yield_z": 1.229,
+     "bond_price_1m_pct": 1.033,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.851,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDCAD=X",
+     "currency": "CAD",
+     "quote": 1.3924599885940552,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.81,
+     "ret_3m_pct": -1.27,
+     "ret_12m_pct": -0.47,
+     "note": "CAD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWC",
+     "last": 62.099998474121094,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 4.39,
+     "ret_3m_pct": 7.55,
+     "ret_12m_pct": 30.71,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -105,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 64.13,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 2.07,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 2.7,
+      "year": 2017,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 2.18,
+      "year": 2017,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "MX": {
+   "name": "Mexico",
+   "iso": "MX",
+   "iso3": "MEX",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -0.729,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": -2.761
+    },
+    {
+     "leg": "equity",
+     "value": 0.08
+    },
+    {
+     "leg": "credit",
+     "value": 0.495
+    }
+   ],
+   "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: bond, equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01MXM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 9.45,
+     "asOf": "2026-05-01",
+     "yield_chg_bps": {
+      "1": 57,
+      "3": 24,
+      "12": 19
+     },
+     "yield_z": 1.266,
+     "bond_price_1m_pct": -4.845,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": -2.761,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDMXN=X",
+     "currency": "MXN",
+     "quote": 17.033700942993164,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 2.19,
+     "ret_3m_pct": 2.17,
+     "ret_12m_pct": 9.69,
+     "note": "MXN return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWW",
+     "last": 75.44999694824219,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 0.08,
+     "ret_3m_pct": -6,
+     "ret_12m_pct": 21.05,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "latam",
+     "label": "ICE BofA Latin America Emerging Markets Corporate Plus OAS",
+     "oas_bps": 199,
+     "oas_chg_1m_bps": -11,
+     "oas_z": -2.014,
+     "credit_1m_pct": 0.495,
+     "note": "ICE BofA Latin America Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": 498,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 50.27,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 3.81,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 8.79,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 0.66,
+      "year": 2025,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "BR": {
+   "name": "Brazil",
+   "iso": "BR",
+   "iso3": "BRA",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -2.692,
+   "heatLegs": [
+    {
+     "leg": "equity",
+     "value": -5.88
+    },
+    {
+     "leg": "credit",
+     "value": 0.495
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDBRL=X",
+     "currency": "BRL",
+     "quote": 5.179500102996826,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": -1.27,
+     "ret_3m_pct": -2.34,
+     "ret_12m_pct": 4.45,
+     "note": "BRL return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWZ",
+     "last": 33.77000045776367,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": -5.88,
+     "ret_3m_pct": -8.18,
+     "ret_12m_pct": 18.95,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "latam",
+     "label": "ICE BofA Latin America Emerging Markets Corporate Plus OAS",
+     "oas_bps": 199,
+     "oas_chg_1m_bps": -11,
+     "oas_z": -2.014,
+     "credit_1m_pct": 0.495,
+     "note": "ICE BofA Latin America Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 81.86,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 5.02,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 45.33,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 30.76,
+      "year": 2025,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "CL": {
+   "name": "Chile",
+   "iso": "CL",
+   "iso3": "CHL",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": 0.835,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.53
+    },
+    {
+     "leg": "equity",
+     "value": 0.48
+    },
+    {
+     "leg": "credit",
+     "value": 0.495
+    }
+   ],
+   "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: bond, equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01CLM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 5.52,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -5,
+      "3": -3.56,
+      "12": -21.46
+     },
+     "yield_z": 0.668,
+     "bond_price_1m_pct": 0.425,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.53,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDCLP=X",
+     "currency": "CLP",
+     "quote": 914.4400024414062,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 1.1,
+     "ret_3m_pct": -1.53,
+     "ret_12m_pct": 4.93,
+     "note": "CLP return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "ECH",
+     "last": 40.040000915527344,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 0.48,
+     "ret_3m_pct": -0.92,
+     "ret_12m_pct": 25.24,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "latam",
+     "label": "ICE BofA Latin America Emerging Markets Corporate Plus OAS",
+     "oas_bps": 199,
+     "oas_chg_1m_bps": -11,
+     "oas_z": -2.014,
+     "credit_1m_pct": 0.495,
+     "note": "ICE BofA Latin America Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": 105,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 4.21,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 4.18,
+      "year": 2018,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "CO": {
+   "name": "Colombia",
+   "iso": "CO",
+   "iso3": "COL",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": 9.495,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 18.495
+    },
+    {
+     "leg": "credit",
+     "value": 0.495
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, credit",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "COLIRLTLT01STM",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 12.36,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -165,
+      "3": -120,
+      "12": -63
+     },
+     "yield_z": 1.313,
+     "bond_price_1m_pct": 14.025,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 18.495,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDCOP=X",
+     "currency": "COP",
+     "quote": 3116.97998046875,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 3.92,
+     "ret_3m_pct": 21.68,
+     "ret_12m_pct": 29.1,
+     "note": "COP return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "latam",
+     "label": "ICE BofA Latin America Emerging Markets Corporate Plus OAS",
+     "oas_bps": 199,
+     "oas_chg_1m_bps": -11,
+     "oas_z": -2.014,
+     "credit_1m_pct": 0.495,
+     "note": "ICE BofA Latin America Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": 789,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 71.2,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 5.14,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 14.31,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "PE": {
+   "name": "Peru",
+   "iso": "PE",
+   "iso3": "PER",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": 1.043,
+   "heatLegs": [
+    {
+     "leg": "equity",
+     "value": 1.59
+    },
+    {
+     "leg": "credit",
+     "value": 0.495
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDPEN=X",
+     "currency": "PEN",
+     "quote": 3.3701999187469482,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.29,
+     "ret_3m_pct": -0.49,
+     "ret_12m_pct": 4.14,
+     "note": "PEN return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EPU",
+     "last": 88.08000183105469,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 1.59,
+     "ret_3m_pct": 4.2,
+     "ret_12m_pct": 70.2,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "latam",
+     "label": "ICE BofA Latin America Emerging Markets Corporate Plus OAS",
+     "oas_bps": 199,
+     "oas_chg_1m_bps": -11,
+     "oas_z": -2.014,
+     "credit_1m_pct": 0.495,
+     "note": "ICE BofA Latin America Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 35.24,
+      "year": 2021,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 1.53,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 12.6,
+      "year": 2022,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "AR": {
+   "name": "Argentina",
+   "iso": "AR",
+   "iso3": "ARG",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -2.012,
+   "heatLegs": [
+    {
+     "leg": "equity",
+     "value": -4.52
+    },
+    {
+     "leg": "credit",
+     "value": 0.495
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDARS=X",
+     "currency": "ARS",
+     "quote": 1491.5,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": -1.07,
+     "ret_3m_pct": -6.24,
+     "ret_12m_pct": -8.88,
+     "note": "ARS return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "ARGT",
+     "last": 91.04000091552734,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": -4.52,
+     "ret_3m_pct": 3.14,
+     "ret_12m_pct": 5.66,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "latam",
+     "label": "ICE BofA Latin America Emerging Markets Corporate Plus OAS",
+     "oas_bps": 199,
+     "oas_chg_1m_bps": -11,
+     "oas_z": -2.014,
+     "credit_1m_pct": 0.495,
+     "note": "ICE BofA Latin America Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 219.88,
+      "year": 2024,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 46.02,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "DE": {
+   "name": "Germany",
+   "iso": "DE",
+   "iso3": "DEU",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 3.702,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.475
+    },
+    {
+     "leg": "equity",
+     "value": 5.93
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, equity",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01DEM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 2.97,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -7.65,
+      "3": 6,
+      "12": 45.1
+     },
+     "yield_z": 1.646,
+     "bond_price_1m_pct": 0.65,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.475,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1538017988204956,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.82,
+     "ret_3m_pct": -0.6,
+     "ret_12m_pct": -0.69,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWG",
+     "last": 43.959999084472656,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 5.93,
+     "ret_3m_pct": 4.27,
+     "ret_12m_pct": 4.29,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -150,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 2.17,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "FR": {
+   "name": "France",
+   "iso": "FR",
+   "iso3": "FRA",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 2.757,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.334
+    },
+    {
+     "leg": "equity",
+     "value": 4.18
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, equity",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01FRM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 3.68,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -6,
+      "3": 4,
+      "12": 44
+     },
+     "yield_z": 1.644,
+     "bond_price_1m_pct": 0.51,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.334,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1538017988204956,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.82,
+     "ret_3m_pct": -0.6,
+     "ret_12m_pct": -0.69,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWQ",
+     "last": 47.369998931884766,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 4.18,
+     "ret_3m_pct": 4.94,
+     "ret_12m_pct": 10.45,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -79,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 0.94,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "IT": {
+   "name": "Italy",
+   "iso": "IT",
+   "iso3": "ITA",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 2.9,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.72
+    },
+    {
+     "leg": "equity",
+     "value": 4.08
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, equity",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01ITM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 3.734,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -10.5,
+      "3": 0.1,
+      "12": 23.3
+     },
+     "yield_z": 0.985,
+     "bond_price_1m_pct": 0.893,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.72,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1538017988204956,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.82,
+     "ret_3m_pct": -0.6,
+     "ret_12m_pct": -0.69,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWI",
+     "last": 63.290000915527344,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 4.08,
+     "ret_3m_pct": 7.44,
+     "ret_12m_pct": 24.98,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -73.6,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 1.53,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 4.07,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 1.94,
+      "year": 2025,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "ES": {
+   "name": "Spain",
+   "iso": "ES",
+   "iso3": "ESP",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 3.247,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.343
+    },
+    {
+     "leg": "equity",
+     "value": 5.15
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, equity",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01ESM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 3.42119047619048,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -6.11,
+      "3": 3.54,
+      "12": 25.38
+     },
+     "yield_z": 1.311,
+     "bond_price_1m_pct": 0.519,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.343,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1538017988204956,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.82,
+     "ret_3m_pct": -0.6,
+     "ret_12m_pct": -0.69,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWP",
+     "last": 62.66999816894531,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 5.15,
+     "ret_3m_pct": 11.06,
+     "ret_12m_pct": 32.27,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -104.88,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 105.64,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 2.7,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "NL": {
+   "name": "Netherlands",
+   "iso": "NL",
+   "iso3": "NLD",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 2.717,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.574
+    },
+    {
+     "leg": "equity",
+     "value": 3.86
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, equity",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01NLM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 3.077,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -8.8,
+      "3": 5,
+      "12": 32
+     },
+     "yield_z": 1.502,
+     "bond_price_1m_pct": 0.748,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.574,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1538017988204956,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.82,
+     "ret_3m_pct": -0.6,
+     "ret_12m_pct": -0.69,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWN",
+     "last": 71.33000183105469,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 3.86,
+     "ret_3m_pct": 9.17,
+     "ret_12m_pct": 34.66,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -139.3,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 3.26,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "BE": {
+   "name": "Belgium",
+   "iso": "BE",
+   "iso3": "BEL",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 1.591,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.591
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: bond",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01BEM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 3.51,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -9,
+      "3": 0,
+      "12": 42
+     },
+     "yield_z": 1.562,
+     "bond_price_1m_pct": 0.765,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.591,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1538017988204956,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.82,
+     "ret_3m_pct": -0.6,
+     "ret_12m_pct": -0.69,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -96,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 2.47,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "AT": {
+   "name": "Austria",
+   "iso": "AT",
+   "iso3": "AUT",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 1.595,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.595
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: bond",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01ATM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 3.2074,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -9.05,
+      "3": -3.25,
+      "12": 26.31
+     },
+     "yield_z": 1.424,
+     "bond_price_1m_pct": 0.769,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.595,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1538017988204956,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.82,
+     "ret_3m_pct": -0.6,
+     "ret_12m_pct": -0.69,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -126.26,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 3.53,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "PT": {
+   "name": "Portugal",
+   "iso": "PT",
+   "iso3": "PRT",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 0.906,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 0.906
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: bond",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01PTM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 3.42,
+     "asOf": "2026-05-01",
+     "yield_chg_bps": {
+      "1": -1,
+      "3": 29,
+      "12": 34
+     },
+     "yield_z": 1.049,
+     "bond_price_1m_pct": 0.085,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 0.906,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1538017988204956,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.82,
+     "ret_3m_pct": -0.6,
+     "ret_12m_pct": -0.69,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -105,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 2.34,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "IE": {
+   "name": "Ireland",
+   "iso": "IE",
+   "iso3": "IRL",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 1.853,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.853
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: bond",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01IEM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 3.1264,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -12.06,
+      "3": -7.08,
+      "12": 27.62
+     },
+     "yield_z": 1.465,
+     "bond_price_1m_pct": 1.025,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.853,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1538017988204956,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.82,
+     "ret_3m_pct": -0.6,
+     "ret_12m_pct": -0.69,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -134.36,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 2.21,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "FI": {
+   "name": "Finland",
+   "iso": "FI",
+   "iso3": "FIN",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 1.577,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.577
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: bond",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01FIM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 3.310733333,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -8.84,
+      "3": -1.16,
+      "12": 41.07
+     },
+     "yield_z": 1.501,
+     "bond_price_1m_pct": 0.751,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.577,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1538017988204956,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.82,
+     "ret_3m_pct": -0.6,
+     "ret_12m_pct": -0.69,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -115.93,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 0.34,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "GR": {
+   "name": "Greece",
+   "iso": "GR",
+   "iso3": "GRC",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 4.689,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.677
+    },
+    {
+     "leg": "equity",
+     "value": 7.7
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, equity",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01GRM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 3.65,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -10,
+      "3": -6,
+      "12": 36
+     },
+     "yield_z": -0.044,
+     "bond_price_1m_pct": 0.85,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.677,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1538017988204956,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.82,
+     "ret_3m_pct": -0.6,
+     "ret_12m_pct": -0.69,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "GREK",
+     "last": 82.25399780273438,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 7.7,
+     "ret_3m_pct": 14.19,
+     "ret_12m_pct": 23.97,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -82,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 2.48,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "SK": {
+   "name": "Slovakia",
+   "iso": "SK",
+   "iso3": "SVK",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": -0.133,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": -0.133
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: bond",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01SKM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 3.623273,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": 11.12,
+      "3": 12.05,
+      "12": 19.41
+     },
+     "yield_z": 1.335,
+     "bond_price_1m_pct": -0.945,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": -0.133,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1538017988204956,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.82,
+     "ret_3m_pct": -0.6,
+     "ret_12m_pct": -0.69,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -84.67,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 4,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "SI": {
+   "name": "Slovenia",
+   "iso": "SI",
+   "iso3": "SVN",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 1.763,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.763
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: bond",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01SIM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 3.36,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -11,
+      "3": 11,
+      "12": 34
+     },
+     "yield_z": 1.353,
+     "bond_price_1m_pct": 0.935,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.763,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1538017988204956,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.82,
+     "ret_3m_pct": -0.6,
+     "ret_12m_pct": -0.69,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -111,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 2.37,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "LU": {
+   "name": "Luxembourg",
+   "iso": "LU",
+   "iso3": "LUX",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 1.498,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.498
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: bond",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01LUM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 3.188,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -7.9,
+      "3": 6.9,
+      "12": 31.3
+     },
+     "yield_z": 1.443,
+     "bond_price_1m_pct": 0.672,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.498,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1538017988204956,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.82,
+     "ret_3m_pct": -0.6,
+     "ret_12m_pct": -0.69,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -128.2,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 2.26,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "GB": {
+   "name": "United Kingdom",
+   "iso": "GB",
+   "iso3": "GBR",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 2.255,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.319
+    },
+    {
+     "leg": "equity",
+     "value": 3.19
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, equity",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01GBM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 4.796,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -14.56,
+      "3": 9.53,
+      "12": 27.12
+     },
+     "yield_z": 1.599,
+     "bond_price_1m_pct": 1.238,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.319,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "GBPUSD=X",
+     "currency": "GBP",
+     "quote": 1.349017858505249,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.08,
+     "ret_3m_pct": 0.7,
+     "ret_12m_pct": 0.27,
+     "note": "GBP return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWU",
+     "last": 48.2599983215332,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 3.19,
+     "ret_3m_pct": 2.9,
+     "ret_12m_pct": 17.62,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": 32.6,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 130.74,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 3.88,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "CH": {
+   "name": "Switzerland",
+   "iso": "CH",
+   "iso3": "CHE",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 0.474,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 0.397
+    },
+    {
+     "leg": "equity",
+     "value": 0.55
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, equity",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01CHM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 0.31,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -13,
+      "3": -9,
+      "12": -10
+     },
+     "yield_z": 0.343,
+     "bond_price_1m_pct": 1.105,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 0.397,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDCHF=X",
+     "currency": "CHF",
+     "quote": 0.8140599727630615,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": -0.7,
+     "ret_3m_pct": -3.1,
+     "ret_12m_pct": -0.97,
+     "note": "CHF return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWL",
+     "last": 63.70000076293945,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 0.55,
+     "ret_3m_pct": 3.14,
+     "ret_12m_pct": 18.38,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -416,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 22.28,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 0.15,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 2.98,
+      "year": 2024,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "NO": {
+   "name": "Norway",
+   "iso": "NO",
+   "iso3": "NOR",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 2.809,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 2.809
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: bond",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01NOM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 4.20271428571429,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -12.72,
+      "3": -5.51,
+      "12": 25.41
+     },
+     "yield_z": 1.64,
+     "bond_price_1m_pct": 1.081,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 2.809,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDNOK=X",
+     "currency": "NOK",
+     "quote": 9.502949714660645,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 1.71,
+     "ret_3m_pct": -2.49,
+     "ret_12m_pct": 6.6,
+     "note": "NOK return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -26.73,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 3.06,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 5.88,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "SE": {
+   "name": "Sweden",
+   "iso": "SE",
+   "iso3": "SWE",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 0.53,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 0.53
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: bond",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01SEM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 2.78067,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": 3.61,
+      "3": 1.65,
+      "12": 46.61
+     },
+     "yield_z": 1.58,
+     "bond_price_1m_pct": -0.307,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 0.53,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDSEK=X",
+     "currency": "SEK",
+     "quote": 9.559639930725098,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.84,
+     "ret_3m_pct": -1.7,
+     "ret_12m_pct": 0.3,
+     "note": "SEK return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -168.93,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 0.68,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "DK": {
+   "name": "Denmark",
+   "iso": "DK",
+   "iso3": "DNK",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 1.415,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.415
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: bond",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01DKM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 2.807,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -7.3,
+      "3": 1.6,
+      "12": 30.6
+     },
+     "yield_z": 1.484,
+     "bond_price_1m_pct": 0.62,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.415,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDDKK=X",
+     "currency": "DKK",
+     "quote": 6.480690002441406,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.79,
+     "ret_3m_pct": -0.68,
+     "ret_12m_pct": -0.84,
+     "note": "DKK return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -166.3,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 1.89,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "PL": {
+   "name": "Poland",
+   "iso": "PL",
+   "iso3": "POL",
+   "region": "emeurope",
+   "regionLabel": "Emerging Europe",
+   "heat": 3.475,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 3.066
+    },
+    {
+     "leg": "equity",
+     "value": 7.09
+    },
+    {
+     "leg": "credit",
+     "value": 0.27
+    }
+   ],
+   "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: bond, equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01PLM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 5.51,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -23,
+      "3": -7,
+      "12": -2
+     },
+     "yield_z": 0.941,
+     "bond_price_1m_pct": 1.955,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 3.066,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDPLN=X",
+     "currency": "PLN",
+     "quote": 3.7374000549316406,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 1.09,
+     "ret_3m_pct": -2.1,
+     "ret_12m_pct": -1.95,
+     "note": "PLN return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EPOL",
+     "last": 43.959999084472656,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 7.09,
+     "ret_3m_pct": 11.09,
+     "ret_12m_pct": 29.33,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 149,
+     "oas_chg_1m_bps": -6,
+     "oas_z": -0.906,
+     "credit_1m_pct": 0.27,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": 104,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 3.81,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "CZ": {
+   "name": "Czechia",
+   "iso": "CZ",
+   "iso3": "CZE",
+   "region": "emeurope",
+   "regionLabel": "Emerging Europe",
+   "heat": 1.303,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 2.336
+    },
+    {
+     "leg": "credit",
+     "value": 0.27
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, credit",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01CZM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 4.70051258148,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -18.52,
+      "3": -2.31,
+      "12": 47.09
+     },
+     "yield_z": 1.332,
+     "bond_price_1m_pct": 1.574,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 2.336,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDCZK=X",
+     "currency": "CZK",
+     "quote": 20.986000061035156,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.75,
+     "ret_3m_pct": -0.18,
+     "ret_12m_pct": 0.67,
+     "note": "CZK return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 149,
+     "oas_chg_1m_bps": -6,
+     "oas_z": -0.906,
+     "credit_1m_pct": 0.27,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": 23.05,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 2.46,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 4.67,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 3.06,
+      "year": 2018,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "HU": {
+   "name": "Hungary",
+   "iso": "HU",
+   "iso3": "HUN",
+   "region": "emeurope",
+   "regionLabel": "Emerging Europe",
+   "heat": 1.937,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 3.604
+    },
+    {
+     "leg": "credit",
+     "value": 0.27
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, credit",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01HUM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 5.26,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -39,
+      "3": -187,
+      "12": -182
+     },
+     "yield_z": 0.285,
+     "bond_price_1m_pct": 3.315,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 3.604,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDHUF=X",
+     "currency": "HUF",
+     "quote": 314.79901123046875,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.28,
+     "ret_3m_pct": -1.26,
+     "ret_12m_pct": 8.61,
+     "note": "HUF return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 149,
+     "oas_chg_1m_bps": -6,
+     "oas_z": -0.906,
+     "credit_1m_pct": 0.27,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": 79,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 81.99,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 4.41,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 8.01,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 1.88,
+      "year": 2025,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "TR": {
+   "name": "Turkey",
+   "iso": "TR",
+   "iso3": "TUR",
+   "region": "emeurope",
+   "regionLabel": "Emerging Europe",
+   "heat": 0.95,
+   "heatLegs": [
+    {
+     "leg": "equity",
+     "value": 1.63
+    },
+    {
+     "leg": "credit",
+     "value": 0.27
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDTRY=X",
+     "currency": "TRY",
+     "quote": 47.84429931640625,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": -1.56,
+     "ret_3m_pct": -4.73,
+     "ret_12m_pct": -14.3,
+     "note": "TRY return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "TUR",
+     "last": 39.369998931884766,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 1.63,
+     "ret_3m_pct": -7.08,
+     "ret_12m_pct": 13.98,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 149,
+     "oas_chg_1m_bps": -6,
+     "oas_z": -0.906,
+     "credit_1m_pct": 0.27,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 26.62,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 34.88,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "IL": {
+   "name": "Israel",
+   "iso": "IL",
+   "iso3": "ISR",
+   "region": "mideast",
+   "regionLabel": "Middle East",
+   "heat": 1.887,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 3.504
+    },
+    {
+     "leg": "credit",
+     "value": 0.27
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, credit",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01ILM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 3.81,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -17,
+      "3": -23,
+      "12": -62
+     },
+     "yield_z": 0.965,
+     "bond_price_1m_pct": 1.445,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 3.504,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDILS=X",
+     "currency": "ILS",
+     "quote": 2.9612998962402344,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 2.03,
+     "ret_3m_pct": -1.12,
+     "ret_12m_pct": 13.56,
+     "note": "ILS return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 149,
+     "oas_chg_1m_bps": -6,
+     "oas_z": -0.906,
+     "credit_1m_pct": 0.27,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -66,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 3.04,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 2.96,
+      "year": 2022,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 1.29,
+      "year": 2022,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "SA": {
+   "name": "Saudi Arabia",
+   "iso": "SA",
+   "iso3": "SAU",
+   "region": "mideast",
+   "regionLabel": "Middle East",
+   "heat": 1.365,
+   "heatLegs": [
+    {
+     "leg": "equity",
+     "value": 2.46
+    },
+    {
+     "leg": "credit",
+     "value": 0.27
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDSAR=X",
+     "currency": "SAR",
+     "quote": 3.753999948501587,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": -3.72,
+     "ret_3m_pct": -1.71,
+     "ret_12m_pct": -0.16,
+     "note": "SAR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "KSA",
+     "last": 37.880001068115234,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 2.46,
+     "ret_3m_pct": -1.84,
+     "ret_12m_pct": 1.04,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 149,
+     "oas_chg_1m_bps": -6,
+     "oas_z": -0.906,
+     "credit_1m_pct": 0.27,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 2.08,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "AE": {
+   "name": "United Arab Emirates",
+   "iso": "AE",
+   "iso3": "ARE",
+   "region": "mideast",
+   "regionLabel": "Middle East",
+   "heat": 1.15,
+   "heatLegs": [
+    {
+     "leg": "equity",
+     "value": 2.03
+    },
+    {
+     "leg": "credit",
+     "value": 0.27
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDAED=X",
+     "currency": "AED",
+     "quote": 3.672600030899048,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": -0.03,
+     "ret_3m_pct": -0.03,
+     "ret_12m_pct": -0.03,
+     "note": "AED return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "UAE",
+     "last": 19.59000015258789,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 2.03,
+     "ret_3m_pct": 3.27,
+     "ret_12m_pct": -2.78,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 149,
+     "oas_chg_1m_bps": -6,
+     "oas_z": -0.906,
+     "credit_1m_pct": 0.27,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 1.25,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "QA": {
+   "name": "Qatar",
+   "iso": "QA",
+   "iso3": "QAT",
+   "region": "mideast",
+   "regionLabel": "Middle East",
+   "heat": -0.24,
+   "heatLegs": [
+    {
+     "leg": "equity",
+     "value": -0.75
+    },
+    {
+     "leg": "credit",
+     "value": 0.27
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDQAR=X",
+     "currency": "QAR",
+     "quote": 3.6410000324249268,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.08,
+     "ret_3m_pct": -3.41,
+     "ret_12m_pct": -0.07,
+     "note": "QAR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "QAT",
+     "last": 17.645999908447266,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": -0.75,
+     "ret_3m_pct": -5.94,
+     "ret_12m_pct": -12.95,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 149,
+     "oas_chg_1m_bps": -6,
+     "oas_z": -0.906,
+     "credit_1m_pct": 0.27,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 1.27,
+      "year": 2024,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 4.75,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "ZA": {
+   "name": "South Africa",
+   "iso": "ZA",
+   "iso3": "ZAF",
+   "region": "africa",
+   "regionLabel": "Africa",
+   "heat": 3.23,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 3.789
+    },
+    {
+     "leg": "equity",
+     "value": 5.63
+    },
+    {
+     "leg": "credit",
+     "value": 0.27
+    }
+   ],
+   "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: bond, equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01ZAM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 8.7,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -29.5,
+      "3": -35.41,
+      "12": -187.95
+     },
+     "yield_z": -1.182,
+     "bond_price_1m_pct": 2.508,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 3.789,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDZAR=X",
+     "currency": "ZAR",
+     "quote": 16.199499130249023,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 1.25,
+     "ret_3m_pct": 3.07,
+     "ret_12m_pct": 8.72,
+     "note": "ZAR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EZA",
+     "last": 67.33000183105469,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 5.63,
+     "ret_3m_pct": -4.86,
+     "ret_12m_pct": 17.1,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 149,
+     "oas_chg_1m_bps": -6,
+     "oas_z": -0.906,
+     "credit_1m_pct": 0.27,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": 423,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 82.76,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 3.21,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 10.69,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 3.52,
+      "year": 2025,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "JP": {
+   "name": "Japan",
+   "iso": "JP",
+   "iso3": "JPN",
+   "region": "asia",
+   "regionLabel": "Developed Asia",
+   "heat": 3.504,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.687
+    },
+    {
+     "leg": "equity",
+     "value": 5.32
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, equity",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01JPM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 2.67,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": 2,
+      "3": 32.5,
+      "12": 125
+     },
+     "yield_z": 3.313,
+     "bond_price_1m_pct": -0.17,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.687,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDJPY=X",
+     "currency": "JPY",
+     "quote": 159.41200256347656,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 1.86,
+     "ret_3m_pct": -0.24,
+     "ret_12m_pct": -7.27,
+     "note": "JPY return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWJ",
+     "last": 98.47000122070312,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 5.32,
+     "ret_3m_pct": 5.78,
+     "ret_12m_pct": 24.28,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -180,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 3.17,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 0.99,
+      "year": 2017,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 1.2,
+      "year": 2017,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "KR": {
+   "name": "South Korea",
+   "iso": "KR",
+   "iso3": "KOR",
+   "region": "asia",
+   "regionLabel": "Developed Asia",
+   "heat": 2.626,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 3.717
+    },
+    {
+     "leg": "equity",
+     "value": 4.07
+    },
+    {
+     "leg": "credit",
+     "value": 0.09
+    }
+   ],
+   "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: bond, equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01KRM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 4.181,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": 10.6,
+      "3": 45.3,
+      "12": 133.9
+     },
+     "yield_z": 2.042,
+     "bond_price_1m_pct": -0.901,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 3.717,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDKRW=X",
+     "currency": "KRW",
+     "quote": 1412.97998046875,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 4.66,
+     "ret_3m_pct": 6.71,
+     "ret_12m_pct": -1.69,
+     "note": "KRW return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWY",
+     "last": 178.6199951171875,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 4.07,
+     "ret_3m_pct": -5.31,
+     "ret_12m_pct": 141.05,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "asia",
+     "label": "ICE BofA Asia Emerging Markets Corporate Plus OAS",
+     "oas_bps": 83,
+     "oas_chg_1m_bps": -2,
+     "oas_z": -0.953,
+     "credit_1m_pct": 0.09,
+     "note": "ICE BofA Asia Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -28.9,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 47.81,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 2.12,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 4.19,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "SG": {
+   "name": "Singapore",
+   "iso": "SG",
+   "iso3": "SGP",
+   "region": "asia",
+   "regionLabel": "Developed Asia",
+   "heat": 2.21,
+   "heatLegs": [
+    {
+     "leg": "equity",
+     "value": 4.33
+    },
+    {
+     "leg": "credit",
+     "value": 0.09
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDSGD=X",
+     "currency": "SGD",
+     "quote": 1.2801400423049927,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.78,
+     "ret_3m_pct": 0.15,
+     "ret_12m_pct": 0.45,
+     "note": "SGD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWS",
+     "last": 33.47999954223633,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 4.33,
+     "ret_3m_pct": 13.92,
+     "ret_12m_pct": 20.39,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "asia",
+     "label": "ICE BofA Asia Emerging Markets Corporate Plus OAS",
+     "oas_bps": 83,
+     "oas_chg_1m_bps": -2,
+     "oas_z": -0.953,
+     "credit_1m_pct": 0.09,
+     "note": "ICE BofA Asia Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 167.8,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 0.9,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 5.25,
+      "year": 2021,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "TW": {
+   "name": "Taiwan",
+   "iso": "TW",
+   "iso3": "TWN",
+   "region": "asia",
+   "regionLabel": "Developed Asia",
+   "heat": 2.49,
+   "heatLegs": [
+    {
+     "leg": "equity",
+     "value": 4.89
+    },
+    {
+     "leg": "credit",
+     "value": 0.09
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDTWD=X",
+     "currency": "TWD",
+     "quote": 31.975000381469727,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.91,
+     "ret_3m_pct": -0.76,
+     "ret_12m_pct": -4.79,
+     "note": "TWD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWT",
+     "last": 107.5,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 4.89,
+     "ret_3m_pct": 13.32,
+     "ret_12m_pct": 75.97,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "asia",
+     "label": "ICE BofA Asia Emerging Markets Corporate Plus OAS",
+     "oas_bps": 83,
+     "oas_chg_1m_bps": -2,
+     "oas_z": -0.953,
+     "credit_1m_pct": 0.09,
+     "note": "ICE BofA Asia Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "status": "UNAVAILABLE"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "AU": {
+   "name": "Australia",
+   "iso": "AU",
+   "iso3": "AUS",
+   "region": "apac",
+   "regionLabel": "Asia-Pacific",
+   "heat": 2.702,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 2.144
+    },
+    {
+     "leg": "equity",
+     "value": 3.26
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, equity",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01AUM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 4.831,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -15.1,
+      "3": -9.5,
+      "12": 62.3
+     },
+     "yield_z": 1.608,
+     "bond_price_1m_pct": 1.283,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 2.144,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "AUDUSD=X",
+     "currency": "AUD",
+     "quote": 0.705865740776062,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.85,
+     "ret_3m_pct": -0.67,
+     "ret_12m_pct": 8.91,
+     "note": "AUD return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWA",
+     "last": 29.739999771118164,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 3.26,
+     "ret_3m_pct": 2.13,
+     "ret_12m_pct": 10.31,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": 36.1,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 57.88,
+      "year": 2022,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 2.87,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 5.1,
+      "year": 2019,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "NZ": {
+   "name": "New Zealand",
+   "iso": "NZ",
+   "iso3": "NZL",
+   "region": "apac",
+   "regionLabel": "Asia-Pacific",
+   "heat": 2.206,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 2.206
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: bond",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "IRLTLT01NZM156N",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 4.46,
+     "asOf": "2026-06-01",
+     "yield_chg_bps": {
+      "1": -22,
+      "3": -18,
+      "12": -12
+     },
+     "yield_z": 1.055,
+     "bond_price_1m_pct": 1.87,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 2.206,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "NZDUSD=X",
+     "currency": "NZD",
+     "quote": 0.5861321091651917,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.33,
+     "ret_3m_pct": 0.48,
+     "ret_12m_pct": 0.21,
+     "note": "NZD return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -1,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 51.99,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 2.84,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 4.76,
+      "year": 2017,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 3,
+      "year": 2017,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "CN": {
+   "name": "China",
+   "iso": "CN",
+   "iso3": "CHN",
+   "region": "emasia",
+   "regionLabel": "Emerging Asia",
+   "heat": 0.295,
+   "heatLegs": [
+    {
+     "leg": "equity",
+     "value": 0.5
+    },
+    {
+     "leg": "credit",
+     "value": 0.09
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDCNY=X",
+     "currency": "CNY",
+     "quote": 6.74370002746582,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.43,
+     "ret_3m_pct": 1.05,
+     "ret_12m_pct": 6.04,
+     "note": "CNY return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "MCHI",
+     "last": 54.41999816894531,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 0.5,
+     "ret_3m_pct": -8.98,
+     "ret_12m_pct": -7.34,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "asia",
+     "label": "ICE BofA Asia Emerging Markets Corporate Plus OAS",
+     "oas_bps": 83,
+     "oas_chg_1m_bps": -2,
+     "oas_z": -0.953,
+     "credit_1m_pct": 0.09,
+     "note": "ICE BofA Asia Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 0.06,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 4.35,
+      "year": 2024,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "IN": {
+   "name": "India",
+   "iso": "IN",
+   "iso3": "IND",
+   "region": "emasia",
+   "regionLabel": "Emerging Asia",
+   "heat": 1.406,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 1.538
+    },
+    {
+     "leg": "equity",
+     "value": 2.59
+    },
+    {
+     "leg": "credit",
+     "value": 0.09
+    }
+   ],
+   "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: bond, equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "seriesId": "INDIRLTLT01STM",
+     "notes": "10Y government bond yield — OECD long-term rate via FRED, monthly",
+     "yield_pct": 7.02,
+     "asOf": "2026-05-01",
+     "yield_chg_bps": {
+      "1": -3,
+      "3": 25,
+      "12": 74.8
+     },
+     "yield_z": 0.185,
+     "bond_price_1m_pct": 0.255,
+     "duration_assumed": 8.5,
+     "bond_price_1m_usd_pct": 1.538,
+     "usd_note": "local price proxy compounded with the 1-month currency move"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDINR=X",
+     "currency": "INR",
+     "quote": 95.43000030517578,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 1.28,
+     "ret_3m_pct": 1.19,
+     "ret_12m_pct": -8.2,
+     "note": "INR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "INDA",
+     "last": 49.97999954223633,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 2.59,
+     "ret_3m_pct": 4.17,
+     "ret_12m_pct": -4.75,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "asia",
+     "label": "ICE BofA Asia Emerging Markets Corporate Plus OAS",
+     "oas_bps": 83,
+     "oas_chg_1m_bps": -2,
+     "oas_z": -0.953,
+     "credit_1m_pct": 0.09,
+     "note": "ICE BofA Asia Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": 255,
+     "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 46.52,
+      "year": 2018,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 2.4,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 8.57,
+      "year": 2022,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "ID": {
+   "name": "Indonesia",
+   "iso": "ID",
+   "iso3": "IDN",
+   "region": "emasia",
+   "regionLabel": "Emerging Asia",
+   "heat": 2,
+   "heatLegs": [
+    {
+     "leg": "equity",
+     "value": 3.91
+    },
+    {
+     "leg": "credit",
+     "value": 0.09
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDIDR=X",
+     "currency": "IDR",
+     "quote": 17877,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.6,
+     "ret_3m_pct": -0.56,
+     "ret_12m_pct": -9.01,
+     "note": "IDR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EIDO",
+     "last": 12.479999542236328,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 3.91,
+     "ret_3m_pct": -12.73,
+     "ret_12m_pct": -32.94,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "asia",
+     "label": "ICE BofA Asia Emerging Markets Corporate Plus OAS",
+     "oas_bps": 83,
+     "oas_chg_1m_bps": -2,
+     "oas_z": -0.953,
+     "credit_1m_pct": 0.09,
+     "note": "ICE BofA Asia Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 1.91,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 8.5,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "TH": {
+   "name": "Thailand",
+   "iso": "TH",
+   "iso3": "THA",
+   "region": "emasia",
+   "regionLabel": "Emerging Asia",
+   "heat": 0.55,
+   "heatLegs": [
+    {
+     "leg": "equity",
+     "value": 1.01
+    },
+    {
+     "leg": "credit",
+     "value": 0.09
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDTHB=X",
+     "currency": "THB",
+     "quote": 33.189998626708984,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 1.02,
+     "ret_3m_pct": -1.6,
+     "ret_12m_pct": -2.14,
+     "note": "THB return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "THD",
+     "last": 73.06999969482422,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 1.01,
+     "ret_3m_pct": 1.25,
+     "ret_12m_pct": 25.74,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "asia",
+     "label": "ICE BofA Asia Emerging Markets Corporate Plus OAS",
+     "oas_bps": 83,
+     "oas_chg_1m_bps": -2,
+     "oas_z": -0.953,
+     "credit_1m_pct": 0.09,
+     "note": "ICE BofA Asia Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 61.86,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": -0.13,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 3.94,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 2.41,
+      "year": 2025,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "MY": {
+   "name": "Malaysia",
+   "iso": "MY",
+   "iso3": "MYS",
+   "region": "emasia",
+   "regionLabel": "Emerging Asia",
+   "heat": 0.64,
+   "heatLegs": [
+    {
+     "leg": "equity",
+     "value": 1.19
+    },
+    {
+     "leg": "credit",
+     "value": 0.09
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDMYR=X",
+     "currency": "MYR",
+     "quote": 4.081999778747559,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": -0.29,
+     "ret_3m_pct": -2.61,
+     "ret_12m_pct": 3.02,
+     "note": "MYR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EWM",
+     "last": 28.15999984741211,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 1.19,
+     "ret_3m_pct": -6.79,
+     "ret_12m_pct": 12.91,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "asia",
+     "label": "ICE BofA Asia Emerging Markets Corporate Plus OAS",
+     "oas_bps": 83,
+     "oas_chg_1m_bps": -2,
+     "oas_z": -0.953,
+     "credit_1m_pct": 0.09,
+     "note": "ICE BofA Asia Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 64.57,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 1.38,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 4.82,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 1.77,
+      "year": 2016,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "PH": {
+   "name": "Philippines",
+   "iso": "PH",
+   "iso3": "PHL",
+   "region": "emasia",
+   "regionLabel": "Emerging Asia",
+   "heat": 1.06,
+   "heatLegs": [
+    {
+     "leg": "equity",
+     "value": 2.03
+    },
+    {
+     "leg": "credit",
+     "value": 0.09
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDPHP=X",
+     "currency": "PHP",
+     "quote": 61.33700180053711,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.31,
+     "ret_3m_pct": 0.63,
+     "ret_12m_pct": -7.6,
+     "note": "PHP return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EPHE",
+     "last": 25.670000076293945,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 2.03,
+     "ret_3m_pct": 3.59,
+     "ret_12m_pct": -3.31,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "asia",
+     "label": "ICE BofA Asia Emerging Markets Corporate Plus OAS",
+     "oas_bps": 83,
+     "oas_chg_1m_bps": -2,
+     "oas_z": -0.953,
+     "credit_1m_pct": 0.09,
+     "note": "ICE BofA Asia Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 1.66,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 7.1,
+      "year": 2019,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 2.77,
+      "year": 2019,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "VN": {
+   "name": "Vietnam",
+   "iso": "VN",
+   "iso3": "VNM",
+   "region": "emasia",
+   "regionLabel": "Emerging Asia",
+   "heat": 0.565,
+   "heatLegs": [
+    {
+     "leg": "equity",
+     "value": 1.04
+    },
+    {
+     "leg": "credit",
+     "value": 0.09
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: equity, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDVND=X",
+     "currency": "VND",
+     "quote": 26068,
+     "asOf": "2026-08-14",
+     "ret_1m_pct": 0.7,
+     "ret_3m_pct": 1,
+     "ret_12m_pct": 0.89,
+     "note": "VND return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "VNM",
+     "last": 17.520000457763672,
+     "asOf": "2026-08-13",
+     "ret_1m_pct": 1.04,
+     "ret_3m_pct": -8.99,
+     "ret_12m_pct": 0.46,
+     "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "asia",
+     "label": "ICE BofA Asia Emerging Markets Corporate Plus OAS",
+     "oas_bps": 83,
+     "oas_chg_1m_bps": -2,
+     "oas_z": -0.953,
+     "credit_1m_pct": 0.09,
+     "note": "ICE BofA Asia Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 3.31,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 9.32,
+      "year": 2023,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 2.89,
+      "year": 2015,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "EZ": {
+   "name": "Euro Area",
+   "iso": "EZ",
+   "iso3": "EMU",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "aggregate": true,
+   "heat": 2.726,
+   "heatLegs": [
+    {
+     "leg": "bond",
+     "value": 0.912
+    },
+    {
+     "leg": "equity",
+     "value": 4.54
+    }
+   ],
+   "heatBasis": "aggregate of the euro-area AAA curve and the EZU equity ETF — not a country",
+   "instruments": {
+    "bonds": {
+     "status": "OK",
+     "notes": "ECB euro-area AAA 10Y government curve (SDW, keyless)",
+     "yield_pct": 3.1654173208,
+     "asOf": "2026-08-12",
+     "yield_chg_bps": {
+      "1": -1.07,
+      "3": 1.31,
+      "12": -0.04
+     },
+     "yield_z": 1.028,
+     "bond_price_1m_pct": 0.091,
+     "bond_price_1m_usd_pct": 0.912,
+     "duration_assumed": 8.5
+    },
+    "equity_etf": {
+     "status": "OK",
+     "label": "EZU",
+     "ret_1m_pct": 4.54,
+     "ret_3m_pct": 6.87,
+     "ret_12m_pct": 19.92
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "sovereign_spread": {
+     "status": "proxy",
+     "vs_us_10y_bps": -130.46,
+     "note": "euro-area AAA 10Y minus the US 10Y"
+    },
+    "structural": {
+     "note": "aggregate — no single World Bank country row applies"
+    }
+   }
+  }
+ },
+ "regions": {
+  "namerica": {
+   "label": "North America",
+   "heat": 2.347,
+   "countries": 2
+  },
+  "latam": {
+   "label": "Latin America",
+   "heat": 0.99,
+   "countries": 6
+  },
+  "europe": {
+   "label": "Europe",
+   "heat": 2.008,
+   "countries": 19
+  },
+  "emeurope": {
+   "label": "Emerging Europe",
+   "heat": 1.916,
+   "countries": 4
+  },
+  "mideast": {
+   "label": "Middle East",
+   "heat": 1.04,
+   "countries": 4
+  },
+  "africa": {
+   "label": "Africa",
+   "heat": 3.23,
+   "countries": 1
+  },
+  "asia": {
+   "label": "Developed Asia",
+   "heat": 2.708,
+   "countries": 4
+  },
+  "apac": {
+   "label": "Asia-Pacific",
+   "heat": 2.454,
+   "countries": 2
+  },
+  "emasia": {
+   "label": "Emerging Asia",
+   "heat": 0.931,
+   "countries": 7
+  }
+ },
+ "credit": {
+  "asia": {
+   "status": "OK",
+   "label": "ICE BofA Asia Emerging Markets Corporate Plus OAS",
+   "seriesId": "BAMLEMRACRPIASIAOAS",
+   "oas_bps": 83,
+   "asOf": "2026-08-12",
+   "oas_chg_1m_bps": -2,
+   "oas_z": -0.953,
+   "credit_1m_pct": 0.09,
+   "note": "1-month credit return proxy = -(Δ OAS in bps / 100) x spread duration 4.5"
+  },
+  "latam": {
+   "status": "OK",
+   "label": "ICE BofA Latin America Emerging Markets Corporate Plus OAS",
+   "seriesId": "BAMLEMRLCRPILAOAS",
+   "oas_bps": 199,
+   "asOf": "2026-08-12",
+   "oas_chg_1m_bps": -11,
+   "oas_z": -2.014,
+   "credit_1m_pct": 0.495,
+   "note": "1-month credit return proxy = -(Δ OAS in bps / 100) x spread duration 4.5"
+  },
+  "emea": {
+   "status": "OK",
+   "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+   "seriesId": "BAMLEMRECRPIEMEAOAS",
+   "oas_bps": 149,
+   "asOf": "2026-08-12",
+   "oas_chg_1m_bps": -6,
+   "oas_z": -0.906,
+   "credit_1m_pct": 0.27,
+   "note": "1-month credit return proxy = -(Δ OAS in bps / 100) x spread duration 4.5"
+  }
+ },
+ "coverage": {
+  "total": 50,
+  "scored": 50,
+  "withSovereignYield": 35,
+  "withEquityEtf": 34,
+  "withCreditLeg": 25
+ },
+ "sources": [
+  "FRED — OECD long-term (10Y) government bond yields, monthly",
+  "FRED — ICE BofA emerging-market corporate OAS by region, daily",
+  "ECB Data Portal — euro-area AAA government curve, keyless",
+  "Yahoo Finance — single-country equity ETFs and FX crosses, daily",
+  "World Bank — debt/GDP, inflation, lending rate and lending risk premium (annual, lagged)"
+ ],
+ "note": "Seed snapshot produced by running the live /api/atlas handler locally. The deployed site prefers the live endpoint; this file only serves a cold or rate-limited deployment."
+}

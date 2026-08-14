@@ -9,8 +9,11 @@ const state = {
   returns: null,
   history: {},
   status: null,
+  forecast: null,
+  opportunities: null,
   meta: null,
   generated: null,
+  error: null,
 };
 const listeners = new Set();
 const chartState = new Map(); // id -> { visible: Set<seriesId>, chart }
@@ -23,36 +26,76 @@ function emit() {
   for (const fn of listeners) fn();
 }
 
-async function fetchJSON(url, fallback) {
+/**
+ * Fetch JSON, refusing anything that is not actually JSON.
+ *
+ * This guard is the fix for the bug that blanked the dashboard: a SPA rewrite
+ * that catches a missing /data/*.json answers HTTP 200 with index.html, so
+ * `r.ok` is true and only `r.json()` fails — deep inside a chart, long after
+ * the page has decided it has data. Checking the content type turns that
+ * silent failure into an explicit one that the fallback chain can act on.
+ */
+async function fetchStrictJSON(url, { timeoutMs = 55000 } = {}) {
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), timeoutMs);
+  let r;
   try {
-    const ctl = new AbortController();
-    // cold serverless + retry chains (e.g. the countries panel = 11 ECB
-    // fetches) can exceed 25s on a first hit; 45s stays bounded
-    const t = setTimeout(() => ctl.abort(), 45000);
-    const r = await fetch(url, { signal: ctl.signal, headers: { Accept: "application/json" } });
+    r = await fetch(url, { signal: ctl.signal, headers: { Accept: "application/json" } });
+  } finally {
     clearTimeout(t);
-    if (!r.ok) throw new Error(`${url} -> HTTP ${r.status}`);
-    const j = await r.json();
+  }
+  if (!r.ok) throw new Error(`${url} -> HTTP ${r.status}`);
+  const ct = r.headers.get("content-type") || "";
+  if (!ct.includes("json")) {
+    throw new Error(`${url} -> served as "${ct}" instead of JSON (the file is missing from this deployment)`);
+  }
+  return r.json();
+}
+
+async function fetchJSON(url, fallback, opts) {
+  try {
+    const j = await fetchStrictJSON(url, opts);
     if (j.status === "UNAVAILABLE") throw new Error(`${url} -> ${j.why || "unavailable"}`);
     return j;
   } catch (e) {
     if (!fallback) throw e;
-    const r2 = await fetch(fallback);
-    if (!r2.ok) throw e;
-    return r2.json();
+    return fetchStrictJSON(fallback);
   }
 }
 
 export async function loadAtlas() {
+  if (state.atlas) return state.atlas;
   try {
     state.atlas = await fetchJSON("/api/atlas", "/data/bundle.json");
   } catch (e) {
-    const r = await fetch("/data/bundle.json");
-    state.atlas = r.ok ? await r.json() : null;
+    state.error = String(e.message || e);
+    state.atlas = null;
   }
   state.generated = state.atlas?.generated || null;
   emit();
   return state.atlas;
+}
+
+export async function loadForecast() {
+  if (state.forecast) return state.forecast;
+  try {
+    state.forecast = await fetchJSON("/api/forecast");
+  } catch (e) {
+    state.forecast = { status: "UNAVAILABLE", why: String(e.message || e) };
+  }
+  emit();
+  return state.forecast;
+}
+
+export async function loadOpportunities() {
+  if (state.opportunities) return state.opportunities;
+  try {
+    state.opportunities = await fetchJSON("/api/opportunities");
+  } catch (e) {
+    state.opportunities = { status: "UNAVAILABLE", why: String(e.message || e) };
+  }
+  emit();
+  return state.opportunities;
 }
 
 export async function loadReturns(market, mode) {

@@ -13,11 +13,12 @@
 import * as echarts from "echarts";
 import { PERIODS, presetToWindow, dataZoomConfig } from "../controls.js";
 import { registerChart, unregisterChart } from "../store.js";
+import { cssVar, onThemeChange } from "../theme.js";
 
 export const PALETTE = [
-  "#12b76a", "#4e5ba6", "#f79009", "#0ea5e9", "#f04438", "#9d4edd",
-  "#0f766e", "#c026d3", "#64748b", "#b45309", "#2563eb", "#7c3aed",
-  "#15803d", "#db2777", "#ca8a04", "#1d4ed8",
+  "#2563eb", "#0f9d58", "#d98613", "#d92d20", "#7c3aed",
+  "#0891b2", "#be185d", "#65a30d", "#ea580c", "#4f46e5",
+  "#0f766e", "#c026d3", "#15803d", "#db2777", "#ca8a04", "#1d4ed8",
 ];
 
 const VIEWS = {
@@ -90,9 +91,14 @@ export function buildProjectionChart(el, assets, opts = {}) {
     }
     return {
       animation: false,
+      backgroundColor: "transparent",
       grid: { left: 64, right: 24, top: 30, bottom: 48 },
       tooltip: {
         trigger: "axis",
+        backgroundColor: cssVar("--bg-card"),
+        borderColor: cssVar("--border"),
+        textStyle: { color: cssVar("--text-main"), fontSize: 12 },
+        extraCssText: "box-shadow:0 8px 28px -10px rgba(0,0,0,.4);border-radius:10px;",
         valueFormatter: (v) => `${Number(v).toFixed(2)}%`,
         formatter: (params) => {
           if (!params.length) return "";
@@ -119,7 +125,11 @@ export function buildProjectionChart(el, assets, opts = {}) {
         nameGap: 26,
         min: 0,
         max: totalMonths,
+        nameTextStyle: { color: cssVar("--axis-text"), fontSize: 11 },
+        axisLine: { lineStyle: { color: cssVar("--border") } },
         axisLabel: {
+          color: cssVar("--axis-text"),
+          fontSize: 10.5,
           formatter: (v) => {
             if (v === 0) return "now";
             if (v < 12) return `${v}M`;
@@ -127,15 +137,16 @@ export function buildProjectionChart(el, assets, opts = {}) {
             return `${(v / 12).toFixed(1)}Y`;
           },
         },
-        splitLine: { lineStyle: { color: "#eef0f3" } },
+        splitLine: { lineStyle: { color: cssVar("--grid-line") } },
       },
       yAxis: {
         type: "value",
         name: "Cumulative return (%)",
         nameLocation: "middle",
         nameGap: 44,
-        axisLabel: { formatter: (v) => `${v}%` },
-        splitLine: { lineStyle: { color: "#eef0f3" } },
+        nameTextStyle: { color: cssVar("--axis-text"), fontSize: 11 },
+        axisLabel: { color: cssVar("--axis-text"), fontSize: 10.5, formatter: (v) => `${v}%` },
+        splitLine: { lineStyle: { color: cssVar("--grid-line") } },
       },
       dataZoom: dataZoomConfig({ total: totalMonths, unit: "months" }),
     };
@@ -158,9 +169,11 @@ export function buildProjectionChart(el, assets, opts = {}) {
 
   const onResize = () => chart.resize();
   window.addEventListener("resize", onResize);
+  const offTheme = onThemeChange(() => rec.refresh());
   rec.dispose = () => {
     unregisterChart(id);
     window.removeEventListener("resize", onResize);
+    offTheme();
     chart.dispose();
   };
   return rec;

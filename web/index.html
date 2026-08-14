@@ -4,10 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Public Credit — Opportunity Engine</title>
+  <meta name="description" content="Live global public-credit opportunity engine: world return heat map, ranked credit and sovereign opportunity board, and VAR-forecast credit spreads with an impulse-response contagion matrix." />
+  <meta name="color-scheme" content="light dark" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23101828'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Inter,sans-serif' font-weight='700'>PC</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231f5eff'/><text x='50' y='69' font-size='50' text-anchor='middle' fill='white' font-family='Inter,sans-serif' font-weight='700'>PC</text></svg>" />
+  <script>
+    // set the theme before first paint so there is no light flash in dark mode
+    try {
+      var t = localStorage.getItem("pc-theme");
+      if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
 </head>
 <body>
   <header class="pc-header">
@@ -20,20 +29,27 @@
         </div>
         <nav class="pc-nav" id="pc-nav">
           <a href="#/map" data-route="map">Map</a>
+          <a href="#/opportunities" data-route="opportunities">Opportunities</a>
+          <a href="#/forecast" data-route="forecast">Forecast</a>
           <a href="#/returns" data-route="returns">Returns</a>
           <a href="#/history" data-route="history">History</a>
           <a href="#/signals" data-route="signals">Signals</a>
         </nav>
       </div>
-      <div class="pc-stamp">
-        <div class="pc-stamp-label">Data updated</div>
-        <div class="pc-stamp-value" id="pc-stamp">…</div>
+      <div class="pc-header-right">
+        <div class="pc-stamp">
+          <div class="pc-stamp-label">Data updated</div>
+          <div class="pc-stamp-value" id="pc-stamp">…</div>
+        </div>
+        <button class="pc-theme-toggle" id="pc-theme" type="button" aria-label="Toggle theme">◐</button>
       </div>
     </div>
   </header>
 
   <main class="pc-main">
     <section class="pc-page" id="page-map"></section>
+    <section class="pc-page" id="page-opportunities"></section>
+    <section class="pc-page" id="page-forecast"></section>
     <section class="pc-page" id="page-returns"></section>
     <section class="pc-page" id="page-history"></section>
     <section class="pc-page" id="page-country"></section>

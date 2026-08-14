@@ -43,6 +43,8 @@ const handlers = {
   "/api/returns": () => import("../api/returns.js").then((m) => m.default),
   "/api/history": () => import("../api/history.js").then((m) => m.default),
   "/api/status": () => import("../api/status.js").then((m) => m.default),
+  "/api/forecast": () => import("../api/forecast.js").then((m) => m.default),
+  "/api/opportunities": () => import("../api/opportunities.js").then((m) => m.default),
 };
 
 const server = createServer(async (req, res) => {
@@ -71,7 +73,20 @@ const server = createServer(async (req, res) => {
     res.end("forbidden");
     return;
   }
-  if (!existsSync(file) || statSync(file).isDirectory()) file = join(distRoot, "index.html");
+  // SPA fallback for ROUTES only. A missing /data/*.json or /assets/* must
+  // 404 honestly — silently serving index.html in its place is exactly what
+  // hid the missing seed bundle in production: the fetch saw HTTP 200 and
+  // only failed later, inside JSON.parse.
+  if (!existsSync(file) || statSync(file).isDirectory()) {
+    const ext = extname(file);
+    if (ext && ext !== ".html") {
+      res.statusCode = 404;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ status: "NOT_FOUND", path: pathname }));
+      return;
+    }
+    file = join(distRoot, "index.html");
+  }
   res.setHeader("Content-Type", MIME[extname(file)] || "application/octet-stream");
   res.end(readFileSync(file));
 });

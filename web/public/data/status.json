@@ -1,0 +1,86 @@
+{
+ "status": "OK",
+ "generated": "2026-08-14T03:00:16.858Z",
+ "schema": "signals.v1",
+ "features": [
+  {
+   "id": "ivrv",
+   "name": "IV-RV premium signal",
+   "what": "The board's options leg: the z-score of credit-ETF ATM implied vol vs realized vol, accrued daily from real listed options chains (IV floor gate 0.02 keeps degraded feeds out).",
+   "autoGoLive": true,
+   "live": false,
+   "status": "accruing",
+   "progress": {
+    "accrued": 4,
+    "needed": 20
+   },
+   "goLiveDate": "2026-09-03",
+   "note": "Accruing real daily snapshots (weekday 18:00 launchd). Per ticker: HYG 4/20 · LQD 4/20 · TLT 4/20 · EMB 4/20 · ANGL 2/20 · JNK 2/20.",
+   "dateNote": "Weekday estimate from the last real snapshot; a degraded-feed day (IV gate) adds a day. The leg unlocks itself the day the 20th real snapshot lands."
+  },
+  {
+   "id": "cot_hy",
+   "name": "COT BBG HY credit futures leg",
+   "what": "Net leveraged-money / dealer positioning on the Bloomberg HY credit futures contract — listed 2026-03.",
+   "autoGoLive": true,
+   "live": false,
+   "status": "date-gated",
+   "progress": null,
+   "goLiveDate": "2028-03-31",
+   "note": "The ≥2-year history gate (COT_MIN_HISTORY_YEARS) needs weekly reports from the contract's 2026-03 listing. The board reports this honestly; no code change can accelerate real history.",
+   "dateNote": "This card flips to live on its own the first day the 2-year history window is complete."
+  },
+  {
+   "id": "cot_ig",
+   "name": "COT BBG IG credit futures leg",
+   "what": "Net leveraged-money / dealer positioning on the Bloomberg IG credit futures contract — listed 2026-05.",
+   "autoGoLive": true,
+   "live": false,
+   "status": "date-gated",
+   "progress": null,
+   "goLiveDate": "2028-05-31",
+   "note": "The ≥2-year history gate (COT_MIN_HISTORY_YEARS) needs weekly reports from the contract's 2026-05 listing. The board reports this honestly; no code change can accelerate real history.",
+   "dateNote": "This card flips to live on its own the first day the 2-year history window is complete."
+  },
+  {
+   "id": "country_straddle",
+   "name": "Per-country straddle yield / VRP",
+   "what": "Spec §3.3-3.4 country legs: ATM straddle yield and vol-risk premium outside the US.",
+   "autoGoLive": true,
+   "live": false,
+   "status": "waiting-for-data",
+   "progress": null,
+   "goLiveDate": null,
+   "note": "No free per-country ETF options chain exists in the daily accrual yet. This card flips to live automatically the first day a real country chain accrues (checked daily by the launchd daemon).",
+   "dateNote": "No date can be promised — the exchanges' chains are the gate, and thin markets decide."
+  },
+  {
+   "id": "emhy_chain",
+   "name": "EMHY options chain",
+   "what": "ATM implied vol + straddle for the EM high-yield ETF (iShares EMHY).",
+   "autoGoLive": true,
+   "live": false,
+   "status": "waiting-for-data",
+   "progress": null,
+   "goLiveDate": null,
+   "note": "EMHY has no listed expiries on the free feed — a genuine thin-market fact. This card flips to live automatically the first day a real chain exists.",
+   "dateNote": "No date can be promised — the exchange lists expiries on its own schedule."
+  },
+  {
+   "id": "angl_straddle",
+   "name": "ANGL ATM straddle quote",
+   "what": "Real ATM straddle price for the fallen-angel ETF (ANGL) — the thin chain has no straddle quote yet.",
+   "autoGoLive": true,
+   "live": false,
+   "status": "waiting-for-data",
+   "progress": null,
+   "goLiveDate": null,
+   "note": "ANGL accrues IV (2/20) but its thin chain carries no ATM straddle quote. This card flips to live automatically the first day a real straddle snapshot accrues.",
+   "dateNote": "No date can be promised — the quote appears when the market makes it."
+  }
+ ],
+ "snapshot": {
+  "lastDate": "2026-08-12",
+  "source": "api/iv_history.json (refreshed daily by the accrual daemon via npm run seed)"
+ }
+}

@@ -30,6 +30,30 @@ export const C = {
 
 export const UA = "Mozilla/5.0 (PublicCredit/1.0; research dashboard)";
 
+/**
+ * Bounded-concurrency map. The atlas fans out to ~90 upstream series; issuing
+ * them sequentially cost ~7s warm and blew the function's wall clock cold,
+ * while issuing all 90 at once gets us rate-limited (FRED 429s above ~10
+ * concurrent). `limit` is the compromise and is the single knob for it.
+ */
+export async function pmap(items, limit, fn) {
+  const out = new Array(items.length);
+  let next = 0;
+  const workers = new Array(Math.min(limit, items.length)).fill(0).map(async () => {
+    for (;;) {
+      const i = next++;
+      if (i >= items.length) return;
+      try {
+        out[i] = await fn(items[i], i);
+      } catch (e) {
+        out[i] = { unavailable: String(e && e.message ? e.message : e) };
+      }
+    }
+  });
+  await Promise.all(workers);
+  return out;
+}
+
 export function cacheHeaders(seconds = 21600) {
   return {
     "Cache-Control": `public, s-maxage=${seconds}, stale-while-revalidate=86400`,
@@ -72,22 +96,42 @@ export const CACHE_TTL = {
   YAHOO_CHART: 2 * 3600 * 1000, // daily closes (intraday tolerance)
   YAHOO_ATMIV: 3 * 3600 * 1000, // option chains move intraday
 };
-const CACHE_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "public", "data", "cache");
+// Two cache roots. SEED_ROOT is the committed snapshot shipped inside the
+// function bundle (vercel.json includeFiles) — readable everywhere, but the
+// Vercel function filesystem is READ-ONLY, so refreshed data can never be
+// written back there. WRITE_ROOT is the only writable location on a serverless
+// instance (/tmp, per-instance, survives warm invocations). Reads prefer the
+// fresher of the two; writes always go to WRITE_ROOT. Locally both are the
+// repo directory, so `npm run serve` still grows the committed snapshot.
+const SEED_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "public", "data", "cache");
+const ON_VERCEL = !!(process.env.VERCEL || process.env.NOW_REGION);
+const WRITE_ROOT = ON_VERCEL ? "/tmp/pc-cache" : SEED_ROOT;
 const inflight = new Map();
 
+function cacheFile(root, kind, key) {
+  return join(root, kind, key.replace(/[^A-Za-z0-9._-]/g, "__") + ".json");
+}
 function cachePath(kind, key) {
-  return join(CACHE_ROOT, kind, key.replace(/[^A-Za-z0-9._-]/g, "__") + ".json");
+  return cacheFile(WRITE_ROOT, kind, key);
 }
 
-function readCached(kind, key, ttlMs) {
-  const p = cachePath(kind, key);
+function readOne(root, kind, key) {
   try {
-    const st = statSync(p);
-    if (ttlMs && Date.now() - st.mtimeMs <= ttlMs) {
-      return JSON.parse(readFileSync(p, "utf8"));
-    }
-  } catch { /* missing or corrupt -> miss */ }
-  return null;
+    const p = cacheFile(root, kind, key);
+    return { mtime: statSync(p).mtimeMs, doc: JSON.parse(readFileSync(p, "utf8")) };
+  } catch {
+    return null;
+  }
+}
+
+/** newest of {/tmp refresh, bundled seed}; ttlMs=0 means "any age" */
+function readCached(kind, key, ttlMs) {
+  const a = readOne(WRITE_ROOT, kind, key);
+  const b = WRITE_ROOT === SEED_ROOT ? null : readOne(SEED_ROOT, kind, key);
+  const best = !a ? b : !b ? a : a.mtime >= b.mtime ? a : b;
+  if (!best) return null;
+  if (ttlMs && Date.now() - best.mtime > ttlMs) return null;
+  return best.doc;
 }
 
 function mergeRows(prev, rows) {
@@ -309,6 +353,82 @@ export async function yahooAtmIv(symbol) {
   // cached.rows contains daily IV snapshots {date, v} (merged by date)
   const last = cached.rows[cached.rows.length - 1];
   return { atmIv: last?.v, fromCache: cached.fromCache, stale: cached.stale };
+}
+
+/* ------------------------------------------------------------------ */
+/* World Bank (keyless, free) — structural credit context              */
+/* ------------------------------------------------------------------ */
+// Annual and lagged 1-2 years by design: this is the structural leg
+// (leverage, inflation, lending risk premium), never presented as live.
+export const WB_TTL = 7 * 24 * 3600 * 1000;
+
+export async function worldBank(indicator, iso3List) {
+  const key = `${indicator}|${iso3List.join("-")}`;
+  const cached = await cachedRows("worldbank", key, WB_TTL, async () => {
+    const url = `https://api.worldbank.org/v2/country/${iso3List.join(";")}/indicator/${indicator}?format=json&per_page=2000&date=2015:2026`;
+    const r = await fetchWithRetry(url, { headers: { Accept: "application/json" }, timeoutMs: 20000 });
+    if (r.unavailable) return { unavailable: `WorldBank ${indicator}: ${r.why}` };
+    if (!r.ok) return { unavailable: `WorldBank ${indicator}: HTTP ${r.status}` };
+    let j;
+    try {
+      j = await r.json();
+    } catch (e) {
+      return { unavailable: `WorldBank ${indicator}: bad JSON` };
+    }
+    const rows = [];
+    for (const o of j?.[1] || []) {
+      if (o?.value == null || !o?.date) continue;
+      // one row per (country, year); `date` key keeps the cache merge honest
+      rows.push({ date: `${o.date}-12-31|${o.countryiso3code}`, v: Number(o.value), iso3: o.countryiso3code });
+    }
+    if (!rows.length) return { unavailable: `WorldBank ${indicator}: no rows` };
+    return { rows };
+  });
+  if (cached.unavailable) return { unavailable: cached.unavailable };
+  // latest non-null observation per country
+  const latest = new Map();
+  for (const r of cached.rows || []) {
+    const iso3 = r.iso3 || r.date.split("|")[1];
+    const year = r.date.slice(0, 4);
+    const prev = latest.get(iso3);
+    if (!prev || year > prev.year) latest.set(iso3, { year, v: r.v });
+  }
+  return { latest, stale: cached.stale };
+}
+
+/* ------------------------------------------------------------------ */
+/* Series helpers shared by the atlas / opportunities / forecast legs   */
+/* ------------------------------------------------------------------ */
+
+/** % return between the close `back` observations ago and the last close */
+export function pctReturn(rows, back) {
+  if (!rows || rows.length <= back) return null;
+  const a = rows[rows.length - 1 - back]?.v;
+  const b = rows[rows.length - 1]?.v;
+  if (!Number.isFinite(a) || !Number.isFinite(b) || a <= 0) return null;
+  return Math.round((b / a - 1) * 10000) / 100;
+}
+
+/** rolling z-score of the last observation over `window` observations */
+export function zLast(rows, window = 126, minObs = 24) {
+  if (!rows || rows.length < minObs) return null;
+  const vals = rows.slice(-window).map((r) => r.v).filter(Number.isFinite);
+  if (vals.length < minObs) return null;
+  const mean = vals.reduce((a, b) => a + b, 0) / vals.length;
+  const sd = Math.sqrt(vals.reduce((a, b) => a + (b - mean) ** 2, 0) / vals.length);
+  if (!Number.isFinite(sd) || sd <= 0) return null;
+  return Math.round(((vals[vals.length - 1] - mean) / sd) * 1000) / 1000;
+}
+
+/** inner join two date-keyed series -> [{date, a, b}] */
+export function joinByDate(a, b) {
+  const bm = new Map(b.map((x) => [x.date, x.v]));
+  const out = [];
+  for (const x of a) {
+    const y = bm.get(x.date);
+    if (y != null) out.push({ date: x.date, a: x.v, b: y });
+  }
+  return out;
 }
 
 /* ------------------------------------------------------------------ */
