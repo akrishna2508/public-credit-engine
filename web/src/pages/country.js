@@ -5,7 +5,7 @@
  */
 import { loadAtlas, loadHistory, loadReturns, setSeriesVisible } from "../store.js";
 import { buildHistoryChart } from "../charts/history.js";
-import { buildProjectionChart, PALETTE } from "../charts/projection.js";
+import { buildProjectionChart, viewsFor, PALETTE } from "../charts/projection.js";
 import { buildLegend } from "../legend.js";
 import { buildPeriodBar } from "../controls.js";
 
@@ -227,12 +227,21 @@ export async function render(root, { iso }) {
     histEl.innerHTML = `<div class="pc-empty">${esc(hist?.why || "No free 10-year series covers this market.")}</div>`;
   }
 
-  /* ---- projected curve (euro-area country panel only) ---- */
+  /* ---- projected curve ---- */
+  // Buy and hold, not the volatility basis: a sovereign page is about what
+  // the bond pays you for owning it, and the hold book covers all 34
+  // sovereigns where the volatility book covers only the 11 euro-area members
+  // the ECB publishes a monthly long-term rate for.
   const projEl = root.querySelector("#proj-chart");
-  const ret = await loadReturns("countries", "pure");
+  const ret = await loadReturns("countries", "pure", "hold");
   const asset = (ret?.markets?.countries?.pure || []).find((a) => a.id === iso);
   if (asset && !asset.unavailable) {
-    const rec = buildProjectionChart(projEl, [asset], { id: "country-proj", view: "ret" });
+    const rec = buildProjectionChart(projEl, [asset], {
+      id: "country-proj",
+      views: viewsFor("hold"),
+      view: "net",
+      footNote: "Yield compounded at today's level, net of the latest inflation print — not a forecast",
+    });
     recs.push(rec);
     buildLegend(
       root.querySelector("#proj-legend"),
@@ -241,7 +250,7 @@ export async function render(root, { iso }) {
     );
     buildPeriodBar(root.querySelector("#proj-periods"), { onSelect: (p) => rec.applyPreset(p) });
   } else {
-    projEl.innerHTML = `<div class="pc-empty">No projected curve for ${esc(iso)} — the hold-horizon country panel is built from the ECB long-term rate series, which covers euro-area members.</div>`;
+    projEl.innerHTML = `<div class="pc-empty">No projected curve for ${esc(iso)} — no free 10-year government yield series covers this market.</div>`;
   }
 
   return { dispose: () => recs.forEach((r) => r.dispose()) };

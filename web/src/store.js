@@ -110,11 +110,11 @@ export async function loadOpportunities() {
   return state.opportunities;
 }
 
-export async function loadReturns(market, mode) {
-  const key = `returns:${market}:${mode}`;
+export async function loadReturns(market, mode, basis = "hold") {
+  const key = `returns:${basis}:${market}:${mode}`;
   if (state.history[key]) return state.history[key];
   try {
-    state.history[key] = await fetchJSON(`/api/returns?market=${market}&mode=${mode}`);
+    state.history[key] = await fetchJSON(`/api/returns?market=${market}&mode=${mode}&basis=${basis}`);
   } catch (e) {
     state.history[key] = null;
   }

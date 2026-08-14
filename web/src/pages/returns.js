@@ -1,32 +1,60 @@
 /**
  * Returns page: cumulative 1-month -> 15-year projections extrapolated from
- * the live hold-horizon curves. Market / mode / view chips, period bar,
- * full-name toggleable legend, honest methodology notes.
+ * the live hold-horizon curves.
+ *
+ * Two economically different books sit behind the same chart, chosen by the
+ * BASIS control:
+ *
+ *   Buy and hold — what you earn by owning the asset. Spread or yield, and
+ *   that carry net of the loss you expect to suffer. Nothing is deducted for
+ *   a dealer, a premium or execution, because a holder pays none of them.
+ *
+ *   Volatility strategy — what a long straddle pays. Gross is the average
+ *   absolute move captured on high-volatility days; the net tiers subtract
+ *   the straddle premium a dealer charges plus execution friction, which is
+ *   why they can be negative.
+ *
+ * They were previously two different pages' worth of ideas crammed into one
+ * label ("Pure assets"), which is what made a dealer markup on a bond look
+ * like a bug. Each basis now names itself and carries its own view chips.
  */
 import { loadReturns, setSeriesVisible } from "../store.js";
-import { buildProjectionChart, VIEWS, PALETTE } from "../charts/projection.js";
+import { buildProjectionChart, viewsFor, PALETTE } from "../charts/projection.js";
 import { buildLegend } from "../legend.js";
 import { buildPeriodBar } from "../controls.js";
 
+const BASES = [
+  { value: "hold", label: "Buy & hold" },
+  { value: "vol", label: "Volatility strategy" },
+];
 const MARKETS = [
   { value: "us", label: "United States" },
   { value: "eu", label: "Europe" },
   { value: "em", label: "Emerging markets" },
   { value: "countries", label: "Countries" },
 ];
-// "pure" means a SINGLE-asset straddle; "spread" means a straddle on the
-// difference between two assets. Neither is a buy-and-hold bond position —
-// the old "Pure assets" label read as if it were, which is why a dealer
-// markup on it looked like a mistake. Holding is priced on the Spreads page.
+// "Single asset" means one instrument on its own; "Relative value" means the
+// difference between two — a straddle on the spread between them under the
+// volatility basis, the extra carry one pays over the other under buy & hold.
 const MODES = [
   { value: "pure", label: "Single asset" },
   { value: "spread", label: "Relative value" },
 ];
-const VIEW_CHIPS = [
-  { value: "gross", label: "Gross payout" },
-  { value: "hf", label: "HF net" },
-  { value: "ret", label: "Retail net" },
-];
+
+const BASIS_COPY = {
+  hold: {
+    heading: "Buy-and-hold returns",
+    blurb:
+      "What you earn by <b>owning</b> the asset: the spread or yield it carries, and that carry net of the loss you expect to suffer. <b>No dealer markup, straddle premium or execution friction is charged anywhere in this book</b> — none of them applies to a holder. Per-grade spread minus expected loss, with cover ratios, is on <a href=\"#/spreads\" style=\"color:var(--accent);font-weight:600\">Spreads</a>.",
+    foot: "Carry compounded at today's level — not a forecast of where spreads or yields go",
+  },
+  vol: {
+    heading: "Volatility strategy returns",
+    blurb:
+      "What a <b>long-volatility straddle</b> pays, not a bond you buy and hold. Gross is the average absolute move captured on high-volatility days; the net tiers subtract the straddle premium a dealer charges plus execution friction, which is why they can be negative. A markup belongs here because you are buying an option. For what owning pays instead, switch the basis to <b>Buy &amp; hold</b>.",
+    foot: "Extrapolated from live hold-horizon curves — not a forecast",
+  },
+};
 
 function seg(container, options, { onChange, active } = {}) {
   container.classList.add("pc-seg");
@@ -46,23 +74,24 @@ function seg(container, options, { onChange, active } = {}) {
 }
 
 export async function render(root, ctx = {}) {
+  let basis = ctx.basis === "vol" ? "vol" : "hold";
   let market = ctx.market || "us";
   let mode = ctx.mode || "pure";
-  let view = ctx.view || "ret";
+  let view = null; // resolved against the active basis on every rebuild
   let payload = null;
   let chartRec = null;
-  let legendApi = null;
   let pb = null;
   const hidden = new Set();
 
   root.innerHTML = `
   <div class="pc-hero">
-    <h1>Volatility strategy returns</h1>
-    <p>This page prices a <b>long-volatility straddle</b>, not a bond you buy and hold. Gross is the average absolute move captured on high-volatility days; the net tiers subtract the straddle premium a dealer charges plus execution friction, which is why they can be negative. For what you earn simply by <b>owning</b> credit — spread minus expected loss, with no dealer markup of any kind — see <a href="#/spreads" style="color:var(--accent);font-weight:600">Spreads</a>.</p>
+    <h1 id="hero-h"></h1>
+    <p id="hero-p"></p>
   </div>
   <div class="pc-card pc-card-pad">
     <div class="pc-controls" style="justify-content:space-between;flex-wrap:wrap;gap:12px">
       <div class="pc-controls">
+        <div id="basis-seg"></div>
         <div id="market-seg"></div>
         <div id="mode-seg"></div>
         <div id="view-seg"></div>
@@ -84,6 +113,8 @@ export async function render(root, ctx = {}) {
   const legendEl = root.querySelector("#legend-el");
   const viewDesc = root.querySelector("#view-desc");
   const methodNote = root.querySelector("#method-note");
+  const viewSegEl = root.querySelector("#view-seg");
+  const modeSegEl = root.querySelector("#mode-seg");
 
   function rebuild() {
     if (chartRec) {
@@ -91,20 +122,55 @@ export async function render(root, ctx = {}) {
       chartRec = null;
     }
     legendEl.innerHTML = "";
-    legendApi = null;
-    viewDesc.textContent = VIEWS[view] ? `${VIEWS[view].label} — ${VIEWS[view].desc}` : "";
 
-    const items = (payload?.markets?.[market]?.[mode] || []).filter((a) => a && !a.unavailable);
+    const copy = BASIS_COPY[basis];
+    root.querySelector("#hero-h").textContent = copy.heading;
+    root.querySelector("#hero-p").innerHTML = copy.blurb;
+
+    // the view chips belong to the basis: buy & hold has no HF/retail split
+    const views = viewsFor(basis);
+    if (!view || !views[view]) view = Object.keys(views)[Object.keys(views).length - 1];
+    seg(viewSegEl, Object.entries(views).map(([value, v]) => ({ value, label: v.label })), {
+      active: view,
+      onChange: (v) => {
+        view = v;
+        rebuild();
+      },
+    });
+    viewDesc.textContent = `${views[view].label} — ${views[view].desc}`;
+
+    const book = payload?.markets?.[market] || {};
+    // a market with no relative-value legs (every sovereign book) should not
+    // offer a chip that leads to an empty chart
+    const modes = MODES.filter((m) => m.value === "pure" || (book[m.value] || []).length);
+    if (!modes.some((m) => m.value === mode)) mode = "pure";
+    seg(modeSegEl, modes, {
+      active: mode,
+      onChange: (v) => {
+        mode = v;
+        hidden.clear();
+        rebuild();
+      },
+    });
+
+    const items = (book[mode] || []).filter((a) => a && !a.unavailable);
     if (!items.length) {
-      chartEl.innerHTML = `<div class="pc-empty">No ${market}/${mode} assets${
-        payload?.why ? ` — ${payload.why}` : ""
-      }.</div>`;
+      chartEl.innerHTML = `<div class="pc-empty">No ${market}/${mode} assets on the ${
+        basis === "vol" ? "volatility" : "buy-and-hold"
+      } basis${payload?.why ? ` — ${payload.why}` : ""}.</div>`;
       methodNote.innerHTML = "";
       return;
     }
+    chartEl.innerHTML = "";
 
-    chartRec = buildProjectionChart(chartEl, items, { id: "returns", view, initialHidden: hidden });
-    legendApi = buildLegend(
+    chartRec = buildProjectionChart(chartEl, items, {
+      id: "returns",
+      view,
+      views,
+      initialHidden: hidden,
+      footNote: copy.foot,
+    });
+    buildLegend(
       legendEl,
       items.map((a, i) => ({
         id: a.id,
@@ -125,42 +191,40 @@ export async function render(root, ctx = {}) {
         onSelect: (preset) => chartRec && chartRec.applyPreset(preset),
       });
     }
-    // switching market/mode/view builds a NEW chart at full range, so the
+    // switching basis/market/mode/view builds a NEW chart at full range, so the
     // still-highlighted preset button would be lying about the visible window
     const active = pb.current();
     if (active) chartRec.applyPreset(active);
+
+    const win = payload?.windows?.[market];
     const approx = (payload.approximations || []).join(" · ");
-    methodNote.innerHTML = `${payload.label || "Extrapolated from live hold-horizon curves — not a forecast"}${
+    methodNote.innerHTML = `${payload.label || copy.foot}${
       payload.generated ? ` · as of ${new Date(payload.generated).toUTCString().slice(0, 22)}` : ""
-    }${approx ? `<br>${approx}` : ""}`;
+    }${win ? `<br>Measured from ${win} — every series in this market shares one window so the ranking is comparable.` : ""}${
+      approx ? `<br>${approx}` : ""
+    }`;
   }
 
   async function refresh() {
-    payload = await loadReturns(market, mode);
+    payload = await loadReturns(market, mode, basis);
     rebuild();
   }
 
+  seg(root.querySelector("#basis-seg"), BASES, {
+    active: basis,
+    onChange: (v) => {
+      basis = v;
+      view = null; // the view chips differ between the two books
+      hidden.clear();
+      refresh();
+    },
+  });
   seg(root.querySelector("#market-seg"), MARKETS, {
     active: market,
     onChange: (v) => {
       market = v;
       hidden.clear();
       refresh();
-    },
-  });
-  seg(root.querySelector("#mode-seg"), MODES, {
-    active: mode,
-    onChange: (v) => {
-      mode = v;
-      hidden.clear();
-      refresh();
-    },
-  });
-  seg(root.querySelector("#view-seg"), VIEW_CHIPS, {
-    active: view,
-    onChange: (v) => {
-      view = v;
-      rebuild();
     },
   });
 

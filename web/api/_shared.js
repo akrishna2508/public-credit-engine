@@ -28,6 +28,30 @@ export const C = {
   TRADE_SIZE_M: 50.0,
 };
 
+/**
+ * Observation-frequency profiles.
+ *
+ * RV_LOOKBACK=21 and DEALER_WINDOW=90 are counts of OBSERVATIONS, and the
+ * engine only ever fed them daily series, so they read as "one month" and
+ * "one business quarter or so". The euro country book is monthly, and both
+ * the engine (engine/eur_country.py) and this port were passing the same
+ * counts straight through — a 21-MONTH realized-vol window and a 90-MONTH
+ * (seven and a half year) fee window. The consequence was visible in the
+ * output: the average |12-month move| over a 90-month window spanning the
+ * 2022 rate shock came out LARGER than the average move on the shock days
+ * it was being charged against, so every euro sovereign priced as a
+ * guaranteed loss for a reason that was purely an indexing artefact.
+ *
+ * The monthly profile keeps the roughly 1:4 ratio the daily constants encode
+ * — one year of realized vol, four years of dealer pricing — which is the
+ * shortest pair that still estimates a standard deviation and a 90th
+ * percentile from monthly data. sqrt(periodsPerYear) annualizes.
+ */
+export const FREQ = {
+  days: { rvLookback: 21, dealerWindow: 90, periodsPerYear: 252 },
+  months: { rvLookback: 12, dealerWindow: 48, periodsPerYear: 12 },
+};
+
 export const UA = "Mozilla/5.0 (PublicCredit/1.0; research dashboard)";
 
 /**
@@ -501,23 +525,75 @@ function rollingMean(values, window, minPeriods = 1) {
   return out;
 }
 
-/** realized vol of log returns (annualized, ddof=0) — realized_vol_series */
-export function realizedVolSeries(closes) {
-  const logret = [];
-  for (let i = 1; i < closes.length; i++) {
-    const a = closes[i - 1];
-    const b = closes[i];
-    if (Number.isFinite(a) && Number.isFinite(b) && a > 0 && b > 0) {
-      logret.push(Math.log(b / a));
-    } else {
-      logret.push(NaN);
-    }
+/**
+ * pandas `.ffill().bfill()`.
+ *
+ * Every vol series the engine builds ends with `.reindex(index).ffill().bfill()`
+ * — get_dealer_volatility, fit_garch_volatility's fallback and
+ * get_empirical_move_fee all do it. This port left the leading NaNs in place,
+ * and returnCurve skips any shock period whose fee or friction is NaN, so
+ * shock periods inside a series' first dealer-window were silently discarded.
+ *
+ * That is not a rounding difference. Portugal and Ireland have their entire
+ * volatility history in the 2011-12 sovereign crisis, inside the first 48
+ * monthly observations, so every one of their shock periods was dropped and
+ * both countries returned a curve of nulls that read on the page as "no data".
+ * More insidiously, every other series lost its earliest shocks — a bias
+ * toward calm early history that no label disclosed.
+ *
+ * The back-fill does hand the first observations a volatility estimated from
+ * slightly later data. The engine accepts that (it is an estimate of the
+ * series' own regime, not a trading signal), and this port now matches it.
+ */
+function ffillBfill(values) {
+  const out = values.slice();
+  let last = NaN;
+  for (let i = 0; i < out.length; i++) {
+    if (Number.isFinite(out[i])) last = out[i];
+    else if (Number.isFinite(last)) out[i] = last;
   }
-  const sd = rollingStd(logret, C.RV_LOOKBACK, Math.floor(C.RV_LOOKBACK / 2));
-  return sd.map((v) => (Number.isFinite(v) ? v * Math.sqrt(C.TRADING_DAYS) : NaN));
+  let next = NaN;
+  for (let i = out.length - 1; i >= 0; i--) {
+    if (Number.isFinite(out[i])) next = out[i];
+    else if (Number.isFinite(next)) out[i] = next;
+  }
+  return out;
 }
 
-export function dealerVolBpsSeries(bpsSeries) {
+/**
+ * Rolling realized vol of FIRST DIFFERENCES, annualized — the shock-mask
+ * input.
+ *
+ * This mirrors the engine: fit_garch_volatility and get_dealer_volatility both
+ * feed on `series.diff()`. The previous port took log returns of the LEVEL
+ * instead, which is wrong twice over. It is not what the engine measures, and
+ * it silently requires the level to be strictly positive — `Math.log(b/a)`
+ * with a<=0 yields NaN, so any series that goes negative or crosses zero
+ * produced an all-NaN mask, zero shock days and a curve of nulls. That is
+ * exactly what a long-short P&L index does, so no relative-value leg could
+ * ever have been evaluated.
+ *
+ * Differences also make the measure scale-covariant and level-independent,
+ * which is what lets a spread index, a yield index and a log-price index go
+ * through the same code path.
+ */
+export function realizedVolSeries(series, freq = FREQ.days) {
+  const diffs = [];
+  for (let i = 1; i < series.length; i++) {
+    const a = series[i - 1];
+    const b = series[i];
+    diffs.push(Number.isFinite(a) && Number.isFinite(b) ? b - a : NaN);
+  }
+  const sd = rollingStd(diffs, freq.rvLookback, Math.floor(freq.rvLookback / 2));
+  // diffs[j] is the move INTO observation j+1, so the vol series has to be
+  // shifted back onto the observation index with a leading NaN — otherwise
+  // every shock flag sat one period early, a one-period look-ahead. pandas
+  // gets this for free because .diff() keeps the original index.
+  const aligned = [NaN, ...sd.map((v) => (Number.isFinite(v) ? v * Math.sqrt(freq.periodsPerYear) : NaN))];
+  return ffillBfill(aligned);
+}
+
+export function dealerVolBpsSeries(bpsSeries, freq = FREQ.days) {
   // engine get_dealer_volatility (volatility.py:34): rolling 90d std of the
   // first differences of the bps series (units: bps), shifted 1 step — the
   // vol of day t is only known at t+1 (no look-ahead). The legacy port
@@ -529,8 +605,45 @@ export function dealerVolBpsSeries(bpsSeries) {
     const b = bpsSeries[i];
     diffs.push(Number.isFinite(a) && Number.isFinite(b) ? b - a : NaN);
   }
-  const sd = rollingStd(diffs, C.DEALER_WINDOW, C.DEALER_WINDOW);
-  return [NaN, ...sd.slice(0, sd.length - 1)]; // shift(1)
+  const sd = rollingStd(diffs, freq.dealerWindow, freq.dealerWindow);
+  // [NaN, ...] realigns diffs onto the observation index; slice drops the last
+  // to give pandas' .shift(1) — the vol of period t is only known at t+1
+  return ffillBfill([NaN, ...sd.slice(0, sd.length - 1)]);
+}
+
+/**
+ * Execution friction in bps: base cost growing exponentially with how
+ * UNUSUAL the current volatility is.
+ *
+ * The engine writes this as base*exp(0.08*(v - p90)) with v in bps, which
+ * makes 0.08 carry units of 1/bps. That is only meaningful on series whose
+ * volatility sits at the scale it was fitted on — US credit spreads, whose
+ * dealer vol peaks about 1 bp above its own 90th percentile. Feed it a
+ * log-price index, whose dealer vol peaks 140 bps above its 90th percentile
+ * in March 2020, and the exponent reaches e^11 : ANGL priced at 44,000 bps
+ * of execution cost and EM high yield at 477,000 bps, i.e. a 4,700% round
+ * trip. Those were the -65,000 and -675,000 bps net returns the page showed.
+ *
+ * Measuring the excess in units of the series' OWN dispersion (p90 - p50)
+ * makes the exponent dimensionless and the constant transferable. It is a
+ * generalization, not a re-calibration: on the BBB OAS series the implied
+ * absolute growth rate is 0.080, the config value to three decimals, and
+ * across the seven US grades the median is the same 0.08. Peak friction
+ * across every series in the book lands between 0.50 and 0.85 bps, which is
+ * the order of magnitude a round trip in liquid credit actually costs.
+ */
+export function executionFrictionSeries(dealerVol) {
+  const finite = dealerVol.filter(Number.isFinite);
+  const p90 = percentile(finite, C.FRICTION_PERCENTILE);
+  const p50 = percentile(finite, 50);
+  // degenerate dispersion (a flat or near-constant vol series) leaves the
+  // base cost rather than dividing by ~0 and producing Infinity
+  const scale = Number.isFinite(p90 - p50) && p90 - p50 > 0 ? p90 - p50 : null;
+  return dealerVol.map((v) => {
+    if (!Number.isFinite(v)) return NaN;
+    if (scale == null) return C.FRICTION_BASE_SPREAD_BPS;
+    return C.FRICTION_BASE_SPREAD_BPS * Math.exp((C.FRICTION_GROWTH_RATE * Math.max(0, v - p90)) / scale);
+  });
 }
 
 /**
@@ -540,17 +653,15 @@ export function dealerVolBpsSeries(bpsSeries) {
  * `seriesBps` = values in bps. Returns {T, gross, hf, ret} rows + annualized
  * edge at holdMax.
  */
-export function returnCurve(seriesBps, { holdMax = 21, percentileVs = null, atmIv = null, name = "asset", unit = "days", monthsPerYear = 12 } = {}) {
+export function returnCurve(seriesBps, { holdMax = 21, percentileVs = null, atmIv = null, name = "asset", unit = "days", pnlScale = 1 } = {}) {
   const n = seriesBps.length;
+  const freq = FREQ[unit] || FREQ.days;
   if (n < 120) return null;
-  const rv = realizedVolSeries(seriesBps.map((v) => (Number.isFinite(v) ? v / 100.0 : NaN))); // pct series
+  const rv = realizedVolSeries(seriesBps, freq);
   const threshold = percentile(rv.filter(Number.isFinite), C.SHOCK_PERCENTILE);
   const shock = rv.map((v) => Number.isFinite(v) && v >= threshold);
-  const dealerVol = dealerVolBpsSeries(seriesBps);
-  const volPct = percentile(dealerVol.filter(Number.isFinite), C.FRICTION_PERCENTILE);
-  const friction = dealerVol.map((v) =>
-    Number.isFinite(v) ? C.FRICTION_BASE_SPREAD_BPS * Math.exp(C.FRICTION_GROWTH_RATE * Math.max(0, v - volPct)) : NaN
-  );
+  const dealerVol = dealerVolBpsSeries(seriesBps, freq);
+  const friction = executionFrictionSeries(dealerVol);
   // markup: 1 + share*(IV/RV - 1), floor 1.05; distressed exact grades +1.05
   const rvNow = floatOr(rv[n - 1], 0.0001);
   const distressed = C.DISTRESSED_GRADES.has(name);
@@ -559,8 +670,16 @@ export function returnCurve(seriesBps, { holdMax = 21, percentileVs = null, atmI
     base = Math.max(C.DEALER_MARKUP_FLOOR, 1 + C.DEALER_MARKUP_PREMIUM_SHARE * (atmIv / rvNow - 1));
   }
   if (distressed) base *= C.FALLEN_ANGEL_LIQUIDITY_PREMIUM;
-  const dailyVolBps = floatOr(dealerVol[n - 1], 0);
-  const annVolBps = dailyVolBps * Math.sqrt(C.TRADING_DAYS);
+  // PB_VOL_THRESHOLD_BPS is an absolute number of basis points of ANNUAL RISK,
+  // so the vol it is compared against has to be in bps of P&L and annualized
+  // at the series' own frequency. Both were wrong: the raw observable vol was
+  // compared without pnlScale (a duration-4.5 CCC position carries 4.5x the
+  // risk its spread quote suggests) and monthly series were annualized by
+  // sqrt(252) as though they were daily, inflating them ~4.6x. The clip keeps
+  // the result bounded either way, which is why this never showed up as an
+  // absurd number the way the friction term did.
+  const perVolBps = floatOr(dealerVol[n - 1], 0) * pnlScale;
+  const annVolBps = perVolBps * Math.sqrt(freq.periodsPerYear);
   let discount = C.PB_BASE_DISCOUNT + Math.log10(Math.max(1, C.TRADE_SIZE_M)) * C.PB_VOLUME_DISCOUNT_FACTOR;
   discount -= Math.max(0, (annVolBps - C.PB_VOL_THRESHOLD_BPS) / C.PB_ILLIQUIDITY_DIVISOR);
   discount = Math.min(C.PB_DISCOUNT_CLIP[1], Math.max(C.PB_DISCOUNT_CLIP[0], discount));
@@ -574,13 +693,15 @@ export function returnCurve(seriesBps, { holdMax = 21, percentileVs = null, atmI
     // fee = rolling mean |ΔT| over the FULL window, shifted by T (known at t+T)
     const muBase = [];
     for (let i = 0; i < n - T; i++) muBase.push(Math.abs(seriesBps[i + T] - seriesBps[i]));
-    const feeMean = rollingMean(muBase, C.DEALER_WINDOW, 10); // length n-T
+    const feeMean = ffillBfill(rollingMean(muBase, freq.dealerWindow, 10)); // length n-T
     for (let i = 0; i < n; i++) {
       if (!shock[i]) continue;
       const g = Math.abs(seriesBps[i + T] - seriesBps[i]);
       if (!Number.isFinite(g)) continue;
-      const fIdx = i - T; // fee known for move ending at i is at window index i-T
-      const fee = fIdx >= 0 && feeMean[fIdx] !== undefined ? feeMean[fIdx] : NaN;
+      // the fee known for a move ending at i sits at window index i-T; below T
+      // the engine's back-fill hands back the first valid value, so clamp
+      const fIdx = Math.max(0, i - T);
+      const fee = feeMean[fIdx] !== undefined ? feeMean[fIdx] : NaN;
       if (!Number.isFinite(fee)) continue;
       const pen = friction[i] === undefined ? NaN : friction[i];
       if (!Number.isFinite(pen)) continue;
@@ -593,16 +714,24 @@ export function returnCurve(seriesBps, { holdMax = 21, percentileVs = null, atmI
       continue;
     }
     const mean = (arr) => arr.reduce((a, b) => a + b, 0) / arr.length;
+    // pnlScale converts a move in the OBSERVABLE series into basis points of
+    // P&L (spread or yield x duration; a log-price index is already P&L, so 1).
+    // Costs are calibrated on the observable — the engine's friction constants
+    // were fitted against spreads in bps and its exponential term is not
+    // scale-free — so the scaling is applied once, at the end, to gross and
+    // net alike.
     rows.push({
       T,
-      gross: round2(mean(grossVals)),
-      hf: round2(mean(hfVals)),
-      ret: round2(mean(retVals)),
+      gross: round2(mean(grossVals) * pnlScale),
+      hf: round2(mean(hfVals) * pnlScale),
+      ret: round2(mean(retVals) * pnlScale),
     });
   }
   const last = rows[rows.length - 1];
-  const periodsPerYear = unit === "months" ? monthsPerYear : C.TRADING_DAYS / holdMax;
-  const edge = (v) => (v == null ? null : round4(v * periodsPerYear)); // annualized bps
+  // a curve row is the payout of ONE holdMax-long trade, so the number of
+  // such trades in a year is the frequency divided by the hold length
+  const tradesPerYear = freq.periodsPerYear / holdMax;
+  const edge = (v) => (v == null ? null : round4(v * tradesPerYear)); // annualized bps
   return {
     unit,
     holdMax,
@@ -626,15 +755,71 @@ function round4(v) {
   return Math.round(v * 10000) / 10000;
 }
 
-/** toBps: values in percent -> bps */
+/* ------------------------------------------------------------------ */
+/* observable series and their P&L scale                               */
+/* ------------------------------------------------------------------ */
+/**
+ * returnCurve measures |S(t+T) - S(t)| in the units of S, then multiplies by
+ * `pnlScale` to express the answer in basis points of P&L. Two things have to
+ * be kept apart, and previously were not:
+ *
+ *   S — the OBSERVABLE series, in the units the market quotes and the units
+ *       the engine's cost model was calibrated against. Spreads and yields
+ *       are quoted in basis points; a listed price becomes 10000*ln(P), whose
+ *       differences are log returns in basis points already.
+ *
+ *   pnlScale — how many basis points of profit one unit of move in S is
+ *       worth. A 1 bp move on a spread-duration-4.5 index is 4.5 bps of P&L;
+ *       on a duration-8.5 government bond, 8.5 bps; on a log-price index, 1.
+ *
+ * The old code multiplied duration into S itself. That inflated the input to
+ * the dealer-friction term, whose exponential is not scale-free and was fitted
+ * against spreads in bps, so the cost of a trade changed when its duration
+ * changed for no economic reason. Applying the scale once at the end leaves
+ * costs calibrated where they were fitted and scales gross and net alike.
+ *
+ * The old code also negated spreads and yields to make "up" mean profit. The
+ * curve only ever looks at |ΔS| and at rolling standard deviations, both sign
+ * invariant, so the negation bought nothing and cost the direction of the
+ * underlying series in every debug trace. It is gone.
+ *
+ * The one rule this leaves: a relative-value pair may only be formed from two
+ * legs with the SAME observable units and the SAME pnlScale. A credit spread
+ * in bps minus a log-price index in bps is not a trade, it is two different
+ * quantities subtracted.
+ */
+export const SPREAD_DURATION = 4.5; // EM/US corporate index spread duration
+export const BOND_DURATION = 8.5; // 10Y government bond duration (engine/atlas)
+export const PRICE_SCALE = 1; // a log-price index is already P&L in bps
+
+/** FRED/ECB percent level -> the same level in basis points */
 export function toBps(rows) {
-  return rows.map((r) => r.v * 100);
-}
-export function yahooToBps(rows) {
-  return rows.map((r) => r.v * 100);
+  return rows.map((r) => (Number.isFinite(r.v) ? r.v * 100 : NaN));
 }
 
-/** monthly -> bps for yield series */
-export function monthBpsFromPct(rows) {
-  return rows.map((r) => r.v * 100);
+/**
+ * listed price -> log-price index in bps. Its difference over any horizon is
+ * exactly the log return in basis points, independent of the price level,
+ * which is what makes a $12 ETF and a $95 ETF directly comparable. Without
+ * this, price*100 read a $95 ETF as 9,500 "bps" and a 1% move as 95 bps.
+ */
+export function logPriceBps(rows) {
+  return rows.map((r) => (Number.isFinite(r.v) && r.v > 0 ? 10000 * Math.log(r.v) : NaN));
+}
+
+/**
+ * Align two same-unit observable series by date and difference them (long a,
+ * short b). Both legs must carry the same pnlScale — see the note above.
+ */
+export function alignedDiff(aRows, bRows, transform) {
+  const av = transform(aRows);
+  const bv = transform(bRows);
+  const bm = new Map(bRows.map((r, i) => [r.date, bv[i]]));
+  const out = [];
+  aRows.forEach((r, i) => {
+    const other = bm.get(r.date);
+    if (other == null || !Number.isFinite(av[i]) || !Number.isFinite(other)) return;
+    out.push({ date: r.date, v: av[i] - other });
+  });
+  return out;
 }

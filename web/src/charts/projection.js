@@ -24,7 +24,7 @@ export const PALETTE = [
 // The three tiers differ only in what the straddle costs to put on. Gross
 // assumes you get the option for nothing, which no one does; it is the
 // ceiling, not a return.
-const VIEWS = {
+const VOL_VIEWS = {
   gross: {
     col: 1,
     label: "Gross payout",
@@ -42,6 +42,27 @@ const VIEWS = {
   },
 };
 
+// Buy and hold has no option to buy and no dealer to pay, so it has no HF/
+// retail split — the only deduction is the loss you expect to actually
+// suffer. It reuses column 2, which the hold endpoint fills with net carry.
+const HOLD_VIEWS = {
+  gross: {
+    col: 1,
+    label: "Gross carry",
+    desc: "The spread or yield the asset pays at today's level, annualised and compounded. What you collect before any loss.",
+  },
+  net: {
+    col: 2,
+    label: "Net of expected loss",
+    desc: "Carry minus the loss you expect to suffer — default-rate proxy times published loss-given-default for corporates, the latest inflation print for sovereigns. No dealer markup, straddle premium or execution friction is charged anywhere in this view; none of them applies to a holder.",
+  },
+};
+
+/** the view dictionary for a basis; `basis` is "hold" or "vol" */
+export function viewsFor(basis) {
+  return basis === "vol" ? VOL_VIEWS : HOLD_VIEWS;
+}
+
 function firstMonthBps(asset, col) {
   // daily units: net at the longest evaluated hold (21 days ~ 1 month);
   // monthly units: net at the 1-month hold
@@ -53,9 +74,11 @@ function firstMonthBps(asset, col) {
   return Number.isFinite(v) ? v : null;
 }
 
+const EDGE_KEY = { 1: "gross", 2: "hf", 3: "ret" };
+
 function cumulativeSeries(asset, col, totalMonths = 180) {
   const r1 = firstMonthBps(asset, col); // bps over the first month
-  const edge = asset.edge ? asset.edge[col === 1 ? "gross" : col === 2 ? "hf" : "ret"] : null;
+  const edge = asset.edge ? asset.edge[EDGE_KEY[col]] : null;
   if (r1 == null || edge == null) return null;
   const monthly = edge / 12 / 10000; // annualized bps -> monthly fraction
   const pts = [[0, 0]];
@@ -68,9 +91,13 @@ function cumulativeSeries(asset, col, totalMonths = 180) {
 
 export function buildProjectionChart(el, assets, opts = {}) {
   const id = opts.id || "projection";
-  const view = opts.view || "ret";
+  const views = opts.views || VOL_VIEWS;
+  const view = opts.view && views[opts.view] ? opts.view : Object.keys(views)[0];
   const initialHidden = opts.initialHidden || new Set();
-  const col = VIEWS[view].col;
+  const col = views[view].col;
+  // the hold basis has no fee tiers, so its tooltip footnote must not claim
+  // a "month-1 net" that was never netted against anything
+  const footNote = opts.footNote || "Extrapolated from live hold-horizon curves — not a forecast";
   const totalMonths = 180;
   const chart = echarts.init(el);
 
@@ -132,12 +159,12 @@ export function buildProjectionChart(el, assets, opts = {}) {
             .map((p) => {
               const a = assets.find((x) => x.id === p.seriesId);
               const r1 = firstMonthBps(a, col);
-              return `<tr><td style="color:${p.color};padding-right:10px">${esc(p.seriesName)}</td><td style="text-align:right;font-variant-numeric:tabular-nums">${p.value[1] != null ? p.value[1].toFixed(2) : "—"}%</td><td style="color:${cssVar("--text-secondary")};padding-left:10px">month-1 net ${r1 != null ? r1.toFixed(1) : "—"} bps</td></tr>`;
+              return `<tr><td style="color:${p.color};padding-right:10px">${esc(p.seriesName)}</td><td style="text-align:right;font-variant-numeric:tabular-nums">${p.value[1] != null ? p.value[1].toFixed(2) : "—"}%</td><td style="color:${cssVar("--text-secondary")};padding-left:10px">month 1 · ${r1 != null ? r1.toFixed(1) : "—"} bps</td></tr>`;
             })
             .join("");
           return `<div style="font-weight:640;margin-bottom:4px">Horizon: ${label}</div>
                   <table style="border-collapse:collapse;font-size:11.5px">${rows}</table>
-                  <div style="font-size:10.5px;color:${cssVar("--text-faint")};margin-top:5px">Extrapolated from live hold-horizon curves — not a forecast</div>`;
+                  <div style="font-size:10.5px;color:${cssVar("--text-faint")};margin-top:5px">${esc(footNote)}</div>`;
         },
       },
       xAxis: {
@@ -206,4 +233,4 @@ function esc(s) {
   return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-export { VIEWS };
+export { VOL_VIEWS, HOLD_VIEWS };
