@@ -90,11 +90,22 @@ import { readFileSync, writeFileSync, renameSync, mkdirSync, statSync } from "no
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+// TTLs are sized so a COLD serverless instance is answered entirely from the
+// snapshot bundled with the function, inside the platform's default 10s
+// execution budget. The atlas alone touches ~90 upstream series; going live on
+// even a third of them on every cold start does not fit in 10s.
+//
+// Nothing here is finer-grained than the data itself: every series below is
+// published at most once a day (FRED daily closes, ECB monthly dataflows,
+// Yahoo daily closes), so a 12h window cannot skip an observation — it only
+// delays picking one up, and `npm run seed` re-cuts the snapshot on deploy.
+// The option-chain TTL stays short because implied vol genuinely moves
+// intraday and the accrual daemon wants a fresh read.
 export const CACHE_TTL = {
-  FRED: 6 * 3600 * 1000,       // daily close; 6h covers one update cycle
-  ECB: 12 * 3600 * 1000,       // monthly dataflow
-  YAHOO_CHART: 2 * 3600 * 1000, // daily closes (intraday tolerance)
-  YAHOO_ATMIV: 3 * 3600 * 1000, // option chains move intraday
+  FRED: 12 * 3600 * 1000,
+  ECB: 24 * 3600 * 1000,
+  YAHOO_CHART: 12 * 3600 * 1000,
+  YAHOO_ATMIV: 3 * 3600 * 1000,
 };
 // Two cache roots. SEED_ROOT is the committed snapshot shipped inside the
 // function bundle (vercel.json includeFiles) — readable everywhere, but the

@@ -6,8 +6,7 @@
   ],
   "functions": {
     "api/*.js": {
-      "includeFiles": "public/data/**",
-      "maxDuration": 60
+      "includeFiles": "public/data/**"
     }
   }
 }
