@@ -20,7 +20,7 @@
  * blended "opportunity score" with invented weights.
  */
 import { fredCsv, json, pmap, zLast, pctReturn, worldBank } from "./_shared.js";
-import { COUNTRIES, CREDIT_PANEL, WB_INDICATORS, CREDIT_SPREAD_DURATION } from "./_universe.js";
+import { COUNTRIES, CREDIT_PANEL, WB_INDICATORS, CREDIT_SPREAD_DURATION, REGION_LABELS } from "./_universe.js";
 
 export const config = { runtime: "nodejs" };
 
@@ -127,7 +127,8 @@ export default async function handler(req, res) {
       label: `${spec.name} 10Y government bond`,
       iso,
       name: spec.name,
-      region: spec.region,
+      region: REGION_LABELS[spec.region] || spec.region,
+      regionKey: spec.region,
       seriesId: spec.yield,
       asOf: last.date,
       yield_pct: r3(last.v),
