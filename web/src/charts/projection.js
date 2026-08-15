@@ -38,7 +38,7 @@ export function viewsFor(basis) {
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const ts = (d) => new Date(d + "T00:00:00Z").getTime();
 
-/** [[epoch, percent], ...] for one asset under one view */
+/** [[epoch, percent], ...] for one asset under one key */
 function pointsFor(asset, key) {
   const path = asset.path || [];
   if (!path.length) return null;
@@ -50,6 +50,14 @@ function pointsFor(asset, key) {
   }
   return pts.length ? pts : null;
 }
+
+/**
+ * Bands and scenario lines are drawn only when few enough series are visible
+ * to read them. With thirty-seven sovereigns on screen a fan per country is
+ * an unreadable wash; with one or two it is the most informative thing on the
+ * chart. Toggling series off in the legend brings them in.
+ */
+const DETAIL_MAX_SERIES = 4;
 
 export function buildProjectionChart(el, assets, opts = {}) {
   const id = opts.id || "projection";
@@ -87,11 +95,43 @@ export function buildProjectionChart(el, assets, opts = {}) {
 
   const buildOption = () => {
     const series = [];
+    const nVisible = assets.filter((a) => visible().has(a.id)).length;
+    const detail = nVisible > 0 && nVisible <= DETAIL_MAX_SERIES;
     assets.forEach((a, ai) => {
       if (!visible().has(a.id)) return;
       const pts = pointsFor(a, key);
       if (!pts) return;
       const color = PALETTE[ai % PALETTE.length];
+
+      if (detail) {
+        // 10-90 fan, drawn as an invisible floor plus a stacked ribbon
+        const lo = pointsFor(a, `${key}_lo`);
+        const hi = pointsFor(a, `${key}_hi`);
+        if (lo && hi && lo.length === hi.length) {
+          series.push({
+            id: `${a.id}__lo`, type: "line", data: lo, stack: `band_${a.id}`,
+            lineStyle: { opacity: 0 }, symbol: "none", silent: true,
+            tooltip: { show: false }, z: 1,
+          });
+          series.push({
+            id: `${a.id}__band`, type: "line",
+            data: hi.map((h, i) => [h[0], Math.round((h[1] - lo[i][1]) * 100) / 100]),
+            stack: `band_${a.id}`, lineStyle: { opacity: 0 }, symbol: "none", silent: true,
+            areaStyle: { color, opacity: 0.1 }, tooltip: { show: false }, z: 1,
+          });
+        }
+        // one simulated future, with its month-to-month fluctuation intact —
+        // a scenario, not a prediction, so it is drawn thin and dashed
+        const scn = pointsFor(a, `${key}_scn`);
+        if (scn) {
+          series.push({
+            id: `${a.id}__scn`, type: "line", data: scn, symbol: "none", silent: true,
+            lineStyle: { width: 1, color, opacity: 0.55, type: "dashed" },
+            tooltip: { show: false }, z: 2,
+          });
+        }
+      }
+
       const s = {
         id: a.id,
         type: "line",
@@ -128,6 +168,8 @@ export function buildProjectionChart(el, assets, opts = {}) {
         textStyle: { color: cssVar("--text-main"), fontSize: 12 },
         extraCssText: "box-shadow:0 8px 28px -10px rgba(0,0,0,.4);border-radius:10px;",
         formatter: (params) => {
+          // the band floor, ribbon and scenario are decoration, not rows
+          params = params.filter((p) => assets.some((a) => a.id === p.seriesId));
           if (!params.length) return "";
           const d = new Date(params[0].value[0]);
           const head = d.toLocaleDateString("en-GB", { month: "short", year: "numeric", timeZone: "UTC" });
@@ -135,9 +177,11 @@ export function buildProjectionChart(el, assets, opts = {}) {
             .map((p) => {
               const a = assets.find((x) => x.id === p.seriesId);
               const row = (a?.path || []).find((r) => ts(r.date) === p.value[0]);
+              const lo = row?.[`${key}_lo`];
+              const hi = row?.[`${key}_hi`];
               const band =
-                row && Number.isFinite(row.lo) && Number.isFinite(row.hi)
-                  ? `<td style="color:${cssVar("--text-secondary")};padding-left:10px">${(row.lo / 100).toFixed(1)} to ${(row.hi / 100).toFixed(1)}%</td>`
+                Number.isFinite(lo) && Number.isFinite(hi)
+                  ? `<td style="color:${cssVar("--text-secondary")};padding-left:10px">${(lo / 100).toFixed(1)} to ${(hi / 100).toFixed(1)}%</td>`
                   : "<td></td>";
               const lvl =
                 row && Number.isFinite(row.level)

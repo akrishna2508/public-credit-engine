@@ -111,9 +111,16 @@ def run_country_analysis(trade_size_millions: float, hold_days: int,
         curves = {}
         for cc, s in series_set.items():
             s = s.rename(cc)
+            # ECB LTIR is MONTHLY. Without freq="months" the shared machinery
+            # applies its daily window counts verbatim — a 90-MONTH fee window
+            # and a 21-MONTH realized-vol lookback — so the mean |T-month move|
+            # over 7.5 years came out larger than the mean move on the shock
+            # periods it was charged against, and every country priced as a
+            # guaranteed loss. See config.FREQ_PROFILES.
             curves[cc] = volatility.return_curve(
                 s, percentile, retail_markup,
-                hold_max=hold_max, trade_size_millions=trade_size_millions)
+                hold_max=hold_max, trade_size_millions=trade_size_millions,
+                freq="months")
         stem = f"europe_country_{tag}_return_curves"
         for view, col, dashed in (("gross", "Gross_bps", False),
                                   ("hf_net", "HF_net_bps", True),

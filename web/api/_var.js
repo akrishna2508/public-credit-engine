@@ -202,6 +202,11 @@ export function fitVar(Y, p) {
   const freeParams = p * K * K + K;
   return {
     A, c, sigma, sigmaMle, nobs, K, p,
+    // the fitted residuals themselves. A Gaussian draw from sigma throws away
+    // everything about the shocks except their covariance; resampling the
+    // actual residual ROWS keeps their fat tails, their skew and their exact
+    // cross-sectional dependence, which is what a credit panel is made of.
+    U,
     aic: ld + (2 / nobs) * freeParams,
     bic: ld + (Math.log(nobs) / nobs) * freeParams,
     logDet: ld,

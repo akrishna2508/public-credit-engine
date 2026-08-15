@@ -26,8 +26,8 @@ import {
   SPREAD_DURATION, BOND_DURATION, PRICE_SCALE,
 } from "./_shared.js";
 import {
-  buildForecast, monthlySamples, holdReturnPath,
-  straddlePnlPath, combinationSamples, combinationLevel0, weightFor, stepSdFor,
+  buildForecast, combinationSamples, combinationLevel0, weightFor, stepSdFor,
+  simulateCombination, summarisePaths, holdPathsFromSims, straddlePathsFromSims,
 } from "./_forecastpath.js";
 import {
   RATING_ORDER, US_GRADES, DR_SERIES, DR_MAPPING, ADJACENT_PAIRS,
@@ -82,6 +82,53 @@ function peakOf(path, key) {
   return { date: path[bi].date, months: bi + 1, value: r2(bv) };
 }
 
+
+/**
+ * How many futures to simulate. Every book is cached for six hours, so the
+ * cost is paid once. 1,500 paths keeps the MEDIAN clean — at 400 it wandered
+ * with about 47 direction changes per sovereign over ten years, which is
+ * sampling noise wearing the costume of signal. The fluctuation belongs in
+ * the scenario line, which is one real future; the median should be a steady
+ * central estimate and the band should be smooth enough to read.
+ */
+const NSIMS = 1500;
+/** fixed so the same panel always returns the same futures — a chart that
+ *  reshuffled on every reload would be unreadable, and the cache would lie */
+const SIM_SEED = 20260815;
+
+/**
+ * Simulate once, then summarise several cost tiers off the SAME set of
+ * futures. Sharing the paths matters: gross, HF and retail must differ only
+ * by their costs, and drawing them separately would let the tiers cross for
+ * no reason but sampling noise.
+ *
+ * Each tier gets its median, a 10-90 band, and one scenario path carried
+ * through untouched — a single future with its month-to-month fluctuation
+ * intact, which no percentile can show, because a pointwise quantile blends
+ * paths that never coexisted.
+ */
+function simRows(fc, w, months, tiers) {
+  const sims = simulateCombination(fc, w, { nSims: NSIMS, months, seed: SIM_SEED });
+  if (!sims || !sims.length || !sims[0].length) return null;
+  const n = sims[0].length;
+  const dates = combinationSamples(fc, w).slice(0, n).map((s) => s.date);
+  if (dates.length < n) return null;
+  const out = dates.map((d) => ({ date: d, level: null }));
+  let first = true;
+  for (const [key, build] of Object.entries(tiers)) {
+    const sum = summarisePaths(build(sims), dates, sims, 0);
+    sum.forEach((r, i) => {
+      if (first) out[i].level = r.level;
+      out[i][key] = r.ret;
+      out[i][`${key}_lo`] = r.lo;
+      out[i][`${key}_hi`] = r.hi;
+      out[i][`${key}_scn`] = r.scenario;
+    });
+    first = false;
+  }
+  return out;
+}
+
 /* ==================================================================== */
 /* buy and hold                                                          */
 /* ==================================================================== */
@@ -114,14 +161,15 @@ async function buildHoldBook(market) {
     if (fc.ok) {
       models.us = { lag: fc.lag, nobs: fc.nobs, rho: r2(fc.rho), stable: fc.stable, horizonMonths: fc.horizonMonths, why: fc.why };
       cols.forEach((g, k) => {
-        const samples = monthlySamples(fc, k);
         const level0 = fc.last[k];
         const el = elBps[g];
-        // expected loss is an annual charge, accrued along the path
-        const rows = holdReturnPath(level0, samples, SPREAD_DURATION).map((r, i) => ({
-          ...r,
-          net: el == null ? r.ret : r.ret - (el * (i + 1)) / 12,
-        }));
+        const w = weightFor(fc.fit.K, k);
+        // expected loss is an annual charge, accrued along each simulated path
+        const rows = simRows(fc, w, null, {
+          ret: (sims) => holdPathsFromSims(sims, level0, SPREAD_DURATION, null),
+          net: (sims) => holdPathsFromSims(sims, level0, SPREAD_DURATION, el),
+        });
+        if (!rows) return;
         pure.push(
           asset(g, g, `${US_GRADES[g].label}, ${SPREAD_DURATION}-year spread duration`, rows, {
             level0: r2(level0),
@@ -153,7 +201,10 @@ async function buildHoldBook(market) {
     if (fc.ok) {
       models[tag] = { lag: fc.lag, nobs: fc.nobs, rho: r2(fc.rho), stable: fc.stable, horizonMonths: fc.horizonMonths, why: fc.why };
       cols.forEach((k, ki) => {
-        const rows = holdReturnPath(fc.last[ki], monthlySamples(fc, ki), SPREAD_DURATION);
+        const rows = simRows(fc, weightFor(fc.fit.K, ki), null, {
+          ret: (sims) => holdPathsFromSims(sims, fc.last[ki], SPREAD_DURATION, null),
+        });
+        if (!rows) return;
         pure.push(
           asset(k, CREDIT_PANEL[k].label, `${CREDIT_PANEL[k].label}, ${SPREAD_DURATION}-year spread duration`, rows, {
             level0: r2(fc.last[ki]),
@@ -179,20 +230,16 @@ async function buildHoldBook(market) {
       const efc = buildForecast(cc, sm, { freq: "months", scale: 100, floorAt: -Infinity });
       if (efc.ok && cc.includes("DE")) {
         const di = cc.indexOf("DE");
-        const dSam = monthlySamples(efc, di);
         cc.forEach((iso, k) => {
           if (iso === "DE") return;
-          const sam = monthlySamples(efc, k);
-          const n = Math.min(sam.length, dSam.length);
-          const diffSam = Array.from({ length: n }, (_, i) => ({
-            date: sam[i].date,
-            level: sam[i].level - dSam[i].level,
-            sd: Math.hypot(sam[i].sd, dSam[i].sd),
-          }));
-          const rows = holdReturnPath(efc.last[k] - efc.last[di], diffSam, BOND_DURATION);
+          const l0 = efc.last[k] - efc.last[di];
+          const rows = simRows(efc, weightFor(efc.fit.K, k, di), null, {
+            ret: (sims) => holdPathsFromSims(sims, l0, BOND_DURATION, null),
+          });
+          if (!rows) return;
           spread.push(
             asset(`${iso} - DE`, `${iso} - DE`, `${ECB_LTIR[iso]} over Bund, ${BOND_DURATION}-year duration`, rows, {
-              level0: r2(efc.last[k] - efc.last[di]),
+              level0: r2(l0),
               peak: peakOf(rows, "ret"),
             })
           );
@@ -230,13 +277,13 @@ async function buildHoldBook(market) {
         continue;
       }
       if (!modelNote) modelNote = fc.why;
-      const samples = monthlySamples(fc, 0);
       const inf = inflLatest?.get(COUNTRIES[iso].iso3);
       const infBps = inf ? inf.v * 100 : null;
-      const rows = holdReturnPath(fc.last[0], samples, BOND_DURATION).map((x, k) => ({
-        ...x,
-        net: infBps == null ? x.ret : x.ret - (infBps * (k + 1)) / 12,
-      }));
+      const rows = simRows(fc, weightFor(fc.fit.K, 0), null, {
+        ret: (sims) => holdPathsFromSims(sims, fc.last[0], BOND_DURATION, null),
+        net: (sims) => holdPathsFromSims(sims, fc.last[0], BOND_DURATION, infBps),
+      });
+      if (!rows) continue;
       pure.push(
         asset(iso, COUNTRIES[iso].name, `${COUNTRIES[iso].name} 10-year government bond, ${BOND_DURATION}-year duration`, rows, {
           level0: r2(fc.last[0]),
@@ -282,30 +329,33 @@ function straddleAsset(fc, { id, name, standsFor, w, costs, pnlScale, riskFree, 
   // combination, annualised at the panel's own observation frequency
   const sigmaAnn = stepSdFor(fc.fit, w) * Math.sqrt(FREQ_PER_YEAR[fc.freq] || 12);
   const level0 = combinationLevel0(fc, w);
-
-  const rows = straddlePnlPath(samples, {
-    level0,
-    sigmaAnn,
-    maturityMonths,
-    markup: costs.markup,
-    hfMarkup: costs.hfMarkup,
-    friction: costs.friction,
-    pnlScale,
-    riskFreeRate: riskFree,
-  });
-  if (!rows) {
+  const fair = sigmaAnn * Math.sqrt(maturityMonths / 12) * Math.sqrt(2 / Math.PI);
+  if (!(fair > 0)) {
     return asset(id, name, standsFor, null, { why: "the fitted innovation variance is zero — no straddle to price" });
   }
-  const fair = sigmaAnn * Math.sqrt(maturityMonths / 12) * Math.sqrt(2 / Math.PI);
+  const premRet = fair * costs.markup;
+  const premHf = fair * costs.hfMarkup;
+  const roundTrip = 2 * costs.friction;
+  const base = { level0, sigmaAnn, maturityMonths, financeRate: riskFree, roundTrip, pnlScale };
+
+  const rows = simRows(fc, w, maturityMonths, {
+    gross: (sims) => straddlePathsFromSims(sims, { ...base, premium: fair, roundTrip: 0, key: "gross" }),
+    hf: (sims) => straddlePathsFromSims(sims, { ...base, premium: premHf, key: "net" }),
+    ret: (sims) => straddlePathsFromSims(sims, { ...base, premium: premRet, key: "net" }),
+  });
+  if (!rows) {
+    return asset(id, name, standsFor, null, { why: "the simulation returned no usable paths" });
+  }
   return asset(id, name, standsFor, rows, {
     level0: r2(level0),
     maturity_months: maturityMonths,
-    premium_bps: r2(fair * costs.markup * pnlScale),
+    premium_bps: r2(premRet * pnlScale),
     fair_premium_bps: r2(fair * pnlScale),
     markup: r2(costs.markup),
     hf_markup: r2(costs.hfMarkup),
     friction_bps: r2(costs.friction * pnlScale),
     financing_pct: r2(riskFree * 100),
+    sims: NSIMS,
     peak: peakOf(rows, "ret"),
     ...extra,
   });
@@ -512,17 +562,19 @@ export default async function handler(req, res) {
   payload.method =
     basis === "hold"
       ? [
-          "return = accrued carry - duration x (forecast level - current level)",
+          `${NSIMS} futures simulated from the fitted VAR by resampling its own residual rows, which keeps their fat tails, skew and cross-sectional dependence rather than assuming a Gaussian shock`,
+          "per path: return = accrued carry - duration x (level on that path - level now), so the yield being earned fluctuates as the yield does",
           "expected loss, where a default-rate proxy maps to the grade, is accrued monthly; for sovereigns the deduction is the latest published inflation print",
-          "band = duration x the model's forecast-error standard deviation",
+          "the line is the median across paths, the shaded band the 10th to 90th percentile, the dashed line one simulated future with its fluctuation intact",
         ]
       : [
           "one straddle struck at the money now and marked to market monthly to expiry, not a new trade at every maturity",
           "premium is the Bachelier at-the-money value sigma x sqrt(2T/pi); the underlying is a spread or yield in basis points, which goes negative, so the normal model applies and not a lognormal one",
-          "value at month m = E|F_m - K| with the remaining time value folded in: sqrt(s_m^2 + v_m^2) x psi(mu_m / sqrt(s_m^2 + v_m^2)), s_m the VAR forecast-error sd and v_m = sigma x sqrt(time left)",
+          "value at month m = the Bachelier straddle struck at the current level, with sigma x sqrt(time left) of value remaining",
           "net = value - premium x dealer markup - financing on the premium at the short rate - a round trip of execution friction",
           "spread straddles are priced on the spread's own variance, Var(a) + Var(b) - 2Cov(a,b), taken from the same fitted VAR as the legs",
-          "band is the 10th to 90th percentile of the forecast distribution pushed through the straddle's value",
+          `${NSIMS} futures simulated by residual bootstrap; the straddle is marked against the level each path reaches, so a future that gaps away from the strike pays and one that sits still bleeds the premium`,
+          "the line is the median across paths, the shaded band the 10th to 90th percentile, the dashed line one simulated future",
         ];
 
   return json(res, payload);

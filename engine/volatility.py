@@ -31,18 +31,20 @@ def get_treasury_rates(index: pd.DatetimeIndex) -> pd.Series:
     return fetch_treasury_daily_rate(index, ticker=config.TREASURY_PROXY_TICKER)
 
 
-def get_dealer_volatility(series: pd.Series, window: int = None) -> pd.Series:
-    """Realized daily vol of first differences, shifted to avoid look-ahead."""
-    window = window or config.DEALER_PRICING_WINDOW
+def get_dealer_volatility(series: pd.Series, window: int = None,
+                          freq: str = "days") -> pd.Series:
+    """Realized per-period vol of first differences, shifted to avoid look-ahead."""
+    window = window or config.freq_profile(freq)["dealer_window"]
     returns = series.diff().dropna()
     dealer_vol = returns.rolling(window).std().shift(1)
     return dealer_vol.reindex(series.index).ffill().bfill()
 
 
-def fit_garch_volatility(series: pd.Series, label: str = "", min_obs: int = None) -> pd.Series:
+def fit_garch_volatility(series: pd.Series, label: str = "", min_obs: int = None,
+                         freq: str = "days") -> pd.Series:
     """GARCH(1,1) conditional volatility; falls back to rolling std on failure."""
     min_obs = min_obs or config.MIN_OBS_FOR_GARCH
-    window = config.DEALER_PRICING_WINDOW
+    window = config.freq_profile(freq)["dealer_window"]
     returns = series.diff().dropna()
     fallback = returns.rolling(window).std().reindex(series.index).ffill().bfill()
     if len(returns) < min_obs:
@@ -82,7 +84,8 @@ def calc_ou_straddle(dealer_vol_series: pd.Series, r_series: pd.Series,
     return discount_factor * priced_vol * np.sqrt(T) * np.sqrt(2 / np.pi)
 
 
-def get_empirical_move_fee(series: pd.Series, hold_days: int, window: int = None) -> pd.Series:
+def get_empirical_move_fee(series: pd.Series, hold_days: int, window: int = None,
+                           freq: str = "days") -> pd.Series:
     """Expected |T-day move| estimated from the series' own realized moves.
 
     Rolling mean of |y_{t+T} - y_t|, each value shifted by T so it is only
@@ -92,7 +95,7 @@ def get_empirical_move_fee(series: pd.Series, hold_days: int, window: int = None
     cheaper than a raw-vol Bachelier term, while trending series price at
     parity. Overridden by the dealer markup in analyze_strategy.
     """
-    window = window or config.DEALER_PRICING_WINDOW
+    window = window or config.freq_profile(freq)["dealer_window"]
     moves = (series.shift(-hold_days) - series).abs()
     known = moves.shift(hold_days)
     fee = known.rolling(window, min_periods=10).mean()
@@ -100,11 +103,18 @@ def get_empirical_move_fee(series: pd.Series, hold_days: int, window: int = None
 
 
 def calculate_dynamic_pb_markup(retail_markup_series: pd.Series, daily_vol_bps: pd.Series,
-                                trade_size_millions: float = None) -> pd.Series:
-    """Prime-broker execution discount schedule (config-documented constants)."""
+                                trade_size_millions: float = None,
+                                freq: str = "days") -> pd.Series:
+    """Prime-broker execution discount schedule (config-documented constants).
+
+    PB_VOL_THRESHOLD_BPS is an absolute number of basis points of ANNUAL risk,
+    so the vol it is compared against must be annualised at the SERIES' own
+    frequency. A monthly series annualised by sqrt(252) is inflated ~4.6x.
+    """
     trade_size_millions = trade_size_millions or config.DEFAULT_TRADE_SIZE_M
     volume_discount = np.log10(max(1.0, trade_size_millions)) * config.PB_VOLUME_DISCOUNT_FACTOR
-    annualized_vol_bps = daily_vol_bps * np.sqrt(config.TRADING_DAYS)
+    periods = config.freq_profile(freq)["periods_per_year"]
+    annualized_vol_bps = daily_vol_bps * np.sqrt(periods)
     illiquidity_penalty = np.maximum(0.0, (annualized_vol_bps - config.PB_VOL_THRESHOLD_BPS)
                                      / config.PB_ILLIQUIDITY_DIVISOR)
     total_discount = config.PB_BASE_DISCOUNT + volume_discount - illiquidity_penalty
@@ -137,7 +147,8 @@ def load_dealer_markup(index: pd.DatetimeIndex) -> pd.Series:
 
 
 def _trade_cost_basis(series: pd.Series, name: str, retail_markup: pd.Series,
-                      trade_size_millions: float, percentile: float):
+                      trade_size_millions: float, percentile: float,
+                      freq: str = "days"):
     """Shared shock/calm masks + markup + friction for one traded series.
 
     Single source of truth used by analyze_strategy and return_curve so the
@@ -145,15 +156,16 @@ def _trade_cost_basis(series: pd.Series, name: str, retail_markup: pd.Series,
     Distressed premium applies to EXACT grade names only (a substring test
     matched "B" inside "BB"/"BBB"/pair names, overcharging retail).
     """
-    garch_vol = fit_garch_volatility(series, label=name)
+    garch_vol = fit_garch_volatility(series, label=name, freq=freq)
     vol_threshold = float(np.percentile(garch_vol.dropna(), percentile))
     shock_mask = garch_vol >= vol_threshold
     calm_mask = garch_vol < vol_threshold
-    dealer_vol = get_dealer_volatility(series)
+    dealer_vol = get_dealer_volatility(series, freq=freq)
     distressed = name in config.DISTRESSED_GRADES  # exact, not substring
     markup = retail_markup * (config.FALLEN_ANGEL_LIQUIDITY_PREMIUM if distressed else 1.0)
     hf_markup = calculate_dynamic_pb_markup(markup, dealer_vol,
-                                            trade_size_millions=trade_size_millions)
+                                            trade_size_millions=trade_size_millions,
+                                            freq=freq)
     friction = calculate_dynamic_execution_friction(config.FRICTION_BASE_SPREAD_BPS, dealer_vol)
     # Every component is anchored to the SERIES' own index: retail_markup is
     # typically aligned to a shared market index (longer than a single
@@ -168,7 +180,8 @@ def _trade_cost_basis(series: pd.Series, name: str, retail_markup: pd.Series,
 
 
 def return_curve(series: pd.Series, percentile: float, retail_markup: pd.Series,
-                 hold_max: int = 21, trade_size_millions: float | None = None) -> pd.DataFrame:
+                 hold_max: int = 21, trade_size_millions: float | None = None,
+                 freq: str = "days") -> pd.DataFrame:
     """Net return (bps) vs hold days T = 1..hold_max at one shock percentile.
 
     Returns are presented as a hold-horizon curve, not a single fixed-period
@@ -185,11 +198,11 @@ def return_curve(series: pd.Series, percentile: float, retail_markup: pd.Series,
     trade_size_millions = trade_size_millions or config.DEFAULT_TRADE_SIZE_M
     shock_mask, _, markup, hf_markup, friction, _ = _trade_cost_basis(
         series, str(getattr(series, "name", "asset")), retail_markup,
-        trade_size_millions, percentile)
+        trade_size_millions, percentile, freq=freq)
     rows = []
     for T in range(1, hold_max + 1):
         gross = (series.shift(-T) - series).abs()
-        fee = get_empirical_move_fee(series, T)
+        fee = get_empirical_move_fee(series, T, freq=freq)
         gs = gross[shock_mask].dropna().mean()
         pen = friction[shock_mask].dropna().mean()
         hf = gs - (fee * hf_markup)[shock_mask].dropna().mean() - pen

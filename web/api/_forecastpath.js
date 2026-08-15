@@ -296,6 +296,59 @@ export function weightFor(K, a, b = null) {
 }
 
 /**
+ * Buy-and-hold P&L along EVERY simulated path.
+ *
+ * Carry accrues off the level the path is actually sitting at, so the yield
+ * being earned fluctuates month to month exactly as the yield does — which
+ * is the fluctuation that averaging into a single expected path erased. The
+ * deduction (expected loss for a grade, the inflation print for a sovereign)
+ * accrues monthly on top.
+ */
+export function holdPathsFromSims(sims, level0, duration, deductAnnualBps = null) {
+  return sims.map((path) => {
+    const out = [];
+    let carry = 0;
+    let prev = level0;
+    for (let m = 0; m < path.length; m++) {
+      carry += prev / 12;
+      const gross = carry - duration * (path[m] - level0);
+      out.push(deductAnnualBps == null ? gross : gross - (deductAnnualBps * (m + 1)) / 12);
+      prev = path[m];
+    }
+    return out;
+  });
+}
+
+/** the gross (pre-deduction) leg of the same simulation */
+export function holdGrossFromSims(sims, level0, duration) {
+  return holdPathsFromSims(sims, level0, duration, null);
+}
+
+/**
+ * Straddle P&L along EVERY simulated path: the option is marked against the
+ * level that path reached, so a future where the underlying gaps away from
+ * the strike pays and one where it sits still bleeds the premium.
+ */
+export function straddlePathsFromSims(sims, {
+  level0, sigmaAnn, maturityMonths, premium, financeRate, roundTrip, pnlScale = 1, key = "net",
+}) {
+  return sims.map((path) => {
+    const out = [];
+    for (let m = 1; m <= path.length; m++) {
+      const tau = Math.max(0, (maturityMonths - m) / 12);
+      const v = sigmaAnn * Math.sqrt(tau);
+      const V = bachelierStraddle(path[m - 1] - level0, v);
+      if (key === "gross") out.push((V - premium) * pnlScale);
+      else {
+        const fin = premium * (Math.pow(1 + financeRate, m / 12) - 1);
+        out.push((V - premium - fin - roundTrip) * pnlScale);
+      }
+    }
+    return out;
+  });
+}
+
+/**
  * Buy-and-hold total return along a forecast path, in bps.
  *
  *   return(m) = accrued carry  -  duration x (level_m - level_0)
@@ -438,6 +491,114 @@ export function stepSdFor(fit, w) {
   let q = 0;
   for (let m = 0; m < fit.K; m++) for (let n = 0; n < fit.K; n++) q += w[m] * Su[m][n] * w[n];
   return Math.sqrt(Math.max(0, q));
+}
+
+/* ------------------------------------------------------------------ */
+/* simulation                                                          */
+/* ------------------------------------------------------------------ */
+
+/** mulberry32 — seeded so a given panel always simulates the same futures */
+function rng(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * Simulate the fitted VAR forward by RESIDUAL BOOTSTRAP.
+ *
+ * Every path is a genuine future: the VAR is iterated step by step and at
+ * each step a whole residual row, drawn at random from the fit's own
+ * residuals, is added. Resampling rows rather than drawing from a Gaussian
+ * keeps three things a normal draw destroys — the fat tails credit spreads
+ * actually have, the skew (spreads gap wider far more violently than they
+ * grind tighter), and the exact cross-sectional dependence between grades,
+ * since a row moves every series together the way that day did.
+ *
+ * This is what makes the output stop looking uniform. The analytic
+ * expectation it replaces is smooth by construction: averaging over all
+ * futures averages the fluctuation away, which is precisely why the chart
+ * looked flat. A path keeps its shocks.
+ *
+ * @returns [nSims][months] values of w'y at each monthly sampling point
+ */
+export function simulateCombination(fc, w, { nSims = 500, months = null, seed = 20260815 } = {}) {
+  const { A, c, K, p, U } = fc.fit;
+  if (!U || !U.length) return null;
+  const perMonth = fc.perMonth;
+  const M = Math.min(months || fc.horizonMonths, fc.horizonMonths);
+  const steps = M * perMonth;
+  const rand = rng(seed);
+  const nU = U.length;
+
+  const out = [];
+  for (let s = 0; s < nSims; s++) {
+    const hist = fc.histTail.map((r) => r.slice());
+    const row = [];
+    for (let t = 1; t <= steps; t++) {
+      const y = c.slice();
+      for (let j = 1; j <= p; j++) {
+        const prev = hist[hist.length - j];
+        const Aj = A[j - 1];
+        for (let k = 0; k < K; k++) {
+          let acc = 0;
+          for (let m = 0; m < K; m++) acc += Aj[k][m] * prev[m];
+          y[k] += acc;
+        }
+      }
+      const e = U[(rand() * nU) | 0];
+      for (let k = 0; k < K; k++) y[k] += e[k];
+      hist.push(y);
+      if (hist.length > p + 1) hist.shift();
+      if (t % perMonth === 0) {
+        let v = 0;
+        for (let k = 0; k < K; k++) v += w[k] * y[k];
+        row.push(v);
+      }
+    }
+    out.push(row);
+  }
+  return out;
+}
+
+/** pointwise percentile across simulated paths */
+function pct(sorted, q) {
+  if (!sorted.length) return NaN;
+  const i = (sorted.length - 1) * q;
+  const lo = Math.floor(i);
+  const hi = Math.ceil(i);
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (i - lo);
+}
+
+/**
+ * Collapse simulated P&L paths into the fan the chart draws.
+ * `scenarioIdx` picks ONE path to carry through untouched — a single future
+ * with its fluctuation intact, which no percentile can show because a
+ * pointwise quantile smooths across paths that never coexisted.
+ */
+export function summarisePaths(pnl, dates, levels, scenarioIdx = 0) {
+  const M = pnl[0].length;
+  const rows = [];
+  for (let m = 0; m < M; m++) {
+    const col = pnl.map((p) => p[m]).filter(Number.isFinite).sort((a, b) => a - b);
+    const lvl = levels.map((p) => p[m]).filter(Number.isFinite).sort((a, b) => a - b);
+    rows.push({
+      date: dates[m],
+      level: pct(lvl, 0.5),
+      ret: pct(col, 0.5),
+      mean: col.reduce((a, b) => a + b, 0) / col.length,
+      lo: pct(col, 0.1),
+      p25: pct(col, 0.25),
+      p75: pct(col, 0.75),
+      hi: pct(col, 0.9),
+      scenario: pnl[scenarioIdx][m],
+    });
+  }
+  return rows;
 }
 
 /**

@@ -171,6 +171,35 @@ DEALER_MARKUP_PREMIUM_SHARE = 0.3
 DEALER_MARKUP_SMOOTHING_WINDOW = 5
 REALIZED_VOL_LOOKBACK = 21
 
+# Observation-frequency profiles for the volatility machinery.
+#
+# DEALER_PRICING_WINDOW and REALIZED_VOL_LOOKBACK are counts of OBSERVATIONS,
+# and every caller but one feeds daily series, so they read as "one business
+# quarter" and "one month". engine/eur_country.py feeds MONTHLY ECB LTIR
+# series through the same code, where the same counts mean a 7.5-year fee
+# window measured against 21-month shocks. The consequence was visible in the
+# output: the mean |12-month move| over a 90-month window spanning the 2022
+# rate shock came out LARGER than the mean move on the shock periods it was
+# charged against, so every euro sovereign priced as a guaranteed loss for a
+# reason that was purely an indexing artefact.
+#
+# The monthly profile keeps the ~1:4 ratio the daily constants encode — one
+# year of realized vol against four years of dealer pricing — the shortest
+# pair that still estimates a standard deviation and a 90th percentile from
+# monthly data. periods_per_year annualises.
+FREQ_PROFILES = {
+    "days": {"rv_lookback": REALIZED_VOL_LOOKBACK,
+             "dealer_window": DEALER_PRICING_WINDOW,
+             "periods_per_year": TRADING_DAYS},
+    "months": {"rv_lookback": 12, "dealer_window": 48, "periods_per_year": 12},
+}
+
+
+def freq_profile(freq: str = "days") -> dict:
+    """Window lengths and annualisation for an observation frequency."""
+    return FREQ_PROFILES.get(freq, FREQ_PROFILES["days"])
+
+
 PB_BASE_DISCOUNT = 0.05
 PB_VOLUME_DISCOUNT_FACTOR = 0.05
 PB_VOL_THRESHOLD_BPS = 100.0
