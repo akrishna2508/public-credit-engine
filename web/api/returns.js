@@ -1,35 +1,32 @@
 /**
- * GET /api/returns?market=us|eu|em|countries&mode=pure|spread&basis=hold|vol
+ * GET /api/returns?market=us|eu|em|countries&basis=hold|vol
  *
- * Two economically different books, deliberately both exposed:
+ * Both books are forecasts. A VAR is fitted to the observable panel — credit
+ * spreads, government yields, log prices — and iterated forward; the payout
+ * is then computed along that forecast path.
  *
- *   basis=hold  BUY AND HOLD. What you earn by owning the asset: the spread
- *               or yield it carries, and that carry net of the loss you
- *               expect to suffer. No dealer markup, no straddle premium, no
- *               execution friction — none of those are charged to a holder.
+ *   basis=hold  accrued carry, marked to the forecast level:
+ *               return(m) = carry - duration x (level_m - level_0)
  *
- *   basis=vol   VOLATILITY STRATEGY. A port of engine/volatility.py's
- *               return_curve: gross is the mean absolute T-day move captured
- *               on high-volatility days, and the net tiers subtract the
- *               straddle premium a dealer charges plus execution friction.
- *               A markup belongs here because you are buying an option.
+ *   basis=vol   a straddle held to maturity m, priced off the VAR's own
+ *               forecast-error volatility sigma_m, net of the dealer premium
+ *               and execution friction measured from history
  *
- * `mode` splits each book into single-asset and relative-value legs.
+ * Nothing here compounds a constant. The previous projection took one
+ * annualised edge and raised it to the power of the horizon, which is
+ * monotone by construction and cannot bend, peak or disagree with itself.
  *
- * UNITS. Each series goes to returnCurve in the units the market quotes —
- * spreads and yields in basis points, listed prices as 10000*ln(P) — together
- * with the `pnlScale` that converts one unit of move into basis points of
- * P&L: spread duration 4.5, bond duration 8.5, log-price 1. Before this, a
- * spread level, a yield level and a price-times-100 were all read as if they
- * were already basis points of return, which mis-scaled every curve by a
- * different factor and made the markets incomparable. See _shared.js for why
- * the scale is applied after the cost model rather than to the input.
+ * The horizon is derived per panel from the fitted model's stability, not
+ * fixed at fifteen years — see _forecastpath.js for the measurements.
  */
 import {
-  fredCsv, yahooChart, yahooAtmIv, ecbCsv, returnCurve, json, pmap, worldBank,
-  toBps, logPriceBps, alignedDiff,
+  fredCsv, yahooChart, yahooAtmIv, ecbCsv, json, pmap, worldBank,
+  toBps, logPriceBps, tradeCostBasis,
   SPREAD_DURATION, BOND_DURATION, PRICE_SCALE,
 } from "./_shared.js";
+import {
+  buildForecast, monthlySamples, holdReturnPath, straddleReturnPath, timingEdge,
+} from "./_forecastpath.js";
 import {
   RATING_ORDER, US_GRADES, DR_SERIES, DR_MAPPING, ADJACENT_PAIRS,
   expectedLossByGrade, CREDIT_PANEL, COUNTRIES, WB_INDICATORS,
@@ -38,62 +35,68 @@ import {
 export const config = { runtime: "nodejs" };
 
 const r2 = (v) => (Number.isFinite(v) ? Math.round(v * 100) / 100 : null);
+const asMap = (rows) => Object.fromEntries(rows.map((r) => [r.date, r.v]));
 
 const ETF_ASSETS = {
-  ANGL: { symbol: "ANGL", label: "Fallen angels — bonds downgraded from investment grade to high yield (VanEck ANGL)" },
-  IEACL: { symbol: "IEAC.L", label: "Euro investment-grade corporate bonds (iShares Core EUR Corp IEAC.L)" },
-  IHYGL: { symbol: "IHYG.L", label: "Euro high-yield corporate bonds (iShares EUR High Yield IHYG.L)" },
-  EMB: { symbol: "EMB", label: "EM US-dollar sovereign bonds (iShares J.P. Morgan USD EM Bond EMB)" },
-  CEMB: { symbol: "CEMB", label: "EM US-dollar corporate bonds (iShares J.P. Morgan EM Corporate CEMB)" },
-  EMHY: { symbol: "EMHY", label: "EM high-yield bonds (iShares J.P. Morgan EM High Yield EMHY)" },
-  LEMB: { symbol: "LEMB", label: "EM local-currency bonds (iShares J.P. Morgan EM Local Currency LEMB)" },
+  ANGL: { symbol: "ANGL", label: "Fallen angels — VanEck ANGL" },
+  IEACL: { symbol: "IEAC.L", label: "Euro investment-grade corporates — iShares IEAC.L" },
+  IHYGL: { symbol: "IHYG.L", label: "Euro high yield — iShares IHYG.L" },
+  EMB: { symbol: "EMB", label: "EM US-dollar sovereigns — iShares EMB" },
+  CEMB: { symbol: "CEMB", label: "EM US-dollar corporates — iShares CEMB" },
+  EMHY: { symbol: "EMHY", label: "EM high yield — iShares EMHY" },
+  LEMB: { symbol: "LEMB", label: "EM local currency — iShares LEMB" },
 };
 
 const ECB_LTIR = {
-  DE: "Germany — Bund long-term (10Y) rate", FI: "Finland — 10Y rate",
-  FR: "France — 10Y OAT rate", IT: "Italy — 10Y BTP rate",
-  ES: "Spain — 10Y Bonos rate", NL: "Netherlands — 10Y DSL rate",
-  BE: "Belgium — 10Y OLO rate", AT: "Austria — 10Y rate",
-  PT: "Portugal — 10Y rate", IE: "Ireland — 10Y rate", GR: "Greece — 10Y rate",
+  DE: "Germany 10Y Bund", FI: "Finland 10Y", FR: "France 10Y OAT", IT: "Italy 10Y BTP",
+  ES: "Spain 10Y Bonos", NL: "Netherlands 10Y DSL", BE: "Belgium 10Y OLO", AT: "Austria 10Y",
+  PT: "Portugal 10Y", IE: "Ireland 10Y", GR: "Greece 10Y",
 };
 
-/* ==================================================================== */
-/* buy-and-hold book                                                     */
-/* ==================================================================== */
+/** an asset the projection chart can draw, or an honest gap */
+function asset(id, name, standsFor, path, extra = {}) {
+  if (!path || path.length < 2) {
+    return { id, name, standsFor, unavailable: extra.why || "no forecast path", path: [] };
+  }
+  return { id, name, standsFor, path, ...extra };
+}
 
 /**
- * A hold asset is described by its annual carry in bps, optionally net of an
- * annual expected loss. The projection chart consumes `curves` + `edge`, so
- * one monthly row and an annualised edge is all it needs: month-1 accrual is
- * carry/12 and it compounds from there.
+ * Where the forecast return peaks — the point past which holding costs more
+ * than it earns. Only reported when the peak is strictly interior: a maximum
+ * at the last sample means the path is still rising when the model runs out
+ * of horizon, and one at the first means it only ever falls. Neither is a
+ * turning point, and calling either one a sell date would be reading a
+ * signal into the edge of the window.
  */
-function holdAsset(id, name, standsFor, grossAnnualBps, netAnnualBps, extra = {}) {
-  if (!Number.isFinite(grossAnnualBps)) {
-    return { id, name, standsFor, unavailable: "no live carry for this asset", curves: [], edge: null };
+function peakOf(path, key) {
+  let bi = -1;
+  let bv = -Infinity;
+  for (let i = 0; i < path.length; i++) {
+    const v = path[i][key];
+    if (Number.isFinite(v) && v > bv) { bv = v; bi = i; }
   }
-  const net = Number.isFinite(netAnnualBps) ? netAnnualBps : grossAnnualBps;
-  return {
-    id,
-    name,
-    standsFor,
-    unit: "months",
-    holdMax: 1,
-    curves: [[1, r2(grossAnnualBps / 12), r2(net / 12), r2(net / 12)]],
-    edge: { gross: r2(grossAnnualBps), hf: r2(net), ret: r2(net) },
-    ...extra,
-  };
+  if (bi <= 0 || bi >= path.length - 1) return null;
+  return { date: path[bi].date, months: bi + 1, value: r2(bv) };
 }
+
+/* ==================================================================== */
+/* buy and hold                                                          */
+/* ==================================================================== */
 
 async function buildHoldBook(market) {
   const markets = {};
+  const models = {};
 
   if (market === "us" || market === "all") {
-    const oasList = await pmap(RATING_ORDER, 4, (g) => fredCsv(US_GRADES[g].id, { start: "2015-01-01" }));
-    const oas = {};
+    const oasList = await pmap(RATING_ORDER, 4, (g) => fredCsv(US_GRADES[g].id, { start: "2010-01-01" }));
+    const seriesMap = {};
+    const cols = [];
     RATING_ORDER.forEach((g, i) => {
       const r = oasList[i];
-      if (r && !r.unavailable && r.rows?.length) oas[g] = r.rows;
+      if (r && !r.unavailable && r.rows?.length) { seriesMap[g] = asMap(r.rows); cols.push(g); }
     });
+
     const drKeys = Object.keys(DR_SERIES);
     const drRes = await pmap(drKeys, 2, (k) => fredCsv(DR_SERIES[k], { start: "2010-01-01" }));
     const drLatest = {};
@@ -104,44 +107,30 @@ async function buildHoldBook(market) {
     });
     const elBps = expectedLossByGrade(drLatest, { asBps: true });
 
+    const fc = buildForecast(cols, seriesMap, { freq: "days", scale: 100, floorAt: 0 });
     const pure = [];
-    for (const g of RATING_ORDER) {
-      if (!oas[g]) continue;
-      const carry = oas[g][oas[g].length - 1].v * 100;
-      const el = elBps[g];
-      pure.push(
-        holdAsset(
-          g,
-          g,
-          `${US_GRADES[g].label} — carry of ${r2(carry)} bps a year${el == null ? "" : `, less expected loss of ${r2(el)} bps`}`,
-          carry,
-          el == null ? null : carry - el,
-          { oas_bps: r2(carry), expected_loss_bps: el, tier: US_GRADES[g].tier }
-        )
-      );
+    if (fc.ok) {
+      models.us = { lag: fc.lag, nobs: fc.nobs, rho: r2(fc.rho), stable: fc.stable, horizonMonths: fc.horizonMonths, why: fc.why };
+      cols.forEach((g, k) => {
+        const samples = monthlySamples(fc, k);
+        const level0 = fc.last[k];
+        const el = elBps[g];
+        // expected loss is an annual charge, accrued along the path
+        const rows = holdReturnPath(level0, samples, SPREAD_DURATION).map((r, i) => ({
+          ...r,
+          net: el == null ? r.ret : r.ret - (el * (i + 1)) / 12,
+        }));
+        pure.push(
+          asset(g, g, `${US_GRADES[g].label}, ${SPREAD_DURATION}-year spread duration`, rows, {
+            level0: r2(level0),
+            expected_loss_bps: el,
+            peak: peakOf(rows, el == null ? "ret" : "net"),
+          })
+        );
+      });
     }
-
-    const spread = [];
-    for (const [riskier, safer] of ADJACENT_PAIRS) {
-      if (!oas[riskier] || !oas[safer]) continue;
-      const hi = oas[riskier][oas[riskier].length - 1].v * 100;
-      const lo = oas[safer][oas[safer].length - 1].v * 100;
-      const elHi = elBps[riskier];
-      const elLo = elBps[safer];
-      const gross = hi - lo;
-      const net = elHi == null || elLo == null ? null : gross - (elHi - elLo);
-      spread.push(
-        holdAsset(
-          `${riskier} - ${safer}`,
-          `${riskier} - ${safer}`,
-          `Extra carry for holding ${riskier} instead of ${safer}${net == null ? "" : ", net of the extra expected loss that step implies"}`,
-          gross,
-          net,
-          { spread_diff_bps: r2(gross), el_diff_bps: elHi == null || elLo == null ? null : r2(elHi - elLo) }
-        )
-      );
-    }
-    markets.us = { pure, spread };
+    markets.us = { pure, spread: [] };
+    if (!fc.ok) models.us = { why: fc.why };
   }
 
   if (market === "em" || market === "eu" || market === "all") {
@@ -150,281 +139,257 @@ async function buildHoldBook(market) {
       : ["EM_CORP", "EM_ASIA", "EM_LATAM", "EM_EMEA", "EM_HG", "EM_HY", "EM_BBB", "EM_BB", "EM_B_LOWER", "EM_XOVER"];
     const keys = wanted.filter((k) => CREDIT_PANEL[k]);
     const res = await pmap(keys, 4, (k) => fredCsv(CREDIT_PANEL[k].id, { start: "2015-01-01" }));
-    const pure = [];
+    const seriesMap = {};
+    const cols = [];
     keys.forEach((k, i) => {
       const r = res[i];
-      if (!r || r.unavailable || !r.rows?.length) return;
-      const carry = r.rows[r.rows.length - 1].v * 100;
-      pure.push(
-        holdAsset(
-          k,
-          CREDIT_PANEL[k].label,
-          `${CREDIT_PANEL[k].label} — carry of ${r2(carry)} bps a year. No published default-rate proxy maps to this index, so no expected-loss deduction is applied and the carry is gross.`,
-          carry,
-          null,
-          { oas_bps: r2(carry), expected_loss_bps: null, gross_only: true }
-        )
-      );
+      if (r && !r.unavailable && r.rows?.length) { seriesMap[k] = asMap(r.rows); cols.push(k); }
     });
+    const fc = buildForecast(cols, seriesMap, { freq: "days", scale: 100, floorAt: 0 });
+    const pure = [];
+    const tag = market === "eu" ? "eu" : "em";
+    if (fc.ok) {
+      models[tag] = { lag: fc.lag, nobs: fc.nobs, rho: r2(fc.rho), stable: fc.stable, horizonMonths: fc.horizonMonths, why: fc.why };
+      cols.forEach((k, ki) => {
+        const rows = holdReturnPath(fc.last[ki], monthlySamples(fc, ki), SPREAD_DURATION);
+        pure.push(
+          asset(k, CREDIT_PANEL[k].label, `${CREDIT_PANEL[k].label}, ${SPREAD_DURATION}-year spread duration`, rows, {
+            level0: r2(fc.last[ki]),
+            expected_loss_bps: null,
+            peak: peakOf(rows, "ret"),
+          })
+        );
+      });
+    } else {
+      models[tag] = { why: fc.why };
+    }
+
     const spread = [];
     if (market === "eu" || market === "all") {
-      // The euro-denominated EM corporate index is the only euro credit OAS
-      // FRED publishes, which left "Europe / buy & hold" as a single line.
-      // The canonical euro credit hold is the sovereign spread over Bund —
-      // BTP-Bund, OAT-Bund — so it is built here from the same ECB long-term
-      // rate series the volatility book uses. It is a real carry position: you
-      // are paid the differential for holding the periphery against the core.
       const isos = Object.keys(ECB_LTIR);
-      const ltir = await pmap(isos, 5, (iso) => ecbCsv(`IRS/M.${iso}.L.L40.CI.0000.EUR.N.Z`, { start: "2015-01-01" }));
-      const last = {};
+      const ltir = await pmap(isos, 5, (iso) => ecbCsv(`IRS/M.${iso}.L.L40.CI.0000.EUR.N.Z`, { start: "2005-01-01" }));
+      const sm = {};
+      const cc = [];
       isos.forEach((iso, i) => {
         const r = ltir[i];
-        if (r && !r.unavailable && r.rows?.length) last[iso] = r.rows[r.rows.length - 1].v * 100;
+        if (r && !r.unavailable && r.rows?.length) { sm[iso] = asMap(r.rows); cc.push(iso); }
       });
-      if (Number.isFinite(last.DE)) {
-        for (const iso of isos) {
-          if (iso === "DE" || !Number.isFinite(last[iso])) continue;
-          const diff = last[iso] - last.DE;
+      const efc = buildForecast(cc, sm, { freq: "months", scale: 100, floorAt: -Infinity });
+      if (efc.ok && cc.includes("DE")) {
+        const di = cc.indexOf("DE");
+        const dSam = monthlySamples(efc, di);
+        cc.forEach((iso, k) => {
+          if (iso === "DE") return;
+          const sam = monthlySamples(efc, k);
+          const n = Math.min(sam.length, dSam.length);
+          const diffSam = Array.from({ length: n }, (_, i) => ({
+            date: sam[i].date,
+            level: sam[i].level - dSam[i].level,
+            sd: Math.hypot(sam[i].sd, dSam[i].sd),
+          }));
+          const rows = holdReturnPath(efc.last[k] - efc.last[di], diffSam, BOND_DURATION);
           spread.push(
-            holdAsset(
-              `${iso} - DE`,
-              `${iso} - DE`,
-              `${ECB_LTIR[iso].split(" — ")[0]} 10-year yield over the Bund — ${r2(diff)} bps a year for holding this sovereign instead of Germany. Both legs are euro-denominated, so the differential is credit and liquidity, not currency. No expected-loss deduction: no default-rate proxy is published for euro-area sovereigns, so this carry is gross.`,
-              diff,
-              null,
-              { spread_diff_bps: r2(diff), yield_bps: r2(last[iso]), bund_bps: r2(last.DE), gross_only: true }
-            )
+            asset(`${iso} - DE`, `${iso} - DE`, `${ECB_LTIR[iso]} over Bund, ${BOND_DURATION}-year duration`, rows, {
+              level0: r2(efc.last[k] - efc.last[di]),
+              peak: peakOf(rows, "ret"),
+            })
           );
-        }
+        });
+        models[`${tag}_sovereign`] = { lag: efc.lag, nobs: efc.nobs, rho: r2(efc.rho), stable: efc.stable, horizonMonths: efc.horizonMonths, why: efc.why };
       }
     }
-    markets[market === "eu" ? "eu" : "em"] = { pure, spread };
+    markets[tag] = { pure, spread };
   }
 
   if (market === "countries" || market === "all") {
     const isos = Object.keys(COUNTRIES).filter((i) => COUNTRIES[i].yield);
-    const res = await pmap(isos, 6, (iso) => fredCsv(COUNTRIES[iso].yield, { start: "2015-01-01" }));
+    const res = await pmap(isos, 6, (iso) => fredCsv(COUNTRIES[iso].yield, { start: "1990-01-01" }));
     const infl = await worldBank(WB_INDICATORS.inflation.id, isos.map((i) => COUNTRIES[i].iso3));
     const inflLatest = infl && !infl.unavailable ? infl.latest : null;
+
+    // one VAR per sovereign against the US 10Y as the global factor: a joint
+    // 34-variable panel would need far more history than any of them has,
+    // and a univariate fit would miss the common rates cycle entirely
+    const usRows = res[isos.indexOf("US")];
+    const usMap = usRows && !usRows.unavailable ? asMap(usRows.rows) : null;
+
     const pure = [];
-    isos.forEach((iso, i) => {
+    let modelNote = null;
+    for (let i = 0; i < isos.length; i++) {
+      const iso = isos[i];
       const r = res[i];
-      if (!r || r.unavailable || !r.rows?.length) return;
-      const y = r.rows[r.rows.length - 1].v * 100;
+      if (!r || r.unavailable || !r.rows?.length) continue;
+      const cols = iso === "US" || !usMap ? [iso] : [iso, "US"];
+      const sm = { [iso]: asMap(r.rows) };
+      if (cols.length === 2) sm.US = usMap;
+      const fc = buildForecast(cols, sm, { freq: "months", scale: 100, floorAt: -Infinity });
+      if (!fc.ok) {
+        pure.push(asset(iso, COUNTRIES[iso].name, `${COUNTRIES[iso].name} 10-year government bond`, null, { why: fc.why }));
+        continue;
+      }
+      if (!modelNote) modelNote = fc.why;
+      const samples = monthlySamples(fc, 0);
       const inf = inflLatest?.get(COUNTRIES[iso].iso3);
-      const real = inf ? y - inf.v * 100 : null;
+      const infBps = inf ? inf.v * 100 : null;
+      const rows = holdReturnPath(fc.last[0], samples, BOND_DURATION).map((x, k) => ({
+        ...x,
+        net: infBps == null ? x.ret : x.ret - (infBps * (k + 1)) / 12,
+      }));
       pure.push(
-        holdAsset(
-          iso,
-          COUNTRIES[iso].name,
-          `${COUNTRIES[iso].name} 10-year government bond — nominal yield ${r2(y)} bps a year${inf ? `, ${r2(real)} bps after the ${inf.year} inflation print` : ""}. Holding to maturity earns the yield; the net view deducts inflation, not a fee.`,
-          y,
-          real,
-          { yield_bps: r2(y), inflation_bps: inf ? r2(inf.v * 100) : null, inflation_year: inf ? Number(inf.year) : null }
-        )
+        asset(iso, COUNTRIES[iso].name, `${COUNTRIES[iso].name} 10-year government bond, ${BOND_DURATION}-year duration`, rows, {
+          level0: r2(fc.last[0]),
+          inflation_bps: infBps == null ? null : r2(infBps),
+          inflation_year: inf ? Number(inf.year) : null,
+          lag: fc.lag,
+          rho: r2(fc.rho),
+          horizonMonths: fc.horizonMonths,
+          peak: peakOf(rows, infBps == null ? "ret" : "net"),
+        })
       );
-    });
+    }
     markets.countries = { pure, spread: [] };
+    models.countries = { why: modelNote || "no sovereign panel could be fitted", perSeries: true };
   }
 
-  return markets;
+  return { markets, models };
 }
 
 /* ==================================================================== */
-/* volatility book                                                       */
+/* volatility                                                            */
 /* ==================================================================== */
 
-/**
- * Every series in one market has to be measured over the SAME window, because
- * the page ranks them against each other and "shock day" is defined by a
- * within-series percentile. FRED serves only the last three years of the ICE
- * BofA OAS indices (a licensing limit on their side, not a fetch bug — the
- * API reports count: 795), while Yahoo hands back fifteen years for an ETF.
- * Ranking a spread whose worst days are 2024 wobbles against an ETF whose
- * worst days are March 2020 is not a comparison, so the book is clipped to
- * the latest start date any of its members has.
- */
-function commonStart(rowSets) {
-  let start = null;
-  for (const rows of rowSets) {
-    if (!rows?.length) continue;
-    const d = rows[0].date;
-    if (start == null || d > start) start = d;
-  }
-  return start;
-}
-const clip = (rows, start) => (start ? rows.filter((r) => r.date >= start) : rows);
-
-async function buildAsset(name, observable, { standsFor, unit = "days", holdMax = 21, atmIv = null, pnlScale = PRICE_SCALE }) {
-  const curve = returnCurve(observable, { holdMax, atmIv, name, unit, pnlScale });
-  if (!curve) {
-    return { id: name, name, standsFor, unit, unavailable: "insufficient history on this deployment", curves: [], edge: null };
-  }
-  return {
-    id: name,
-    name,
-    standsFor,
-    unit,
-    holdMax,
-    curves: curve.rows.map((r) => [r.T, r.gross, r.hf, r.ret]),
-    edge: curve.edge,
-    markupNote: curve.markupNote,
-  };
+/** fit one panel, then price a straddle along each column's sigma path */
+function volAssets(fc, cols, rawByCol, { pnlScale, unit, label, atmIvByCol = {} }) {
+  const out = [];
+  cols.forEach((c, k) => {
+    const series = rawByCol[c];
+    const costs = tradeCostBasis(series, { name: c, atmIv: atmIvByCol[c] || null, unit, pnlScale });
+    const T = unit === "months" ? 12 : 21;
+    const kappa = timingEdge(series, T, costs.shock);
+    if (kappa == null) {
+      out.push(asset(c, label(c), label(c), null, { why: "too few high-volatility periods to measure a timing edge" }));
+      return;
+    }
+    const rows = straddleReturnPath(monthlySamples(fc, k), {
+      kappa,
+      markup: costs.markup,
+      hfMarkup: costs.hfMarkup,
+      friction: costs.friction,
+      pnlScale,
+    });
+    out.push(
+      asset(c, label(c), label(c), rows, {
+        kappa: r2(kappa),
+        markup: r2(costs.markup),
+        hf_markup: r2(costs.hfMarkup),
+        friction_bps: r2(costs.friction * pnlScale),
+        peak: peakOf(rows, "ret"),
+        peakHf: peakOf(rows, "hf"),
+      })
+    );
+  });
+  return out;
 }
 
 async function buildVolBook(market) {
   const markets = {};
-  const windows = {};
+  const models = {};
 
   if (market === "us" || market === "all") {
     const oasList = await pmap(RATING_ORDER, 4, (g) => fredCsv(US_GRADES[g].id, { start: "2010-01-01" }));
-    const oas = {};
+    const seriesMap = {};
+    const raw = {};
+    const cols = [];
     RATING_ORDER.forEach((g, i) => {
       const r = oasList[i];
-      if (r && !r.unavailable && r.rows?.length) oas[g] = r.rows;
-    });
-    const ang = await yahooChart("ANGL", { range: "15y", interval: "1d" });
-    let angRows = ang.unavailable ? null : ang.rows;
-    let angIv = null;
-    if (angRows) {
-      const iv = await yahooAtmIv("ANGL");
-      angIv = iv.atmIv || null;
-    }
-
-    const start = commonStart([...Object.values(oas), ...(angRows ? [angRows] : [])]);
-    for (const g of Object.keys(oas)) oas[g] = clip(oas[g], start);
-    if (angRows) {
-      angRows = clip(angRows, start);
-      if (angRows.length < 120) angRows = null; // honest drop, not a short-window curve
-    }
-    windows.us = start;
-
-    const pure = [];
-    for (const g of RATING_ORDER) {
-      if (!oas[g]) continue;
-      pure.push(
-        await buildAsset(g, toBps(oas[g]), {
-          standsFor: `${US_GRADES[g].label} — straddle on the option-adjusted spread, ${SPREAD_DURATION} bps of P&L per bp of spread move`,
-          pnlScale: SPREAD_DURATION,
-        })
-      );
-    }
-    if (angRows) {
-      pure.push(
-        await buildAsset("Fallen_Angel", logPriceBps(angRows), {
-          standsFor: ETF_ASSETS.ANGL.label,
-          atmIv: angIv,
-          pnlScale: PRICE_SCALE,
-        })
-      );
-    }
-
-    const spread = [];
-    for (const [riskier, safer] of ADJACENT_PAIRS) {
-      if (!oas[riskier] || !oas[safer]) continue;
-      const pair = alignedDiff(oas[riskier], oas[safer], toBps);
-      if (pair.length < 120) continue;
-      spread.push(
-        await buildAsset(`${riskier} - ${safer}`, pair.map((r) => r.v), {
-          standsFor: `Long ${riskier} against short ${safer} — both legs quoted as option-adjusted spreads, so the difference is a spread in bps at duration ${SPREAD_DURATION}`,
-          pnlScale: SPREAD_DURATION,
-        })
-      );
-    }
-    // BB vs the fallen-angel ETF is deliberately NOT offered. A credit spread
-    // in bps and a log-price index in bps are different quantities that happen
-    // to share a name for their unit; differencing them is not a trade, and
-    // no single pnlScale is correct for the result. The Python pipeline omits
-    // it for the same reason.
-    markets.us = { pure, spread };
-  }
-
-  if (market === "eu" || market === "all") {
-    const [ieacRes, ihygRes] = await pmap(["IEAC.L", "IHYG.L"], 2, (s) => yahooChart(s, { range: "15y", interval: "1d" }));
-    const raw = {};
-    if (!ieacRes.unavailable && ieacRes.rows?.length) raw.IEAC = ieacRes.rows;
-    if (!ihygRes.unavailable && ihygRes.rows?.length) raw.IHYG = ihygRes.rows;
-    const start = commonStart(Object.values(raw));
-    for (const k of Object.keys(raw)) raw[k] = clip(raw[k], start);
-    windows.eu = start;
-
-    const pure = [];
-    const spread = [];
-    if (raw.IEAC) pure.push(await buildAsset("EUR_IG", logPriceBps(raw.IEAC), { standsFor: ETF_ASSETS.IEACL.label }));
-    if (raw.IHYG) pure.push(await buildAsset("EUR_HY", logPriceBps(raw.IHYG), { standsFor: ETF_ASSETS.IHYGL.label }));
-    if (raw.IEAC && raw.IHYG) {
-      const pair = alignedDiff(raw.IHYG, raw.IEAC, logPriceBps);
-      if (pair.length >= 120) {
-        spread.push(await buildAsset("EUR_HY - EUR_IG", pair.map((r) => r.v), { standsFor: "Long euro high yield against short euro investment grade" }));
+      if (r && !r.unavailable && r.rows?.length) {
+        seriesMap[g] = asMap(r.rows);
+        raw[g] = toBps(r.rows);
+        cols.push(g);
       }
+    });
+    const fc = buildForecast(cols, seriesMap, { freq: "days", scale: 100, floorAt: 0 });
+    let pure = [];
+    if (fc.ok) {
+      models.us = { lag: fc.lag, nobs: fc.nobs, rho: r2(fc.rho), stable: fc.stable, horizonMonths: fc.horizonMonths, why: fc.why };
+      pure = volAssets(fc, cols, raw, {
+        pnlScale: SPREAD_DURATION,
+        unit: "days",
+        label: (c) => `${c} — straddle on the option-adjusted spread`,
+      });
+    } else {
+      models.us = { why: fc.why };
     }
-    markets.eu = { pure, spread };
+    markets.us = { pure, spread: [] };
   }
 
-  if (market === "em" || market === "all") {
-    const keys = ["EMB", "CEMB", "EMHY", "LEMB"];
-    const res = await pmap(keys, 4, (k) => yahooChart(ETF_ASSETS[k].symbol, { range: "15y", interval: "1d" }));
-    const rows = {};
-    keys.forEach((k, i) => {
-      if (!res[i].unavailable && res[i].rows?.length) rows[k] = res[i].rows;
+  for (const [tag, symbols] of [
+    ["eu", { EUR_IG: "IEAC.L", EUR_HY: "IHYG.L" }],
+    ["em", { EM_USD_Sovereign: "EMB", EM_Corporate: "CEMB", EM_High_Yield: "EMHY", EM_Local_Currency: "LEMB" }],
+  ]) {
+    if (market !== tag && market !== "all") continue;
+    const names = Object.keys(symbols);
+    const res = await pmap(names, 4, (n) => yahooChart(symbols[n].includes(".") ? symbols[n] : ETF_ASSETS[symbols[n]].symbol, { range: "15y", interval: "1d" }));
+    const seriesMap = {};
+    const raw = {};
+    const cols = [];
+    names.forEach((n, i) => {
+      const r = res[i];
+      if (r && !r.unavailable && r.rows?.length) {
+        // the log-price index IS the observable here: its differences are
+        // already returns in bps, so the VAR is fitted on it directly
+        const lp = logPriceBps(r.rows);
+        seriesMap[n] = Object.fromEntries(r.rows.map((x, j) => [x.date, lp[j] / 100]));
+        raw[n] = lp;
+        cols.push(n);
+      }
     });
-    const NAMES = { EMB: "EM_USD_Sovereign", CEMB: "EM_Corporate", EMHY: "EM_High_Yield", LEMB: "EM_Local_Currency" };
-    const start = commonStart(Object.values(rows));
-    for (const k of Object.keys(rows)) rows[k] = clip(rows[k], start);
-    windows.em = start;
-
-    const pure = [];
-    for (const k of keys) {
-      if (!rows[k]) continue;
-      pure.push(await buildAsset(NAMES[k], logPriceBps(rows[k]), { standsFor: ETF_ASSETS[k].label }));
+    const fc = buildForecast(cols, seriesMap, { freq: "days", scale: 100, floorAt: -Infinity });
+    let pure = [];
+    if (fc.ok) {
+      models[tag] = { lag: fc.lag, nobs: fc.nobs, rho: r2(fc.rho), stable: fc.stable, horizonMonths: fc.horizonMonths, why: fc.why };
+      const key = tag === "eu" ? { EUR_IG: "IEACL", EUR_HY: "IHYGL" } : { EM_USD_Sovereign: "EMB", EM_Corporate: "CEMB", EM_High_Yield: "EMHY", EM_Local_Currency: "LEMB" };
+      pure = volAssets(fc, cols, raw, {
+        pnlScale: PRICE_SCALE,
+        unit: "days",
+        label: (c) => ETF_ASSETS[key[c]].label,
+      });
+    } else {
+      models[tag] = { why: fc.why };
     }
-    const PAIRS = [["CEMB", "EMB"], ["EMHY", "CEMB"], ["LEMB", "EMHY"]];
-    const spread = [];
-    for (const [a, b] of PAIRS) {
-      if (!rows[a] || !rows[b]) continue;
-      const pair = alignedDiff(rows[a], rows[b], logPriceBps);
-      if (pair.length < 120) continue;
-      spread.push(
-        await buildAsset(`${NAMES[a]} - ${NAMES[b]}`, pair.map((r) => r.v), {
-          standsFor: `Long ${ETF_ASSETS[a].label} against short ${ETF_ASSETS[b].label}`,
-        })
-      );
-    }
-    markets.em = { pure, spread };
+    markets[tag] = { pure, spread: [] };
   }
 
   if (market === "countries" || market === "all") {
     const isos = Object.keys(ECB_LTIR);
-    const res = await pmap(isos, 5, (iso) => ecbCsv(`IRS/M.${iso}.L.L40.CI.0000.EUR.N.Z`, { start: "2010-01-01" }));
-    const usable = {};
+    const res = await pmap(isos, 5, (iso) => ecbCsv(`IRS/M.${iso}.L.L40.CI.0000.EUR.N.Z`, { start: "2005-01-01" }));
+    const seriesMap = {};
+    const raw = {};
+    const cols = [];
     isos.forEach((iso, i) => {
       const r = res[i];
-      if (r && !r.unavailable && r.rows?.length >= 120) usable[iso] = r.rows;
+      if (r && !r.unavailable && r.rows?.length >= 60) {
+        seriesMap[iso] = asMap(r.rows);
+        raw[iso] = toBps(r.rows);
+        cols.push(iso);
+      }
     });
-    const start = commonStart(Object.values(usable));
-    for (const iso of Object.keys(usable)) {
-      const c = clip(usable[iso], start);
-      if (c.length < 120) delete usable[iso];
-      else usable[iso] = c;
-    }
-    windows.countries = start;
-
-    const pure = [];
-    for (const iso of isos) {
-      if (!usable[iso]) continue;
-      pure.push(
-        await buildAsset(iso, toBps(usable[iso]), {
-          standsFor: `${ECB_LTIR[iso]} — straddle on the 10-year yield, ${BOND_DURATION} bps of price P&L per bp of yield move`,
-          unit: "months",
-          holdMax: 12,
-          pnlScale: BOND_DURATION,
-        })
-      );
+    const fc = buildForecast(cols, seriesMap, { freq: "months", scale: 100, floorAt: -Infinity });
+    let pure = [];
+    if (fc.ok) {
+      models.countries = { lag: fc.lag, nobs: fc.nobs, rho: r2(fc.rho), stable: fc.stable, horizonMonths: fc.horizonMonths, why: fc.why };
+      pure = volAssets(fc, cols, raw, {
+        pnlScale: BOND_DURATION,
+        unit: "months",
+        label: (c) => `${ECB_LTIR[c]} — straddle on the yield`,
+      });
+    } else {
+      models.countries = { why: fc.why };
     }
     markets.countries = { pure, spread: [] };
   }
 
-  return { markets, windows };
+  return { markets, models };
 }
 
 /* ==================================================================== */
@@ -434,51 +399,36 @@ export default async function handler(req, res) {
   const market = url.searchParams.get("market") || "us";
   const basis = url.searchParams.get("basis") === "vol" ? "vol" : "hold";
 
-  let markets;
-  let windows = null;
-  if (basis === "hold") {
-    markets = await buildHoldBook(market);
-  } else {
-    ({ markets, windows } = await buildVolBook(market));
-  }
+  const { markets, models } = basis === "hold" ? await buildHoldBook(market) : await buildVolBook(market);
 
-  const common = {
+  const payload = {
     status: "OK",
     generated: new Date().toISOString(),
     basis,
     markets,
+    models,
   };
-  if (windows) common.windows = windows;
   if (!markets[market] && market !== "all") {
-    common.status = "UNAVAILABLE";
-    common.why = `no ${basis} book for market '${market}'`;
+    payload.status = "UNAVAILABLE";
+    payload.why = `no ${basis} book for market '${market}'`;
   }
 
-  if (basis === "hold") {
-    return json(res, {
-      ...common,
-      label: "Carry accrued by holding the asset — compounded, not forecast",
-      approximations: [
-        "Carry is the current spread or yield annualised; it is what the asset pays at today's level, held flat. It is not a forecast of where spreads or yields go.",
-        "Expected loss is the default-rate proxy times the published loss-given-default for that grade, deducted once a year.",
-        "Sovereign carry is the nominal 10-year yield; the net view deducts the latest published inflation print, which is annual and lagged, so the real figure is structural rather than live.",
-        "No dealer markup, straddle premium or execution friction is charged anywhere in this book — none of them applies to a holder.",
-      ],
-    });
-  }
+  payload.label =
+    basis === "hold"
+      ? "Carry accrued and marked to the VAR forecast of the spread or yield"
+      : "Straddle held to maturity, priced off the VAR forecast-error volatility";
+  payload.method =
+    basis === "hold"
+      ? [
+          "return = accrued carry - duration x (forecast level - current level)",
+          "expected loss, where a default-rate proxy maps to the grade, is accrued monthly; for sovereigns the deduction is the latest published inflation print",
+          "band = duration x the model's forecast-error standard deviation",
+        ]
+      : [
+          "expected move to maturity m = sigma_m x sqrt(2/pi), sigma_m from the VAR forecast-error covariance",
+          "gross = timing edge x expected move; the timing edge is the measured ratio of moves on high-volatility periods to unconditional moves",
+          "net = gross - premium x dealer markup - execution friction",
+        ];
 
-  return json(res, {
-    ...common,
-    label: "Long-volatility straddle, extrapolated from live hold-horizon curves — not a forecast",
-    approximations: [
-      "Shock periods = realized vol of first differences at the 90th percentile (the engine uses a GARCH fit at the same percentile; the rolling-vol mask is the site's documented approximation)",
-      "Dealer markup: 30% share of the IV-RV premium over parity with a 1.05 floor, from live ATM implied vol where a listed options chain exists; otherwise the 1.05 floor",
-      `Units: each move is measured in the units the market quotes — spreads and yields in bps, listed prices as 10000*ln(price) — then converted to basis points of P&L: spread duration ${SPREAD_DURATION}, bond duration ${BOND_DURATION}, log-price 1. Costs are charged in the quoted units, where the engine's friction model was calibrated.`,
-      "Relative-value legs are only formed from two series with the same quoted units, so a credit spread is never differenced against a price index.",
-      "Execution friction grows exponentially in how far volatility sits above its own 90th percentile, measured in units of that series' own dispersion. The engine states this growth in absolute bps, which only holds at the scale it was fitted on and charged a price index up to 4,700% per round trip.",
-      "Window lengths follow the observation frequency: 21/90 observations on daily series, 12/48 on monthly. Applying the daily counts to a monthly series priced a seven-and-a-half-year fee window against one-year shocks.",
-      "Every series inside one market is clipped to a common start date, because a shock is defined by a within-series percentile and windows of different lengths are not comparable. FRED serves only three years of the ICE BofA indices, which sets the US window.",
-      "Extrapolation compounds the net edge measured at the longest evaluated hold horizon (21 days / 12 months)",
-    ],
-  });
+  return json(res, payload);
 }

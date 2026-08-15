@@ -195,8 +195,8 @@ export async function render(root, { iso }) {
 
     <div class="col-12">
       <div class="pc-card pc-card-pad">
-        <div class="pc-card-title">Projected return curve</div>
-        <div class="pc-card-sub">Extrapolated from the live hold-horizon curves — not a forecast</div>
+        <div class="pc-card-title">Forecast return</div>
+        <div class="pc-card-sub" id="proj-sub">Carry accrued, marked to a VAR forecast of the yield</div>
         <div class="pc-controls" style="margin-bottom:12px"><div id="proj-periods"></div></div>
         <div class="grid-12">
           <div class="col-8"><div id="proj-chart" style="height:380px"></div></div>
@@ -240,7 +240,6 @@ export async function render(root, { iso }) {
       id: "country-proj",
       views: viewsFor("hold"),
       view: "net",
-      footNote: "Yield compounded at today's level, net of the latest inflation print — not a forecast",
     });
     recs.push(rec);
     buildLegend(

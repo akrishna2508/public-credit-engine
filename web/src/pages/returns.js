@@ -1,6 +1,5 @@
 /**
- * Returns page: cumulative 1-month -> 15-year projections extrapolated from
- * the live hold-horizon curves.
+ * Returns page: the VAR forecast path for each asset, on a real date axis.
  *
  * Two economically different books sit behind the same chart, chosen by the
  * BASIS control:
@@ -21,7 +20,9 @@
 import { loadReturns, setSeriesVisible } from "../store.js";
 import { buildProjectionChart, viewsFor, PALETTE } from "../charts/projection.js";
 import { buildLegend } from "../legend.js";
-import { buildPeriodBar } from "../controls.js";
+import { buildPeriodBar, PERIODS } from "../controls.js";
+
+const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 const BASES = [
   { value: "hold", label: "Buy & hold" },
@@ -43,16 +44,14 @@ const MODES = [
 
 const BASIS_COPY = {
   hold: {
-    heading: "Buy-and-hold returns",
+    heading: "Buy-and-hold forecast",
     blurb:
-      "What you earn by <b>owning</b> the asset: the spread or yield it carries, and that carry net of the loss you expect to suffer. <b>No dealer markup, straddle premium or execution friction is charged anywhere in this book</b> — none of them applies to a holder. Per-grade spread minus expected loss, with cover ratios, is on <a href=\"#/spreads\" style=\"color:var(--accent);font-weight:600\">Spreads</a>.",
-    foot: "Carry compounded at today's level — not a forecast of where spreads or yields go",
+      "Carry accrued while you own the asset, marked to a VAR forecast of the spread or yield. Where the forecast level rises by more than the carry pays, the line turns over; that point is marked.",
   },
   vol: {
-    heading: "Volatility strategy returns",
+    heading: "Volatility strategy forecast",
     blurb:
-      "What a <b>long-volatility straddle</b> pays, not a bond you buy and hold. Gross is the average absolute move captured on high-volatility days; the net tiers subtract the straddle premium a dealer charges plus execution friction, which is why they can be negative. A markup belongs here because you are buying an option. For what owning pays instead, switch the basis to <b>Buy &amp; hold</b>.",
-    foot: "Extrapolated from live hold-horizon curves — not a forecast",
+      "A straddle held to maturity, priced off the forecast-error volatility of the same VAR, net of the dealer premium and execution friction.",
   },
 };
 
@@ -168,7 +167,6 @@ export async function render(root, ctx = {}) {
       view,
       views,
       initialHidden: hidden,
-      footNote: copy.foot,
     });
     buildLegend(
       legendEl,
@@ -186,23 +184,21 @@ export async function render(root, ctx = {}) {
         },
       }
     );
-    if (!pb) {
-      pb = buildPeriodBar(root.querySelector("#periods"), {
-        onSelect: (preset) => chartRec && chartRec.applyPreset(preset),
-      });
-    }
-    // switching basis/market/mode/view builds a NEW chart at full range, so the
-    // still-highlighted preset button would be lying about the visible window
-    const active = pb.current();
-    if (active) chartRec.applyPreset(active);
+    // presets that overrun the model's horizon would silently clamp to the
+    // same window and read as broken buttons, so only the ones that fit show
+    const hz = chartRec.horizonMonths;
+    const periods = PERIODS.filter((p, i) => p.months <= hz || (i > 0 && PERIODS[i - 1].months < hz));
+    pb = buildPeriodBar(root.querySelector("#periods"), {
+      periods,
+      initial: periods[periods.length - 1].label,
+      onSelect: (preset) => chartRec && chartRec.applyPreset(preset),
+    });
 
-    const win = payload?.windows?.[market];
-    const approx = (payload.approximations || []).join(" · ");
-    methodNote.innerHTML = `${payload.label || copy.foot}${
+    const model = payload?.models?.[market] || Object.values(payload?.models || {})[0];
+    const method = (payload.method || []).join(" · ");
+    methodNote.innerHTML = `${esc(payload.label || "")}${
       payload.generated ? ` · as of ${new Date(payload.generated).toUTCString().slice(0, 22)}` : ""
-    }${win ? `<br>Measured from ${win} — every series in this market shares one window so the ranking is comparable.` : ""}${
-      approx ? `<br>${approx}` : ""
-    }`;
+    }${model?.why ? `<br>${esc(model.why)}` : ""}${method ? `<br>${esc(method)}` : ""}`;
   }
 
   async function refresh() {

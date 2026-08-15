@@ -647,6 +647,44 @@ export function executionFrictionSeries(dealerVol) {
 }
 
 /**
+ * Shock mask and trade costs for one observable series — the same basis
+ * returnCurve measures on, exposed so the forecast path can be priced with
+ * identical costs. Port of engine/volatility._trade_cost_basis.
+ *
+ * Returns the mask itself (which days the strategy trades), the retail and
+ * prime-broker markups, and the mean execution friction over the days it
+ * actually trades — all in the OBSERVABLE unit, with pnlScale applied only
+ * where the constant it meets is denominated in P&L.
+ */
+export function tradeCostBasis(series, { name = "asset", atmIv = null, unit = "days", pnlScale = 1 } = {}) {
+  const freq = FREQ[unit] || FREQ.days;
+  const n = series.length;
+  const rv = realizedVolSeries(series, freq);
+  const threshold = percentile(rv.filter(Number.isFinite), C.SHOCK_PERCENTILE);
+  const shock = rv.map((v) => Number.isFinite(v) && v >= threshold);
+  const dealerVol = dealerVolBpsSeries(series, freq);
+  const friction = executionFrictionSeries(dealerVol);
+
+  const rvNow = floatOr(rv[n - 1], 0.0001);
+  let base = C.DEALER_MARKUP_FLOOR;
+  if (atmIv && Number.isFinite(rvNow) && rvNow > 0.0004) {
+    base = Math.max(C.DEALER_MARKUP_FLOOR, 1 + C.DEALER_MARKUP_PREMIUM_SHARE * (atmIv / rvNow - 1));
+  }
+  if (C.DISTRESSED_GRADES.has(name)) base *= C.FALLEN_ANGEL_LIQUIDITY_PREMIUM;
+
+  const annVolBps = floatOr(dealerVol[n - 1], 0) * pnlScale * Math.sqrt(freq.periodsPerYear);
+  let discount = C.PB_BASE_DISCOUNT + Math.log10(Math.max(1, C.TRADE_SIZE_M)) * C.PB_VOLUME_DISCOUNT_FACTOR;
+  discount -= Math.max(0, (annVolBps - C.PB_VOL_THRESHOLD_BPS) / C.PB_ILLIQUIDITY_DIVISOR);
+  discount = Math.min(C.PB_DISCOUNT_CLIP[1], Math.max(C.PB_DISCOUNT_CLIP[0], discount));
+
+  const fr = [];
+  for (let i = 0; i < n; i++) if (shock[i] && Number.isFinite(friction[i])) fr.push(friction[i]);
+  const meanFriction = fr.length ? fr.reduce((a, b) => a + b, 0) / fr.length : C.FRICTION_BASE_SPREAD_BPS;
+
+  return { shock, markup: base, hfMarkup: base * (1 - discount), friction: meanFriction, freq };
+}
+
+/**
  * Return curve port of engine/volatility.return_curve: for hold T=1..holdMax,
  * grossT = mean |x[t+T]-x[t]| over shock days; fee = rolling mean |ΔT|
  * shifted by T (no look-ahead); net = gross - fee*markup - friction.

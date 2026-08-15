@@ -1,14 +1,12 @@
 /**
- * Projection chart: cumulative return extrapolated from the live hold-horizon
- * curves, horizon axis 1 month -> 15 years.
+ * Forecast chart: the VAR's projected path for each asset, on a real date
+ * axis running from the last observation to the end of the model's usable
+ * horizon.
  *
- * Mechanics (honest, labeled): the first month is anchored to the observed
- * hold-curve payout (net bps at the longest evaluated hold — 21 days for
- * daily series, 1 month for the monthly country series); beyond that the
- * curve compounds the same annualized edge. Three views: Gross payout / HF
- * net / Retail net (heatmap tiers 1-3). Period buttons + wheel/pinch zoom via
- * dataZoom. Each line's legend entry shows the full name + what it stands
- * for, and clicking an entry toggles exactly that line.
+ * The series plotted are whatever /api/returns puts in each asset's `path` —
+ * cumulative return in bps at each forecast month, converted to per cent
+ * here. Nothing is compounded or extended in this file; the shape of the line
+ * is the model's, and the line stops where the model does.
  */
 import * as echarts from "echarts";
 import { dataZoomConfig } from "../controls.js";
@@ -21,84 +19,44 @@ export const PALETTE = [
   "#0f766e", "#c026d3", "#15803d", "#db2777", "#ca8a04", "#1d4ed8",
 ];
 
-// The three tiers differ only in what the straddle costs to put on. Gross
-// assumes you get the option for nothing, which no one does; it is the
-// ceiling, not a return.
+/** each view names the key it reads out of the forecast path */
 const VOL_VIEWS = {
-  gross: {
-    col: 1,
-    label: "Gross payout",
-    desc: "Tier 1 · the average absolute move captured on high-volatility days, before paying for the option. A ceiling, not an achievable return.",
-  },
-  hf: {
-    col: 2,
-    label: "HF net",
-    desc: "Tier 2 · after the dealer's straddle premium at institutional size, with the prime-broker volume discount applied.",
-  },
-  ret: {
-    col: 3,
-    label: "Retail net",
-    desc: "Tier 3 · after the full dealer straddle premium and execution friction. Negative means the option costs more than the move it captures.",
-  },
+  gross: { key: "gross", label: "Gross payout", desc: "Expected move to maturity, before the premium." },
+  hf: { key: "hf", label: "HF net", desc: "After the dealer premium at institutional size and execution friction." },
+  ret: { key: "ret", label: "Retail net", desc: "After the full dealer premium and execution friction." },
 };
 
-// Buy and hold has no option to buy and no dealer to pay, so it has no HF/
-// retail split — the only deduction is the loss you expect to actually
-// suffer. It reuses column 2, which the hold endpoint fills with net carry.
 const HOLD_VIEWS = {
-  gross: {
-    col: 1,
-    label: "Gross carry",
-    desc: "The spread or yield the asset pays at today's level, annualised and compounded. What you collect before any loss.",
-  },
-  net: {
-    col: 2,
-    label: "Net of expected loss",
-    desc: "Carry minus the loss you expect to suffer — default-rate proxy times published loss-given-default for corporates, the latest inflation print for sovereigns. No dealer markup, straddle premium or execution friction is charged anywhere in this view; none of them applies to a holder.",
-  },
+  gross: { key: "ret", label: "Gross carry", desc: "Carry accrued, marked to the forecast spread or yield." },
+  net: { key: "net", label: "Net of expected loss", desc: "Gross carry less expected loss; for sovereigns, less the latest inflation print." },
 };
 
-/** the view dictionary for a basis; `basis` is "hold" or "vol" */
 export function viewsFor(basis) {
   return basis === "vol" ? VOL_VIEWS : HOLD_VIEWS;
 }
 
-function firstMonthBps(asset, col) {
-  // daily units: net at the longest evaluated hold (21 days ~ 1 month);
-  // monthly units: net at the 1-month hold
-  const rows = asset.curves || [];
-  const idx = asset.unit === "months" ? 0 : rows.length - 1;
-  const row = rows[idx];
-  if (!row) return null;
-  const v = row[col];
-  return Number.isFinite(v) ? v : null;
-}
+const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const ts = (d) => new Date(d + "T00:00:00Z").getTime();
 
-const EDGE_KEY = { 1: "gross", 2: "hf", 3: "ret" };
-
-function cumulativeSeries(asset, col, totalMonths = 180) {
-  const r1 = firstMonthBps(asset, col); // bps over the first month
-  const edge = asset.edge ? asset.edge[EDGE_KEY[col]] : null;
-  if (r1 == null || edge == null) return null;
-  const monthly = edge / 12 / 10000; // annualized bps -> monthly fraction
-  const pts = [[0, 0]];
-  for (let h = 1; h <= totalMonths; h++) {
-    const cum = (1 + r1 / 10000) * Math.pow(1 + monthly, h - 1) - 1;
-    pts.push([h, Math.round(cum * 10000) / 10000 * 100]);
+/** [[epoch, percent], ...] for one asset under one view */
+function pointsFor(asset, key) {
+  const path = asset.path || [];
+  if (!path.length) return null;
+  const pts = [];
+  for (const r of path) {
+    const v = r[key] !== undefined && r[key] !== null ? r[key] : r.ret;
+    if (!Number.isFinite(v)) continue;
+    pts.push([ts(r.date), Math.round(v) / 100]);
   }
-  return pts;
+  return pts.length ? pts : null;
 }
 
 export function buildProjectionChart(el, assets, opts = {}) {
   const id = opts.id || "projection";
   const views = opts.views || VOL_VIEWS;
   const view = opts.view && views[opts.view] ? opts.view : Object.keys(views)[0];
+  const key = views[view].key;
   const initialHidden = opts.initialHidden || new Set();
-  const col = views[view].col;
-  // the hold basis has no fee tiers, so its tooltip footnote must not claim
-  // a "month-1 net" that was never netted against anything
-  const footNote = opts.footNote || "Extrapolated from live hold-horizon curves — not a forecast";
-  const totalMonths = 180;
   const chart = echarts.init(el);
 
   const rec = registerChart(id, {
@@ -106,86 +64,97 @@ export function buildProjectionChart(el, assets, opts = {}) {
     el,
     seriesIds: assets.map((a) => a.id),
     visible: new Set(assets.map((a) => a.id).filter((x) => !initialHidden.has(x))),
-    refresh: null, // set below
+    refresh: null,
   });
   const visible = () => rec.visible;
 
-  // The x-axis is a FORWARD horizon (0 = now, 180 = fifteen years out), so a
-  // period preset windows the NEAR end of the projection: "1Y" means the
-  // first twelve months, not the last twelve. The previous code windowed from
-  // the far end, which collapsed "1M" onto the single final point.
-  const horizon = { end: totalMonths };
+  // full date extent across every asset — horizons differ per market because
+  // each panel's model runs out at a different point
+  let tMin = Infinity;
+  let tMax = -Infinity;
+  for (const a of assets) {
+    for (const r of a.path || []) {
+      const t = ts(r.date);
+      if (t < tMin) tMin = t;
+      if (t > tMax) tMax = t;
+    }
+  }
+  if (!Number.isFinite(tMin)) {
+    tMin = Date.now();
+    tMax = tMin;
+  }
+  const win = { from: tMin, to: tMax };
 
   const buildOption = () => {
     const series = [];
-    for (let ai = 0; ai < assets.length; ai++) {
-      const a = assets[ai];
-      // a hidden series is OMITTED, not flagged. ECharts has no `hidden`
-      // series property, so the old `hidden: !show` was silently ignored and
-      // legend clicks did nothing.
-      if (!visible().has(a.id)) continue;
-      const pts = cumulativeSeries(a, col, totalMonths);
-      if (!pts) continue;
-      series.push({
+    assets.forEach((a, ai) => {
+      if (!visible().has(a.id)) return;
+      const pts = pointsFor(a, key);
+      if (!pts) return;
+      const color = PALETTE[ai % PALETTE.length];
+      const s = {
         id: a.id,
         type: "line",
         name: a.name,
         data: pts,
         showSymbol: false,
         smooth: false,
-        lineStyle: { width: 2, color: PALETTE[ai % PALETTE.length] },
-        itemStyle: { color: PALETTE[ai % PALETTE.length] },
+        lineStyle: { width: 2, color },
+        itemStyle: { color },
         emphasis: { focus: "series" },
-      });
-    }
+      };
+      // the turning point, where the model says holding longer stops paying
+      if (a.peak && a.peak.date) {
+        s.markPoint = {
+          symbol: "circle",
+          symbolSize: 7,
+          label: { show: false },
+          itemStyle: { color },
+          data: [{ coord: [ts(a.peak.date), Math.round(a.peak.value) / 100] }],
+        };
+      }
+      series.push(s);
+    });
+
     return {
       series,
       animation: false,
       backgroundColor: "transparent",
-      grid: { left: 64, right: 24, top: 30, bottom: 48 },
+      grid: { left: 64, right: 24, top: 30, bottom: 52 },
       tooltip: {
         trigger: "axis",
         backgroundColor: cssVar("--bg-card"),
         borderColor: cssVar("--border"),
         textStyle: { color: cssVar("--text-main"), fontSize: 12 },
         extraCssText: "box-shadow:0 8px 28px -10px rgba(0,0,0,.4);border-radius:10px;",
-        valueFormatter: (v) => `${Number(v).toFixed(2)}%`,
         formatter: (params) => {
           if (!params.length) return "";
-          const h = params[0].value[0];
-          const label =
-            h === 0 ? "today" : h < 12 ? `${h}M` : h % 12 === 0 ? `${h / 12}Y` : `${(h / 12).toFixed(1)}Y`;
+          const d = new Date(params[0].value[0]);
+          const head = d.toLocaleDateString("en-GB", { month: "short", year: "numeric", timeZone: "UTC" });
           const rows = params
             .map((p) => {
               const a = assets.find((x) => x.id === p.seriesId);
-              const r1 = firstMonthBps(a, col);
-              return `<tr><td style="color:${p.color};padding-right:10px">${esc(p.seriesName)}</td><td style="text-align:right;font-variant-numeric:tabular-nums">${p.value[1] != null ? p.value[1].toFixed(2) : "—"}%</td><td style="color:${cssVar("--text-secondary")};padding-left:10px">month 1 · ${r1 != null ? r1.toFixed(1) : "—"} bps</td></tr>`;
+              const row = (a?.path || []).find((r) => ts(r.date) === p.value[0]);
+              const band =
+                row && Number.isFinite(row.lo) && Number.isFinite(row.hi)
+                  ? `<td style="color:${cssVar("--text-secondary")};padding-left:10px">${(row.lo / 100).toFixed(1)} to ${(row.hi / 100).toFixed(1)}%</td>`
+                  : "<td></td>";
+              const lvl =
+                row && Number.isFinite(row.level)
+                  ? `<td style="color:${cssVar("--text-faint")};padding-left:10px">${row.level.toFixed(0)} bps</td>`
+                  : "<td></td>";
+              return `<tr><td style="color:${p.color};padding-right:10px">${esc(p.seriesName)}</td><td style="text-align:right;font-variant-numeric:tabular-nums">${p.value[1].toFixed(2)}%</td>${band}${lvl}</tr>`;
             })
             .join("");
-          return `<div style="font-weight:640;margin-bottom:4px">Horizon: ${label}</div>
-                  <table style="border-collapse:collapse;font-size:11.5px">${rows}</table>
-                  <div style="font-size:10.5px;color:${cssVar("--text-faint")};margin-top:5px">${esc(footNote)}</div>`;
+          return `<div style="font-weight:640;margin-bottom:4px">${head}</div><table style="border-collapse:collapse;font-size:11.5px">${rows}</table>`;
         },
       },
       xAxis: {
-        type: "value",
-        name: "Horizon",
-        nameLocation: "middle",
-        nameGap: 26,
-        min: 0,
-        max: totalMonths,
-        nameTextStyle: { color: cssVar("--axis-text"), fontSize: 11 },
+        type: "time",
+        min: tMin,
+        max: tMax,
         axisLine: { lineStyle: { color: cssVar("--border") } },
-        axisLabel: {
-          color: cssVar("--axis-text"),
-          fontSize: 10.5,
-          formatter: (v) => {
-            if (v === 0) return "now";
-            if (v < 12) return `${v}M`;
-            if (v % 12 === 0) return `${v / 12}Y`;
-            return `${(v / 12).toFixed(1)}Y`;
-          },
-        },
+        axisLabel: { color: cssVar("--axis-text"), fontSize: 10.5, hideOverlap: true },
         splitLine: { lineStyle: { color: cssVar("--grid-line") } },
       },
       yAxis: {
@@ -193,11 +162,12 @@ export function buildProjectionChart(el, assets, opts = {}) {
         name: "Cumulative return (%)",
         nameLocation: "middle",
         nameGap: 44,
+        scale: true,
         nameTextStyle: { color: cssVar("--axis-text"), fontSize: 11 },
         axisLabel: { color: cssVar("--axis-text"), fontSize: 10.5, formatter: (v) => `${v}%` },
         splitLine: { lineStyle: { color: cssVar("--grid-line") } },
       },
-      dataZoom: dataZoomConfig({ mode: "value", startValue: 0, endValue: horizon.end }),
+      dataZoom: dataZoomConfig({ mode: "value", startValue: win.from, endValue: win.to }),
     };
   };
 
@@ -208,14 +178,23 @@ export function buildProjectionChart(el, assets, opts = {}) {
     chart.setOption(currentOption, { notMerge: true });
   };
 
+  // a preset windows the near end of the forecast: "1Y" is the first twelve
+  // months of the projection, clamped to the horizon the model actually has
   rec.applyPreset = (preset) => {
-    horizon.end = Math.max(1, Math.min(totalMonths, preset.months));
-    // both components must be told, or the slider handles and the plot drift
-    // apart after a preset click
+    const months = Math.max(1, preset.months || 12);
+    const end = Math.min(tMax, new Date(new Date(tMin).setUTCMonth(new Date(tMin).getUTCMonth() + months)).getTime());
+    win.from = tMin;
+    win.to = end > tMin ? end : tMax;
     for (const dataZoomIndex of [0, 1]) {
-      chart.dispatchAction({ type: "dataZoom", dataZoomIndex, startValue: 0, endValue: horizon.end });
+      chart.dispatchAction({ type: "dataZoom", dataZoomIndex, startValue: win.from, endValue: win.to });
     }
   };
+
+  /** months of forecast available — lets the page hide presets that overrun */
+  rec.horizonMonths = Math.max(
+    1,
+    Math.round((tMax - tMin) / (1000 * 60 * 60 * 24 * 30.44))
+  );
 
   const onResize = () => chart.resize();
   window.addEventListener("resize", onResize);
@@ -227,10 +206,6 @@ export function buildProjectionChart(el, assets, opts = {}) {
     chart.dispose();
   };
   return rec;
-}
-
-function esc(s) {
-  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 export { VOL_VIEWS, HOLD_VIEWS };
