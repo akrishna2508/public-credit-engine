@@ -93,3 +93,32 @@ try {
 } catch (e) {
   console.error("status.json NOT refreshed:", e.message);
 }
+
+/* ---- derived documents -> public/data/cache/{atlas,returns} ----
+ *
+ * Warm the cachedJson store for the endpoints that compute rather than merely
+ * fetch. Locally WRITE_ROOT === SEED_ROOT, so calling each handler writes its
+ * document straight into the committed snapshot, which vercel.json bundles
+ * into the functions. Without this a cold serverless instance starts with an
+ * empty /tmp and pays the full assembly cost on the first request: the
+ * upstream series are already seeded, but the VAR fits and atlas alignment on
+ * top of them are not, which measured 4-6.5s cold in production.
+ */
+try {
+  const { default: returnsHandler } = await import("../api/returns.js");
+  const combos = [];
+  for (const market of ["us", "eu", "em", "countries"]) {
+    for (const basis of ["hold", "vol"]) combos.push([market, basis]);
+  }
+  let warmed = 0;
+  for (const [market, basis] of combos) {
+    const r = await capture(returnsHandler, `/api/returns?market=${market}&basis=${basis}`);
+    const book = r?.markets?.[market];
+    const n = book ? (book.pure || []).length + (book.spread || []).length : 0;
+    if (r?.status === "OK" && n) warmed++;
+    console.log(`  returns ${market}/${basis}: ${r?.status} — ${n} assets`);
+  }
+  console.log(`derived returns cache warmed — ${warmed}/${combos.length} books`);
+} catch (e) {
+  console.error("derived returns cache NOT warmed:", e.message);
+}
