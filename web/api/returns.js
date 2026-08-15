@@ -259,7 +259,7 @@ async function buildHoldBook(market) {
 /* ==================================================================== */
 
 /** fit one panel, then price a straddle along each column's sigma path */
-function volAssets(fc, cols, rawByCol, { pnlScale, unit, label, atmIvByCol = {} }) {
+function volAssets(fc, cols, rawByCol, { pnlScale, unit, name, standsFor, atmIvByCol = {} }) {
   const out = [];
   cols.forEach((c, k) => {
     const series = rawByCol[c];
@@ -267,7 +267,7 @@ function volAssets(fc, cols, rawByCol, { pnlScale, unit, label, atmIvByCol = {} 
     const T = unit === "months" ? 12 : 21;
     const kappa = timingEdge(series, T, costs.shock);
     if (kappa == null) {
-      out.push(asset(c, label(c), label(c), null, { why: "too few high-volatility periods to measure a timing edge" }));
+      out.push(asset(c, name(c), standsFor(c), null, { why: "too few high-volatility periods to measure a timing edge" }));
       return;
     }
     const rows = straddleReturnPath(monthlySamples(fc, k), {
@@ -278,7 +278,7 @@ function volAssets(fc, cols, rawByCol, { pnlScale, unit, label, atmIvByCol = {} 
       pnlScale,
     });
     out.push(
-      asset(c, label(c), label(c), rows, {
+      asset(c, name(c), standsFor(c), rows, {
         kappa: r2(kappa),
         markup: r2(costs.markup),
         hf_markup: r2(costs.hfMarkup),
@@ -315,7 +315,8 @@ async function buildVolBook(market) {
       pure = volAssets(fc, cols, raw, {
         pnlScale: SPREAD_DURATION,
         unit: "days",
-        label: (c) => `${c} — straddle on the option-adjusted spread`,
+        name: (c) => c,
+        standsFor: (c) => `${US_GRADES[c].label} — straddle on the spread, ${SPREAD_DURATION}-year duration`,
       });
     } else {
       models.us = { why: fc.why };
@@ -352,7 +353,8 @@ async function buildVolBook(market) {
       pure = volAssets(fc, cols, raw, {
         pnlScale: PRICE_SCALE,
         unit: "days",
-        label: (c) => ETF_ASSETS[key[c]].label,
+        name: (c) => c.replace(/_/g, " "),
+        standsFor: (c) => `${ETF_ASSETS[key[c]].label} — straddle on the price`,
       });
     } else {
       models[tag] = { why: fc.why };
@@ -381,7 +383,8 @@ async function buildVolBook(market) {
       pure = volAssets(fc, cols, raw, {
         pnlScale: BOND_DURATION,
         unit: "months",
-        label: (c) => `${ECB_LTIR[c]} — straddle on the yield`,
+        name: (c) => ECB_LTIR[c],
+        standsFor: (c) => `Straddle on the ${ECB_LTIR[c]} yield, ${BOND_DURATION}-year duration`,
       });
     } else {
       models.countries = { why: fc.why };
