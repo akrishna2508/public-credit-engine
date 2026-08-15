@@ -208,13 +208,20 @@ function writeCache(kind, key, data) {
  * than making the caller wait, so a cold instance is slow at most once.
  */
 export async function cachedJson(kind, key, ttlMs, buildFn) {
-  const hit = readCached(kind, key, ttlMs);
-  if (hit?.doc) return { doc: hit.doc, fromCache: true, stale: false };
+  // Freshness comes from the document's OWN `updated` stamp, not the file's
+  // mtime. A seeded document is bundled into the function by vercel.json, and
+  // its mtime on a serverless instance is whatever the build assigned rather
+  // than when the data was produced — so an mtime test marked every seeded
+  // document stale on arrival and every cold instance kicked off a needless
+  // background rebuild of data that was minutes old.
+  const stale = readCached(kind, key, 0); // any age; judge it ourselves
+  const age = stale?.updated ? Date.now() - Date.parse(stale.updated) : Infinity;
+  if (stale?.doc && Number.isFinite(age) && age >= 0 && age < ttlMs) {
+    return { doc: stale.doc, fromCache: true, stale: false };
+  }
 
   const inflightKey = "json:" + kind + ":" + key;
   if (inflight.has(inflightKey)) return inflight.get(inflightKey);
-
-  const stale = readCached(kind, key, 0); // any age
   const job = (async () => {
     try {
       const doc = await buildFn();
@@ -229,10 +236,11 @@ export async function cachedJson(kind, key, ttlMs, buildFn) {
   })();
   inflight.set(inflightKey, job);
 
-  // a stale copy beats a 14-second wait; the refresh above still completes
-  // and lands in the cache for the next caller. Its rejection is swallowed
-  // here on purpose — nobody is awaiting it, and an unhandled rejection would
-  // take the whole function down for a refresh that simply failed.
+  // past the TTL a stale copy still beats making the caller wait for a full
+  // rebuild; the refresh above completes and lands in the cache for the next
+  // one. Its rejection is swallowed here on purpose — nobody is awaiting it,
+  // and an unhandled rejection would take the whole function down for a
+  // refresh that simply failed.
   if (stale?.doc) {
     job.catch(() => {});
     return { doc: stale.doc, fromCache: true, stale: true, refreshing: true };
