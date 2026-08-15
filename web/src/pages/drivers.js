@@ -112,12 +112,27 @@ export async function render(root) {
     const top = p.mostInfluential[0];
 
     body.innerHTML = `
-      <div class="pc-stats" style="margin-bottom:18px">
-        <div class="pc-stat"><div class="pc-stat-k">Model</div><div class="pc-stat-v">VAR(${m.lag})</div><div class="pc-stat-s">${m.variables} series · ${m.observations} observations · ${esc(m.frequency)}</div></div>
-        <div class="pc-stat"><div class="pc-stat-k">Drives the panel</div><div class="pc-stat-v">${esc(top ? top.id : "—")}</div><div class="pc-stat-s">${top ? pc(top.share) : ""} of the others' forecast error on average</div></div>
-        <div class="pc-stat"><div class="pc-stat-k">Spectral radius</div><div class="pc-stat-v">${m.spectralRadius}</div><div class="pc-stat-s">${m.stable ? "below 1 — shocks decay" : "at or above 1 — shocks do not decay"}</div></div>
-        <div class="pc-stat"><div class="pc-stat-k">Decomposed over</div><div class="pc-stat-v">${p.fevdSteps}</div><div class="pc-stat-s">${esc(m.frequency === "months" ? "months" : "business days")} ahead</div></div>
-        <div class="pc-stat"><div class="pc-stat-k">Fit</div><div class="pc-stat-v">AIC ${m.aic}</div><div class="pc-stat-s">BIC ${m.bic}</div></div>
+      <div class="pc-kpis" style="margin-bottom:20px">
+        <div class="pc-kpi-cell"><div class="pc-kpi">
+          <div class="pc-kpi-label">Model</div>
+          <div class="pc-kpi-value">VAR(${m.lag})</div>
+          <div class="pc-kpi-extra">${m.variables} series · ${m.observations} observations · ${esc(m.frequency === "months" ? "monthly" : "daily")}</div></div></div>
+        <div class="pc-kpi-cell"><div class="pc-kpi">
+          <div class="pc-kpi-label">Drives the panel</div>
+          <div class="pc-kpi-value" style="color:var(--accent)">${esc(top ? top.id : "—")}</div>
+          <div class="pc-kpi-extra">${top ? pc(top.share) : ""} of the others' forecast error, on average</div></div></div>
+        <div class="pc-kpi-cell"><div class="pc-kpi">
+          <div class="pc-kpi-label">Spectral radius</div>
+          <div class="pc-kpi-value" style="color:${m.stable ? "var(--green)" : "var(--red)"}">${m.spectralRadius}</div>
+          <div class="pc-kpi-extra">${m.stable ? "below 1 — shocks decay" : "at or above 1 — shocks do not decay"}</div></div></div>
+        <div class="pc-kpi-cell"><div class="pc-kpi">
+          <div class="pc-kpi-label">Decomposed over</div>
+          <div class="pc-kpi-value">${p.fevdSteps}</div>
+          <div class="pc-kpi-extra">${esc(m.frequency === "months" ? "months" : "business days")} ahead</div></div></div>
+        <div class="pc-kpi-cell"><div class="pc-kpi">
+          <div class="pc-kpi-label">Information criteria</div>
+          <div class="pc-kpi-value">${m.aic}</div>
+          <div class="pc-kpi-extra">AIC · BIC ${m.bic}</div></div></div>
       </div>
 
       <div class="grid-12">
