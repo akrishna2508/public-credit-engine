@@ -25,7 +25,8 @@ import {
   SPREAD_DURATION, BOND_DURATION, PRICE_SCALE,
 } from "./_shared.js";
 import {
-  buildForecast, monthlySamples, holdReturnPath, straddleReturnPath, timingEdge,
+  buildForecast, monthlySamples, holdReturnPath,
+  straddlePnlPath, combinationSamples, combinationLevel0, weightFor, stepSdFor,
 } from "./_forecastpath.js";
 import {
   RATING_ORDER, US_GRADES, DR_SERIES, DR_MAPPING, ADJACENT_PAIRS,
@@ -258,42 +259,71 @@ async function buildHoldBook(market) {
 /* volatility                                                            */
 /* ==================================================================== */
 
-/** fit one panel, then price a straddle along each column's sigma path */
-function volAssets(fc, cols, rawByCol, { pnlScale, unit, name, standsFor, atmIvByCol = {} }) {
-  const out = [];
-  cols.forEach((c, k) => {
-    const series = rawByCol[c];
-    const costs = tradeCostBasis(series, { name: c, atmIv: atmIvByCol[c] || null, unit, pnlScale });
-    const T = unit === "months" ? 12 : 21;
-    const kappa = timingEdge(series, T, costs.shock);
-    if (kappa == null) {
-      out.push(asset(c, name(c), standsFor(c), null, { why: "too few high-volatility periods to measure a timing edge" }));
-      return;
-    }
-    const rows = straddleReturnPath(monthlySamples(fc, k), {
-      kappa,
-      markup: costs.markup,
-      hfMarkup: costs.hfMarkup,
-      friction: costs.friction,
-      pnlScale,
-    });
-    out.push(
-      asset(c, name(c), standsFor(c), rows, {
-        kappa: r2(kappa),
-        markup: r2(costs.markup),
-        hf_markup: r2(costs.hfMarkup),
-        friction_bps: r2(costs.friction * pnlScale),
-        peak: peakOf(rows, "ret"),
-        peakHf: peakOf(rows, "hf"),
-      })
-    );
+/**
+ * Price one straddle position and mark it to market along the VAR forecast.
+ *
+ * `w` selects the underlying: a unit vector trades the series itself, a
+ * long/short pair trades the SPREAD between two of them. Both come off the
+ * same fitted VAR, so a spread straddle is priced on the spread's own
+ * variance — Var(a) + Var(b) - 2Cov(a,b) — and not on its legs' separately.
+ *
+ * Maturity is the model's usable horizon, capped at a year: a straddle whose
+ * expiry sits beyond where the VAR is projectable would be priced off a
+ * forecast the model cannot support.
+ */
+function straddleAsset(fc, { id, name, standsFor, w, costs, pnlScale, riskFree, extra = {} }) {
+  const samples = combinationSamples(fc, w);
+  if (samples.length < 2) {
+    return asset(id, name, standsFor, null, { why: "forecast horizon too short to hold a straddle" });
+  }
+  const maturityMonths = Math.min(samples.length, 12);
+  // the option's Bachelier vol: the one-step innovation sd of the traded
+  // combination, annualised at the panel's own observation frequency
+  const sigmaAnn = stepSdFor(fc.fit, w) * Math.sqrt(FREQ_PER_YEAR[fc.freq] || 12);
+  const level0 = combinationLevel0(fc, w);
+
+  const rows = straddlePnlPath(samples, {
+    level0,
+    sigmaAnn,
+    maturityMonths,
+    markup: costs.markup,
+    hfMarkup: costs.hfMarkup,
+    friction: costs.friction,
+    pnlScale,
+    riskFreeRate: riskFree,
   });
-  return out;
+  if (!rows) {
+    return asset(id, name, standsFor, null, { why: "the fitted innovation variance is zero — no straddle to price" });
+  }
+  const fair = sigmaAnn * Math.sqrt(maturityMonths / 12) * Math.sqrt(2 / Math.PI);
+  return asset(id, name, standsFor, rows, {
+    level0: r2(level0),
+    maturity_months: maturityMonths,
+    premium_bps: r2(fair * costs.markup * pnlScale),
+    fair_premium_bps: r2(fair * pnlScale),
+    markup: r2(costs.markup),
+    hf_markup: r2(costs.hfMarkup),
+    friction_bps: r2(costs.friction * pnlScale),
+    financing_pct: r2(riskFree * 100),
+    peak: peakOf(rows, "ret"),
+    ...extra,
+  });
 }
+
+const FREQ_PER_YEAR = { days: 252, months: 12 };
 
 async function buildVolBook(market) {
   const markets = {};
   const models = {};
+
+  // financing cost of the premium. A long option is cash paid up front, so
+  // carrying it costs the short rate — the leverage cost of the position,
+  // which accrues whether or not the trade works. USD books are financed at
+  // the 3-month bill, euro books at the ECB main refinancing rate.
+  const [usdR, eurR] = await pmap(["DGS3MO", "ECBMRRFR"], 2, (id) => fredCsv(id, { start: "2024-01-01" }));
+  const rateOf = (r, dflt) => (r && !r.unavailable && r.rows?.length ? r.rows[r.rows.length - 1].v / 100 : dflt);
+  const USD_RF = rateOf(usdR, 0.04);
+  const EUR_RF = rateOf(eurR, 0.025);
 
   if (market === "us" || market === "all") {
     const oasList = await pmap(RATING_ORDER, 4, (g) => fredCsv(US_GRADES[g].id, { start: "2010-01-01" }));
@@ -309,28 +339,45 @@ async function buildVolBook(market) {
       }
     });
     const fc = buildForecast(cols, seriesMap, { freq: "days", scale: 100, floorAt: 0 });
-    let pure = [];
+    const pure = [];
+    const spread = [];
     if (fc.ok) {
       models.us = { lag: fc.lag, nobs: fc.nobs, rho: r2(fc.rho), stable: fc.stable, horizonMonths: fc.horizonMonths, why: fc.why };
-      pure = volAssets(fc, cols, raw, {
-        pnlScale: SPREAD_DURATION,
-        unit: "days",
-        name: (c) => c,
-        standsFor: (c) => `${US_GRADES[c].label} — straddle on the spread, ${SPREAD_DURATION}-year duration`,
+      cols.forEach((c, k) => {
+        const costs = tradeCostBasis(raw[c], { name: c, unit: "days", pnlScale: SPREAD_DURATION });
+        pure.push(straddleAsset(fc, {
+          id: c, name: c,
+          standsFor: `${US_GRADES[c].label} — straddle on the spread, ${SPREAD_DURATION}-year duration`,
+          w: weightFor(fc.fit.K, k), costs, pnlScale: SPREAD_DURATION, riskFree: USD_RF,
+        }));
       });
+      // straddles ON THE SPREAD between adjacent grades: you trade the
+      // difference, so the position is priced on the difference's own variance
+      for (const [hi, lo] of ADJACENT_PAIRS) {
+        const a = cols.indexOf(hi);
+        const b = cols.indexOf(lo);
+        if (a < 0 || b < 0) continue;
+        const diff = raw[hi].map((v, i) => v - raw[lo][i]);
+        const costs = tradeCostBasis(diff, { name: `${hi}-${lo}`, unit: "days", pnlScale: SPREAD_DURATION });
+        spread.push(straddleAsset(fc, {
+          id: `${hi} - ${lo}`, name: `${hi} - ${lo}`,
+          standsFor: `Straddle on the ${hi} minus ${lo} spread, ${SPREAD_DURATION}-year duration`,
+          w: weightFor(fc.fit.K, a, b), costs, pnlScale: SPREAD_DURATION, riskFree: USD_RF,
+        }));
+      }
     } else {
       models.us = { why: fc.why };
     }
-    markets.us = { pure, spread: [] };
+    markets.us = { pure, spread };
   }
 
   for (const [tag, symbols] of [
-    ["eu", { EUR_IG: "IEAC.L", EUR_HY: "IHYG.L" }],
+    ["eu", { EUR_IG: "IEACL", EUR_HY: "IHYGL" }],
     ["em", { EM_USD_Sovereign: "EMB", EM_Corporate: "CEMB", EM_High_Yield: "EMHY", EM_Local_Currency: "LEMB" }],
   ]) {
     if (market !== tag && market !== "all") continue;
     const names = Object.keys(symbols);
-    const res = await pmap(names, 4, (n) => yahooChart(symbols[n].includes(".") ? symbols[n] : ETF_ASSETS[symbols[n]].symbol, { range: "15y", interval: "1d" }));
+    const res = await pmap(names, 4, (n) => yahooChart(ETF_ASSETS[symbols[n]].symbol, { range: "15y", interval: "1d" }));
     const seriesMap = {};
     const raw = {};
     const cols = [];
@@ -346,20 +393,36 @@ async function buildVolBook(market) {
       }
     });
     const fc = buildForecast(cols, seriesMap, { freq: "days", scale: 100, floorAt: -Infinity });
-    let pure = [];
+    const pure = [];
+    const spread = [];
+    const rf = tag === "eu" ? EUR_RF : USD_RF;
     if (fc.ok) {
       models[tag] = { lag: fc.lag, nobs: fc.nobs, rho: r2(fc.rho), stable: fc.stable, horizonMonths: fc.horizonMonths, why: fc.why };
-      const key = tag === "eu" ? { EUR_IG: "IEACL", EUR_HY: "IHYGL" } : { EM_USD_Sovereign: "EMB", EM_Corporate: "CEMB", EM_High_Yield: "EMHY", EM_Local_Currency: "LEMB" };
-      pure = volAssets(fc, cols, raw, {
-        pnlScale: PRICE_SCALE,
-        unit: "days",
-        name: (c) => c.replace(/_/g, " "),
-        standsFor: (c) => `${ETF_ASSETS[key[c]].label} — straddle on the price`,
+      cols.forEach((c, k) => {
+        const costs = tradeCostBasis(raw[c], { name: c, unit: "days", pnlScale: PRICE_SCALE });
+        pure.push(straddleAsset(fc, {
+          id: c, name: c.replace(/_/g, " "),
+          standsFor: `${ETF_ASSETS[symbols[c]].label} — straddle on the price`,
+          w: weightFor(fc.fit.K, k), costs, pnlScale: PRICE_SCALE, riskFree: rf,
+        }));
       });
+      for (let a = 0; a < cols.length; a++) {
+        for (let b = a + 1; b < cols.length; b++) {
+          const A = cols[a];
+          const B = cols[b];
+          const diff = raw[A].map((v, i) => v - raw[B][i]);
+          const costs = tradeCostBasis(diff, { name: `${A}-${B}`, unit: "days", pnlScale: PRICE_SCALE });
+          spread.push(straddleAsset(fc, {
+            id: `${A} - ${B}`, name: `${A.replace(/_/g, " ")} - ${B.replace(/_/g, " ")}`,
+            standsFor: `Straddle on the price difference between ${ETF_ASSETS[symbols[A]].label} and ${ETF_ASSETS[symbols[B]].label}`,
+            w: weightFor(fc.fit.K, a, b), costs, pnlScale: PRICE_SCALE, riskFree: rf,
+          }));
+        }
+      }
     } else {
       models[tag] = { why: fc.why };
     }
-    markets[tag] = { pure, spread: [] };
+    markets[tag] = { pure, spread };
   }
 
   if (market === "countries" || market === "all") {
@@ -377,19 +440,37 @@ async function buildVolBook(market) {
       }
     });
     const fc = buildForecast(cols, seriesMap, { freq: "months", scale: 100, floorAt: -Infinity });
-    let pure = [];
+    const pure = [];
+    const spread = [];
     if (fc.ok) {
       models.countries = { lag: fc.lag, nobs: fc.nobs, rho: r2(fc.rho), stable: fc.stable, horizonMonths: fc.horizonMonths, why: fc.why };
-      pure = volAssets(fc, cols, raw, {
-        pnlScale: BOND_DURATION,
-        unit: "months",
-        name: (c) => ECB_LTIR[c],
-        standsFor: (c) => `Straddle on the ${ECB_LTIR[c]} yield, ${BOND_DURATION}-year duration`,
+      cols.forEach((c, k) => {
+        const costs = tradeCostBasis(raw[c], { name: c, unit: "months", pnlScale: BOND_DURATION });
+        pure.push(straddleAsset(fc, {
+          id: c, name: ECB_LTIR[c],
+          standsFor: `Straddle on the ${ECB_LTIR[c]} yield, ${BOND_DURATION}-year duration`,
+          w: weightFor(fc.fit.K, k), costs, pnlScale: BOND_DURATION, riskFree: EUR_RF,
+        }));
       });
+      // the canonical euro rates trade: a straddle on the sovereign spread
+      // over Bund, which is far less volatile than either leg on its own
+      const de = cols.indexOf("DE");
+      if (de >= 0) {
+        cols.forEach((c, k) => {
+          if (c === "DE") return;
+          const diff = raw[c].map((v, i) => v - raw.DE[i]);
+          const costs = tradeCostBasis(diff, { name: `${c}-DE`, unit: "months", pnlScale: BOND_DURATION });
+          spread.push(straddleAsset(fc, {
+            id: `${c} - DE`, name: `${ECB_LTIR[c]} - Bund`,
+            standsFor: `Straddle on the ${ECB_LTIR[c]} spread over Bund, ${BOND_DURATION}-year duration`,
+            w: weightFor(fc.fit.K, k, de), costs, pnlScale: BOND_DURATION, riskFree: EUR_RF,
+          }));
+        });
+      }
     } else {
       models.countries = { why: fc.why };
     }
-    markets.countries = { pure, spread: [] };
+    markets.countries = { pure, spread };
   }
 
   return { markets, models };
@@ -435,9 +516,12 @@ export default async function handler(req, res) {
           "band = duration x the model's forecast-error standard deviation",
         ]
       : [
-          "expected move to maturity m = sigma_m x sqrt(2/pi), sigma_m from the VAR forecast-error covariance",
-          "gross = timing edge x expected move; the timing edge is the measured ratio of moves on high-volatility periods to unconditional moves",
-          "net = gross - premium x dealer markup - execution friction",
+          "one straddle struck at the money now and marked to market monthly to expiry, not a new trade at every maturity",
+          "premium is the Bachelier at-the-money value sigma x sqrt(2T/pi); the underlying is a spread or yield in basis points, which goes negative, so the normal model applies and not a lognormal one",
+          "value at month m = E|F_m - K| with the remaining time value folded in: sqrt(s_m^2 + v_m^2) x psi(mu_m / sqrt(s_m^2 + v_m^2)), s_m the VAR forecast-error sd and v_m = sigma x sqrt(time left)",
+          "net = value - premium x dealer markup - financing on the premium at the short rate - a round trip of execution friction",
+          "spread straddles are priced on the spread's own variance, Var(a) + Var(b) - 2Cov(a,b), taken from the same fitted VAR as the legs",
+          "band is the 10th to 90th percentile of the forecast distribution pushed through the straddle's value",
         ];
 
   return json(res, payload);

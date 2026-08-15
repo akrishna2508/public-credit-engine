@@ -21,9 +21,9 @@ export const PALETTE = [
 
 /** each view names the key it reads out of the forecast path */
 const VOL_VIEWS = {
-  gross: { key: "gross", label: "Gross payout", desc: "Expected move to maturity, before the premium." },
-  hf: { key: "hf", label: "HF net", desc: "After the dealer premium at institutional size and execution friction." },
-  ret: { key: "ret", label: "Retail net", desc: "After the full dealer premium and execution friction." },
+  gross: { key: "gross", label: "Mark to market", desc: "Change in the straddle's value at fair premium, before markup, financing or friction." },
+  hf: { key: "hf", label: "HF net", desc: "After the dealer premium at institutional size, financing on it at the short rate, and a round trip of execution friction." },
+  ret: { key: "ret", label: "Retail net", desc: "After the full dealer premium, financing on it at the short rate, and a round trip of execution friction." },
 };
 
 const HOLD_VIEWS = {

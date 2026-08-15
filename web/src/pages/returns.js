@@ -51,7 +51,7 @@ const BASIS_COPY = {
   vol: {
     heading: "Volatility strategy forecast",
     blurb:
-      "A straddle held to maturity, priced off the forecast-error volatility of the same VAR, net of the dealer premium and execution friction.",
+      "One at-the-money straddle, opened now and marked to market each month to expiry. Value comes from the underlying drifting away from the strike; against it run time decay, the dealer premium and financing on that premium. Single asset trades the level, relative value trades the spread between two.",
   },
 };
 

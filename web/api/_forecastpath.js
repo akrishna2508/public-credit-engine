@@ -234,6 +234,9 @@ export function buildForecast(cols, seriesMap, { freq = "months", scale = 100, f
     perMonth,
     lastDate,
     last: Y[Y.length - 1],
+    // last p observations, in fitted units — the seed a simulation needs to
+    // iterate the VAR forward from the same state the point forecast used
+    histTail: Y.slice(-Math.max(1, p)).map((r) => r.slice()),
     steps: f.slice(0, usable),
     sd: sd.slice(0, usable),
     stepDates: stepDates.slice(0, usable),
@@ -257,6 +260,40 @@ export function monthlySamples(fc, k) {
 }
 
 const SQRT_2_OVER_PI = Math.sqrt(2 / Math.PI);
+
+/**
+ * Monthly forecast of a linear combination w'y — one column when w is a unit
+ * vector, a spread when it is the difference of two. The spread is read off
+ * the SAME fitted VAR as its legs, so the covariance between them is carried
+ * through rather than assumed away.
+ */
+export function combinationSamples(fc, w) {
+  const sd = forecastErrorSdFor(fc.fit, fc.steps.length, w);
+  const out = [];
+  for (let m = 1; m <= fc.horizonMonths; m++) {
+    const i = m * fc.perMonth - 1;
+    if (i >= fc.steps.length) break;
+    let lvl = 0;
+    for (let k = 0; k < w.length; k++) lvl += w[k] * fc.steps[i][k];
+    out.push({ date: fc.stepDates[i], level: lvl, sd: sd[i] });
+  }
+  return out;
+}
+
+/** current level of w'y */
+export function combinationLevel0(fc, w) {
+  let v = 0;
+  for (let k = 0; k < w.length; k++) v += w[k] * fc.last[k];
+  return v;
+}
+
+/** unit vector for column k, or a long/short pair */
+export function weightFor(K, a, b = null) {
+  const w = new Array(K).fill(0);
+  w[a] = 1;
+  if (b != null) w[b] = -1;
+  return w;
+}
 
 /**
  * Buy-and-hold total return along a forecast path, in bps.
@@ -288,57 +325,220 @@ export function holdReturnPath(level0, samples, duration) {
   return rows;
 }
 
-/**
- * Straddle payout to maturity m, in bps, from the model's own volatility.
- *
- *   E|move to m| = sigma_m x sqrt(2/pi)      (Gaussian forecast error)
- *   gross        = kappa x E|move| x pnlScale
- *   premium      = E|move| x pnlScale        (fair value at that maturity)
- *   net          = gross - premium x markup - friction
- *
- * sigma_m is the VAR's forecast-error sd, which SATURATES for a mean-
- * reverting panel instead of growing with sqrt(m). The premium and the
- * friction do not saturate, so the net payout has an interior optimum — the
- * maturity past which more time buys less move than it costs. That is the
- * volatility book's sell point, and it falls out of the model rather than
- * being asserted.
- *
- * `kappa` is the timing edge: how much larger the move actually is on the
- * high-volatility days the strategy trades than an unconditional Gaussian
- * would predict. Measured from history, not assumed.
- */
-export function straddleReturnPath(samples, { kappa, markup, hfMarkup, friction, pnlScale }) {
-  return samples.map((s) => {
-    const move = s.sd * SQRT_2_OVER_PI * pnlScale;
-    const gross = kappa * move;
-    const pen = friction * pnlScale;
-    return {
-      date: s.date,
-      level: s.level,
-      gross,
-      hf: gross - move * hfMarkup - pen,
-      ret: gross - move * markup - pen,
-    };
-  });
+/* ------------------------------------------------------------------ */
+/* normal distribution helpers                                         */
+/* ------------------------------------------------------------------ */
+
+const normPdf = (x) => Math.exp(-0.5 * x * x) / Math.sqrt(2 * Math.PI);
+
+/** complementary error function, Numerical Recipes Chebyshev fit */
+function erfc(x) {
+  const z = Math.abs(x);
+  const t = 2 / (2 + z);
+  const ty = 4 * t - 2;
+  const cof = [
+    -1.3026537197817094, 6.4196979235649026e-1, 1.9476473204185836e-2,
+    -9.561514786808631e-3, -9.46595344482036e-4, 3.66839497852761e-4,
+    4.2523324806907e-5, -2.0278578112534e-5, -1.624290004647e-6,
+    1.30365583558e-6, 1.5626441722e-8, -8.5238095915e-8, 6.529054439e-9,
+    5.059343495e-9, -9.91364156e-10, -2.27365122e-10, 9.6467911e-11,
+    2.394038e-12, -6.886027e-12, 8.94487e-13, 3.13092e-13, -1.12708e-13,
+    3.81e-16, 7.106e-15,
+  ];
+  let d = 0;
+  let dd = 0;
+  for (let j = cof.length - 1; j > 0; j--) {
+    const tmp = d;
+    d = ty * d - dd + cof[j];
+    dd = tmp;
+  }
+  const ans = t * Math.exp(-z * z + 0.5 * (cof[0] + ty * d) - dd);
+  return x >= 0 ? ans : 2 - ans;
+}
+
+const normCdf = (x) => 0.5 * erfc(-x / Math.SQRT2);
+
+/** inverse standard normal cdf, Acklam's rational approximation */
+function normInv(p) {
+  if (p <= 0) return -Infinity;
+  if (p >= 1) return Infinity;
+  const a = [-3.969683028665376e1, 2.209460984245205e2, -2.759285104469687e2, 1.38357751867269e2, -3.066479806614716e1, 2.506628277459239];
+  const b = [-5.447609879822406e1, 1.615858368580409e2, -1.556989798598866e2, 6.680131188771972e1, -1.328068155288572e1];
+  const c = [-7.784894002430293e-3, -3.223964580411365e-1, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783];
+  const d = [7.784695709041462e-3, 3.224671290700398e-1, 2.445134137142996, 3.754408661907416];
+  const pl = 0.02425;
+  let q;
+  let r;
+  if (p < pl) {
+    q = Math.sqrt(-2 * Math.log(p));
+    return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+  }
+  if (p > 1 - pl) {
+    q = Math.sqrt(-2 * Math.log(1 - p));
+    return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+  }
+  q = p - 0.5;
+  r = q * q;
+  return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
 }
 
 /**
- * Timing edge kappa: mean |T-step move| on the highest-volatility days,
- * divided by what an unconditional Gaussian of the same sample sd predicts.
- * kappa > 1 means selecting on volatility genuinely finds bigger moves.
+ * Bachelier (normal-model) straddle value at moneyness x with remaining
+ * volatility v = sigma*sqrt(tau).
+ *
+ * Bachelier rather than Black-Scholes because the underlying is a spread or a
+ * yield in basis points, which goes negative and is quoted additively; a
+ * lognormal model is the wrong process for it. The value is exactly
+ * E|x + v*Z| for a standard normal Z, so at the money it collapses to
+ * v*sqrt(2/pi) and at expiry (v=0) to |x|.
  */
-export function timingEdge(series, T, shockMask) {
-  const sel = [];
-  const all = [];
-  for (let i = 0; i + T < series.length; i++) {
-    const d = Math.abs(series[i + T] - series[i]);
-    if (!Number.isFinite(d)) continue;
-    all.push(d);
-    if (shockMask[i]) sel.push(d);
+export function bachelierStraddle(x, v) {
+  if (!(v > 0)) return Math.abs(x);
+  const d = x / v;
+  return x * (2 * normCdf(d) - 1) + 2 * v * normPdf(d);
+}
+
+/** E|mu + s*Z| — the expected absolute value of a normal */
+const psi = (z) => 2 * normPdf(z) + z * (2 * normCdf(z) - 1);
+
+/**
+ * Forecast-error standard deviation of a LINEAR COMBINATION w'y.
+ *
+ * The diagonal of Sigma(h) is enough for a single series but not for a
+ * spread, whose variance is Var(a) + Var(b) - 2Cov(a,b). Trading the spread
+ * between two credit grades that move together is far less volatile than
+ * either leg, and using the legs' own variances would overstate a spread
+ * straddle's value by a wide margin.
+ */
+export function forecastErrorSdFor(fit, H, w) {
+  const psiM = irfMa(fit, H);
+  const Su = fit.sigma;
+  const K = fit.K;
+  let acc = 0;
+  const out = [];
+  for (let h = 1; h <= H; h++) {
+    const P = psiM[h - 1];
+    const a = new Array(K).fill(0);
+    for (let m = 0; m < K; m++) {
+      let sm = 0;
+      for (let r = 0; r < K; r++) sm += w[r] * P[r][m];
+      a[m] = sm;
+    }
+    let q = 0;
+    for (let m = 0; m < K; m++) for (let n = 0; n < K; n++) q += a[m] * Su[m][n] * a[n];
+    acc += q;
+    out.push(Math.sqrt(Math.max(0, acc)));
   }
-  if (sel.length < 10 || all.length < 30) return null;
-  const mean = (a) => a.reduce((x, y) => x + y, 0) / a.length;
-  const uncond = mean(all);
-  if (!(uncond > 0)) return null;
-  return mean(sel) / uncond;
+  return out;
+}
+
+/** one-step innovation sd of w'y — the option's Bachelier vol per period */
+export function stepSdFor(fit, w) {
+  const Su = fit.sigma;
+  let q = 0;
+  for (let m = 0; m < fit.K; m++) for (let n = 0; n < fit.K; n++) q += w[m] * Su[m][n] * w[n];
+  return Math.sqrt(Math.max(0, q));
+}
+
+/**
+ * Mark-to-market P&L of ONE straddle position, month by month to expiry.
+ *
+ * WHAT THIS REPLACES, AND WHY IT WAS WRONG. The previous version computed
+ * kappa*sigma_m*sqrt(2/pi) - sigma_m*sqrt(2/pi)*markup - friction, which
+ * collapses to sigma_m*(kappa - markup) - friction. sigma_m rises with the
+ * horizon and the other three are constants, so the result was a monotone
+ * function of sigma_m and could never change direction: measured on the live
+ * book, all twelve series were monotone with zero sign changes. It also was
+ * not a position at all. Evaluating a NEW straddle at every maturity is a
+ * term structure of separate trades, not the life of one trade, so it had no
+ * strike, no time decay and no financing.
+ *
+ * A real position has all three:
+ *
+ *   strike     struck at the money at inception, K = level now. Its value
+ *              afterwards depends on how far the underlying has travelled
+ *              FROM THERE, not on the absolute size of the forecast band.
+ *   theta      remaining time value is sigma*sqrt(tau), and tau runs down.
+ *              What the position gains from the underlying drifting away
+ *              from the strike, it loses from the clock.
+ *   financing  the premium is cash paid up front. Carrying it costs the
+ *              short rate, which is the leverage cost of the option and
+ *              accrues whether or not the trade works.
+ *
+ * The expectation is exact, not sampled. Simulating VAR paths and marking the
+ * straddle on each converges to
+ *
+ *   E[V(m)] = sqrt(s_m^2 + v_m^2) * psi( mu_m / sqrt(s_m^2 + v_m^2) )
+ *
+ * because V(m) = E_Z|X + v_m Z| with X ~ N(mu_m, s_m^2), and two independent
+ * normals combine in quadrature. Evaluating that closed form gives the mean
+ * of the simulation with no sampling noise, and the band below is the
+ * quantile map of the same distribution rather than a scatter of draws.
+ *
+ * The shape this produces is the one a straddle actually has. For a random
+ * walk s_m^2 + v_m^2 is constant, so a fairly-priced straddle is a martingale
+ * and expected P&L is exactly minus its costs — it bleeds. It only turns
+ * positive if the VAR's drift carries the underlying away from the strike
+ * faster than the clock runs down, and where mean reversion pulls it back the
+ * position goes positive early and negative later. Nothing here is monotone
+ * by construction.
+ */
+export function straddlePnlPath(samples, {
+  level0,
+  sigmaAnn,
+  maturityMonths,
+  markup,
+  hfMarkup,
+  friction,
+  pnlScale = 1,
+  riskFreeRate = 0,
+}) {
+  const Tyr = maturityMonths / 12;
+  const v0 = sigmaAnn * Math.sqrt(Tyr);
+  const fair = v0 * SQRT_2_OVER_PI; // ATM Bachelier premium at inception
+  if (!(fair > 0)) return null;
+
+  const premRet = fair * markup;
+  const premHf = fair * hfMarkup;
+  // entry and exit are both charged; the round trip is paid whatever happens
+  const roundTrip = 2 * friction;
+
+  // quantile grid for the band — a deterministic map of the forecast
+  // distribution through the option's payoff, not a scatter of draws
+  const GRID = 199;
+  const zGrid = [];
+  for (let i = 1; i <= GRID; i++) zGrid.push(normInv(i / (GRID + 1)));
+
+  const rows = [];
+  for (let m = 1; m <= Math.min(maturityMonths, samples.length); m++) {
+    const s = samples[m - 1];
+    const tau = (maturityMonths - m) / 12;
+    const v = sigmaAnn * Math.sqrt(Math.max(0, tau));
+    const mu = s.level - level0;
+    const sd = s.sd;
+    const comb = Math.hypot(sd, v);
+    const ev = comb > 0 ? comb * psi(mu / comb) : Math.abs(mu);
+
+    const carry = (p) => p * (Math.pow(1 + riskFreeRate, m / 12) - 1);
+    const gross = (ev - fair) * pnlScale;
+    const hf = (ev - premHf - carry(premHf) - roundTrip) * pnlScale;
+    const ret = (ev - premRet - carry(premRet) - roundTrip) * pnlScale;
+
+    // band on the retail line: push the forecast quantiles through the
+    // straddle's value and read the 10th and 90th off the result
+    const vals = zGrid.map((z) => bachelierStraddle(mu + sd * z, v)).sort((a, b) => a - b);
+    const q = (p) => vals[Math.min(vals.length - 1, Math.max(0, Math.round(p * (vals.length - 1))))];
+    const costs = premRet + carry(premRet) + roundTrip;
+
+    rows.push({
+      date: s.date,
+      level: s.level,
+      gross,
+      hf,
+      ret,
+      lo: (q(0.1) - costs) * pnlScale,
+      hi: (q(0.9) - costs) * pnlScale,
+    });
+  }
+  return rows;
 }
