@@ -3,7 +3,7 @@
  * sovereign bonds) sorted by `cheapZ`: how wide the current spread or yield is
  * against that instrument's own trailing history.
  */
-import { loadOpportunities } from "../store.js";
+import { loadOpportunities, loadDrivers, loadSpreads } from "../store.js";
 
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const n2 = (v) => (v == null ? "—" : Number(v).toFixed(2));
@@ -40,7 +40,31 @@ export async function render(root) {
   root.innerHTML = `<div class="pc-spinner-wrap"><div class="pc-spinner"></div>
     <div>Screening credit indices and sovereign curves…</div></div>`;
 
-  const o = await loadOpportunities();
+  // the screen joins three cached endpoints: the ranking itself, what the
+  // fitted VAR says is driving each index, and the expected loss a US grade
+  // has to cover before its spread is compensation for anything
+  const [o, drv, spr] = await Promise.all([loadOpportunities(), loadDrivers(), loadSpreads()]);
+
+  /** id -> { id, share } from the variance decomposition, across all panels */
+  const driverBy = new Map();
+  for (const panel of drv?.panels || []) {
+    if (panel.status !== "OK") continue;
+    for (const srs of panel.series) {
+      if (!srs.driver) continue;
+      const rec = { ...srs.driver, own: srs.ownShare, r2: srs.r2 };
+      driverBy.set(srs.id, rec);
+      // the drivers panel names US grades AAA…CCC; the opportunity screen
+      // names the same series US_AAA…US_CCC
+      driverBy.set(`US_${srs.id}`, rec);
+    }
+  }
+  /** the opportunities ids for US grades are US_AAA…; the spreads book keys on AAA */
+  const elBy = new Map();
+  for (const g of Object.values(spr?.grades || {})) {
+    if (!g || g.status !== "OK") continue;
+    elBy.set(g.grade, g);
+    elBy.set(`US_${g.grade}`, g);
+  }
   if (!o || o.status !== "OK") {
     root.innerHTML = `<div class="pc-empty">
       <div style="font-weight:620;color:var(--text-main);margin-bottom:6px">Opportunity screen unavailable</div>
@@ -107,6 +131,8 @@ export async function render(root) {
               <th class="sortable num" data-k="chg_3m_bps">Δ3M</th>
               <th class="sortable num" data-k="chg_12m_bps">Δ12M</th>
               <th class="sortable num" data-k="carry_1m_pct">1M carry</th>
+              <th class="num">Spread − EL</th>
+              <th class="num">Driven by</th>
             </tr></thead>
             <tbody id="credit-body"></tbody>
           </table>
@@ -167,6 +193,24 @@ export async function render(root) {
       ? `<span style="color:var(--text-faint)">—</span>`
       : `<span style="color:${v > 0 ? "var(--red)" : v < 0 ? "var(--green)" : "var(--text-secondary)"}">${v > 0 ? "+" : ""}${Number(v).toFixed(d)}${suffix}</span>`;
 
+  /** expected loss and what the spread pays over it, where a grade maps */
+  function elCell(id) {
+    const g = elBy.get(id);
+    if (!g || g.expected_loss_bps == null) return `<span style="color:var(--text-faint)">—</span>`;
+    const net = g.net_of_expected_loss_bps;
+    const c = net == null ? "var(--text-secondary)" : net >= 0 ? "var(--green)" : "var(--red)";
+    return `<span style="color:${c}"><b>${net == null ? "—" : (net > 0 ? "+" : "") + net.toFixed(0)}</b></span>
+      <div style="font-size:10.5px;color:var(--text-faint)">EL ${g.expected_loss_bps.toFixed(0)}${g.cover_ratio != null ? ` · ${g.cover_ratio.toFixed(2)}x` : ""}</div>`;
+  }
+
+  /** the largest external source of this series' forecast error */
+  function driverCell(id) {
+    const d = driverBy.get(id);
+    if (!d) return `<span style="color:var(--text-faint)">—</span>`;
+    return `<b>${esc(d.id)}</b> ${d.share == null ? "" : d.share.toFixed(0) + "%"}
+      <div style="font-size:10.5px;color:var(--text-faint)">own ${d.own == null ? "—" : d.own.toFixed(0) + "%"}${d.r2 == null ? "" : ` · R² ${d.r2.toFixed(0)}%`}</div>`;
+  }
+
   function drawCredit() {
     let rows = famFilter ? credit.filter((c) => c.family === famFilter) : credit;
     rows = sortRows(rows, cSort);
@@ -185,6 +229,8 @@ export async function render(root) {
         <td class="num">${col(c.chg_3m_bps)}</td>
         <td class="num">${col(c.chg_12m_bps)}</td>
         <td class="num">${c.carry_1m_pct == null ? `<span style="color:var(--text-faint)">—</span>` : `<span style="color:${c.carry_1m_pct >= 0 ? "var(--green)" : "var(--red)"}">${c.carry_1m_pct > 0 ? "+" : ""}${c.carry_1m_pct.toFixed(2)}%</span>`}</td>
+        <td class="num">${elCell(c.id)}</td>
+        <td class="num">${driverCell(c.id)}</td>
       </tr>`
       )
       .join("");

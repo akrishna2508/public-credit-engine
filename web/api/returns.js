@@ -111,7 +111,9 @@ function simRows(fc, w, months, tiers) {
   const sims = simulateCombination(fc, w, { nSims: NSIMS, months, seed: SIM_SEED });
   if (!sims || !sims.length || !sims[0].length) return null;
   const n = sims[0].length;
-  const dates = combinationSamples(fc, w).slice(0, n).map((s) => s.date);
+  // one date per SIMULATED STEP — business days on a daily panel, months on a
+  // monthly one — so the path carries every shock the VAR generated
+  const dates = fc.stepDates.slice(0, n);
   if (dates.length < n) return null;
   const out = dates.map((d) => ({ date: d, level: null }));
   let first = true;
@@ -166,8 +168,8 @@ async function buildHoldBook(market) {
         const w = weightFor(fc.fit.K, k);
         // expected loss is an annual charge, accrued along each simulated path
         const rows = simRows(fc, w, null, {
-          ret: (sims) => holdPathsFromSims(sims, level0, SPREAD_DURATION, null),
-          net: (sims) => holdPathsFromSims(sims, level0, SPREAD_DURATION, el),
+          ret: (sims) => holdPathsFromSims(sims, level0, SPREAD_DURATION, null, FREQ_PER_YEAR[fc.freq]),
+          net: (sims) => holdPathsFromSims(sims, level0, SPREAD_DURATION, el, FREQ_PER_YEAR[fc.freq]),
         });
         if (!rows) return;
         pure.push(
@@ -202,7 +204,7 @@ async function buildHoldBook(market) {
       models[tag] = { lag: fc.lag, nobs: fc.nobs, rho: r2(fc.rho), stable: fc.stable, horizonMonths: fc.horizonMonths, why: fc.why };
       cols.forEach((k, ki) => {
         const rows = simRows(fc, weightFor(fc.fit.K, ki), null, {
-          ret: (sims) => holdPathsFromSims(sims, fc.last[ki], SPREAD_DURATION, null),
+          ret: (sims) => holdPathsFromSims(sims, fc.last[ki], SPREAD_DURATION, null, FREQ_PER_YEAR[fc.freq]),
         });
         if (!rows) return;
         pure.push(
@@ -234,7 +236,7 @@ async function buildHoldBook(market) {
           if (iso === "DE") return;
           const l0 = efc.last[k] - efc.last[di];
           const rows = simRows(efc, weightFor(efc.fit.K, k, di), null, {
-            ret: (sims) => holdPathsFromSims(sims, l0, BOND_DURATION, null),
+            ret: (sims) => holdPathsFromSims(sims, l0, BOND_DURATION, null, FREQ_PER_YEAR[efc.freq]),
           });
           if (!rows) return;
           spread.push(
@@ -280,8 +282,8 @@ async function buildHoldBook(market) {
       const inf = inflLatest?.get(COUNTRIES[iso].iso3);
       const infBps = inf ? inf.v * 100 : null;
       const rows = simRows(fc, weightFor(fc.fit.K, 0), null, {
-        ret: (sims) => holdPathsFromSims(sims, fc.last[0], BOND_DURATION, null),
-        net: (sims) => holdPathsFromSims(sims, fc.last[0], BOND_DURATION, infBps),
+        ret: (sims) => holdPathsFromSims(sims, fc.last[0], BOND_DURATION, null, FREQ_PER_YEAR[fc.freq]),
+        net: (sims) => holdPathsFromSims(sims, fc.last[0], BOND_DURATION, infBps, FREQ_PER_YEAR[fc.freq]),
       });
       if (!rows) continue;
       pure.push(
@@ -336,7 +338,9 @@ function straddleAsset(fc, { id, name, standsFor, w, costs, pnlScale, riskFree, 
   const premRet = fair * costs.markup;
   const premHf = fair * costs.hfMarkup;
   const roundTrip = 2 * costs.friction;
-  const base = { level0, sigmaAnn, maturityMonths, financeRate: riskFree, roundTrip, pnlScale };
+  const stepsPerYear = FREQ_PER_YEAR[fc.freq] || 12;
+  const totalSteps = maturityMonths * fc.perMonth;
+  const base = { level0, sigmaAnn, totalSteps, stepsPerYear, financeRate: riskFree, roundTrip, pnlScale };
 
   const rows = simRows(fc, w, maturityMonths, {
     gross: (sims) => straddlePathsFromSims(sims, { ...base, premium: fair, roundTrip: 0, key: "gross" }),

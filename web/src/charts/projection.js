@@ -240,6 +240,19 @@ export function buildProjectionChart(el, assets, opts = {}) {
     Math.round((tMax - tMin) / (1000 * 60 * 60 * 24 * 30.44))
   );
 
+  // Shortest preset the data can actually fill. A monthly panel samples once
+  // a month, so a 1M window holds two points and draws as a stub; a daily one
+  // holds twenty-two and draws properly. Presets below this are hidden rather
+  // than left to render almost nothing.
+  {
+    const first = assets.find((a) => (a.path || []).length > 1);
+    const gapDays = first
+      ? (ts(first.path[1].date) - ts(first.path[0].date)) / 86400000
+      : 30;
+    const MIN_POINTS = 6;
+    rec.minPresetMonths = Math.max(1, Math.ceil((gapDays * MIN_POINTS) / 30.44));
+  }
+
   const onResize = () => chart.resize();
   window.addEventListener("resize", onResize);
   const offTheme = onThemeChange(() => rec.refresh());

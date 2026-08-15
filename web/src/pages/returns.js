@@ -187,7 +187,11 @@ export async function render(root, ctx = {}) {
     // presets that overrun the model's horizon would silently clamp to the
     // same window and read as broken buttons, so only the ones that fit show
     const hz = chartRec.horizonMonths;
-    const periods = PERIODS.filter((p, i) => p.months <= hz || (i > 0 && PERIODS[i - 1].months < hz));
+    const lo = chartRec.minPresetMonths || 1;
+    const periods = PERIODS.filter(
+      (p, i) => p.months >= lo && (p.months <= hz || (i > 0 && PERIODS[i - 1].months < hz))
+    );
+    if (!periods.length) periods.push(PERIODS[PERIODS.length - 1]);
     pb = buildPeriodBar(root.querySelector("#periods"), {
       periods,
       initial: periods[periods.length - 1].label,

@@ -105,6 +105,15 @@ try {
  * top of them are not, which measured 4-6.5s cold in production.
  */
 try {
+  const { default: driversHandler } = await import("../api/drivers.js");
+  const d = await capture(driversHandler, "/api/drivers");
+  const okp = (d?.panels || []).filter((p) => p.status === "OK").length;
+  console.log(`drivers cache warmed — ${okp}/${(d?.panels || []).length} panels`);
+} catch (e) {
+  console.error("drivers cache NOT warmed:", e.message);
+}
+
+try {
   const { default: returnsHandler } = await import("../api/returns.js");
   const combos = [];
   for (const market of ["us", "eu", "em", "countries"]) {

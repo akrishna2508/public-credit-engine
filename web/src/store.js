@@ -110,6 +110,18 @@ export async function loadOpportunities() {
   return state.opportunities;
 }
 
+export async function loadDrivers() {
+  const key = "drivers";
+  if (state.history[key]) return state.history[key];
+  try {
+    state.history[key] = await fetchJSON("/api/drivers");
+  } catch (e) {
+    state.history[key] = null;
+  }
+  emit();
+  return state.history[key];
+}
+
 export async function loadReturns(market, mode, basis = "hold") {
   const key = `returns:${basis}:${market}:${mode}`;
   if (state.history[key]) return state.history[key];

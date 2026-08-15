@@ -222,10 +222,28 @@ export function buildForecast(cols, seriesMap, { freq = "months", scale = 100, f
         : `stationary; the horizon ends where the 1-sd forecast band reaches the forecast level`;
   const why = `VAR(${p}) on ${fit.nobs} observations, spectral radius ${rho.toFixed(4)} — ${limit}`;
 
+  // per-equation R^2, computed here where the observed matrix is still in
+  // scope rather than carrying Y out to every caller
+  const r2ByEquation = (() => {
+    if (!fit.U || !fit.U.length) return new Array(K).fill(null);
+    const out = [];
+    for (let k = 0; k < K; k++) {
+      let ssr = 0;
+      for (const row of fit.U) ssr += row[k] * row[k];
+      const obs = Y.slice(fit.p).map((r) => r[k]);
+      const mean = obs.reduce((a, b) => a + b, 0) / obs.length;
+      let sst = 0;
+      for (const v of obs) sst += (v - mean) * (v - mean);
+      out.push(sst > 0 ? 1 - ssr / sst : null);
+    }
+    return out;
+  })();
+
   return {
     ok: true,
     cols,
     fit,
+    r2ByEquation,
     rho,
     stable,
     lag: p,
@@ -304,24 +322,21 @@ export function weightFor(K, a, b = null) {
  * deduction (expected loss for a grade, the inflation print for a sovereign)
  * accrues monthly on top.
  */
-export function holdPathsFromSims(sims, level0, duration, deductAnnualBps = null) {
+export function holdPathsFromSims(sims, level0, duration, deductAnnualBps = null, stepsPerYear = 12) {
   return sims.map((path) => {
     const out = [];
     let carry = 0;
     let prev = level0;
     for (let m = 0; m < path.length; m++) {
-      carry += prev / 12;
+      // carry accrues per STEP at the panel's own frequency; on a daily panel
+      // that is level/252 a day, not level/12
+      carry += prev / stepsPerYear;
       const gross = carry - duration * (path[m] - level0);
-      out.push(deductAnnualBps == null ? gross : gross - (deductAnnualBps * (m + 1)) / 12);
+      out.push(deductAnnualBps == null ? gross : gross - (deductAnnualBps * (m + 1)) / stepsPerYear);
       prev = path[m];
     }
     return out;
   });
-}
-
-/** the gross (pre-deduction) leg of the same simulation */
-export function holdGrossFromSims(sims, level0, duration) {
-  return holdPathsFromSims(sims, level0, duration, null);
 }
 
 /**
@@ -330,17 +345,20 @@ export function holdGrossFromSims(sims, level0, duration) {
  * the strike pays and one where it sits still bleeds the premium.
  */
 export function straddlePathsFromSims(sims, {
-  level0, sigmaAnn, maturityMonths, premium, financeRate, roundTrip, pnlScale = 1, key = "net",
+  level0, sigmaAnn, totalSteps, stepsPerYear, premium, financeRate, roundTrip, pnlScale = 1, key = "net",
 }) {
   return sims.map((path) => {
     const out = [];
     for (let m = 1; m <= path.length; m++) {
-      const tau = Math.max(0, (maturityMonths - m) / 12);
+      // time to expiry and financing both run in STEPS now, so the option
+      // decays a day at a time instead of jumping a month at a time
+      const tau = Math.max(0, (totalSteps - m) / stepsPerYear);
+      const yrs = m / stepsPerYear;
       const v = sigmaAnn * Math.sqrt(tau);
       const V = bachelierStraddle(path[m - 1] - level0, v);
       if (key === "gross") out.push((V - premium) * pnlScale);
       else {
-        const fin = premium * (Math.pow(1 + financeRate, m / 12) - 1);
+        const fin = premium * (Math.pow(1 + financeRate, yrs) - 1);
         out.push((V - premium - fin - roundTrip) * pnlScale);
       }
     }
@@ -531,7 +549,7 @@ export function simulateCombination(fc, w, { nSims = 500, months = null, seed = 
   if (!U || !U.length) return null;
   const perMonth = fc.perMonth;
   const M = Math.min(months || fc.horizonMonths, fc.horizonMonths);
-  const steps = M * perMonth;
+  const steps = Math.min(M * perMonth, fc.stepDates.length);
   const rand = rng(seed);
   const nU = U.length;
 
@@ -554,11 +572,14 @@ export function simulateCombination(fc, w, { nSims = 500, months = null, seed = 
       for (let k = 0; k < K; k++) y[k] += e[k];
       hist.push(y);
       if (hist.length > p + 1) hist.shift();
-      if (t % perMonth === 0) {
-        let v = 0;
-        for (let k = 0; k < K; k++) v += w[k] * y[k];
-        row.push(v);
-      }
+      // EVERY step, not every 21st. The VAR is iterated daily on a daily
+      // panel, and sampling the result monthly threw the daily shocks away:
+      // the path arrived as twelve points over a year, which cannot look
+      // like anything but a smooth curve, and a one-month window contained
+      // exactly one point so the 1M preset rendered nothing at all.
+      let v = 0;
+      for (let k = 0; k < K; k++) v += w[k] * y[k];
+      row.push(v);
     }
     out.push(row);
   }
@@ -586,16 +607,17 @@ export function summarisePaths(pnl, dates, levels, scenarioIdx = 0) {
   for (let m = 0; m < M; m++) {
     const col = pnl.map((p) => p[m]).filter(Number.isFinite).sort((a, b) => a - b);
     const lvl = levels.map((p) => p[m]).filter(Number.isFinite).sort((a, b) => a - b);
+    // rounded to 0.01 bp: the values are basis points and full float
+    // precision was most of the payload, which at daily resolution runs to
+    // hundreds of points per asset
+    const r = (v) => (Number.isFinite(v) ? Math.round(v * 100) / 100 : null);
     rows.push({
       date: dates[m],
-      level: pct(lvl, 0.5),
-      ret: pct(col, 0.5),
-      mean: col.reduce((a, b) => a + b, 0) / col.length,
-      lo: pct(col, 0.1),
-      p25: pct(col, 0.25),
-      p75: pct(col, 0.75),
-      hi: pct(col, 0.9),
-      scenario: pnl[scenarioIdx][m],
+      level: r(pct(lvl, 0.5)),
+      ret: r(pct(col, 0.5)),
+      lo: r(pct(col, 0.1)),
+      hi: r(pct(col, 0.9)),
+      scenario: r(pnl[scenarioIdx][m]),
     });
   }
   return rows;
