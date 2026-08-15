@@ -50,6 +50,12 @@ const NAME_ALIASES = {
   "United Arab Emirates": ["United Arab Emirates", "Utd. Arab Emir."],
   Vietnam: ["Vietnam", "Viet Nam"],
   "Bosnia and Herzegovina": ["Bosnia and Herz."],
+  // the basemap uses pre-2019 or French forms for these
+  "North Macedonia": ["Macedonia"],
+  "Ivory Coast": ["Côte d'Ivoire", "Cote d'Ivoire"],
+  Laos: ["Lao PDR", "Lao People's Democratic Republic"],
+  // Natural Earth at this resolution carries no Taiwan polygon at all, so it
+  // stays table-only however it is named — the coverage note says so
   "Euro Area": [],
 };
 
