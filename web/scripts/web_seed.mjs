@@ -105,6 +105,14 @@ try {
  * top of them are not, which measured 4-6.5s cold in production.
  */
 try {
+  const { default: recHandler } = await import("../api/recommend.js");
+  const rec = await capture(recHandler, "/api/recommend");
+  console.log(`recommend cache warmed — ${rec?.status} · ${(rec?.items || []).length} instruments`);
+} catch (e) {
+  console.error("recommend cache NOT warmed:", e.message);
+}
+
+try {
   const { default: driversHandler } = await import("../api/drivers.js");
   const d = await capture(driversHandler, "/api/drivers");
   const okp = (d?.panels || []).filter((p) => p.status === "OK").length;

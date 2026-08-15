@@ -14,6 +14,7 @@ import { render as renderHistory } from "./pages/history.js";
 import { render as renderCountry } from "./pages/country.js";
 import { render as renderSignals } from "./pages/signals.js";
 import { render as renderDrivers } from "./pages/drivers.js";
+import { render as renderRecommend } from "./pages/recommend.js";
 
 initTheme();
 installAuditHandle();
@@ -28,6 +29,7 @@ const PAGES = {
   country: { el: "page-country", render: renderCountry },
   signals: { el: "page-signals", render: renderSignals },
   drivers: { el: "page-drivers", render: renderDrivers },
+  recommend: { el: "page-recommend", render: renderRecommend },
 };
 
 let current = { dispose: null };

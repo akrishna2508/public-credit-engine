@@ -110,6 +110,18 @@ export async function loadOpportunities() {
   return state.opportunities;
 }
 
+export async function loadRecommend() {
+  const key = "recommend";
+  if (state.history[key]) return state.history[key];
+  try {
+    state.history[key] = await fetchJSON("/api/recommend");
+  } catch (e) {
+    state.history[key] = { status: "UNAVAILABLE", why: String(e.message || e) };
+  }
+  emit();
+  return state.history[key];
+}
+
 export async function loadDrivers() {
   const key = "drivers";
   if (state.history[key]) return state.history[key];

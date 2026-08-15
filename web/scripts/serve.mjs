@@ -47,6 +47,7 @@ const handlers = {
   "/api/opportunities": () => import("../api/opportunities.js").then((m) => m.default),
   "/api/spreads": () => import("../api/spreads.js").then((m) => m.default),
   "/api/drivers": () => import("../api/drivers.js").then((m) => m.default),
+  "/api/recommend": () => import("../api/recommend.js").then((m) => m.default),
 };
 
 const server = createServer(async (req, res) => {
