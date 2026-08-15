@@ -8,9 +8,10 @@
  *   basis=hold  accrued carry, marked to the forecast level:
  *               return(m) = carry - duration x (level_m - level_0)
  *
- *   basis=vol   a straddle held to maturity m, priced off the VAR's own
- *               forecast-error volatility sigma_m, net of the dealer premium
- *               and execution friction measured from history
+ *   basis=vol   ONE at-the-money straddle opened now and marked to market
+ *               monthly to expiry: Bachelier value against the VAR's forecast
+ *               of the underlying, less the dealer premium, financing on that
+ *               premium at the short rate, and a round trip of friction
  *
  * Nothing here compounds a constant. The previous projection took one
  * annualised edge and raised it to the power of the horizon, which is
@@ -507,7 +508,7 @@ export default async function handler(req, res) {
   payload.label =
     basis === "hold"
       ? "Carry accrued and marked to the VAR forecast of the spread or yield"
-      : "Straddle held to maturity, priced off the VAR forecast-error volatility";
+      : "One at-the-money straddle, opened now and marked to market monthly to expiry";
   payload.method =
     basis === "hold"
       ? [
