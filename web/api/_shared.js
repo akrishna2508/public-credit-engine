@@ -130,6 +130,10 @@ export const CACHE_TTL = {
   ECB: 24 * 3600 * 1000,
   YAHOO_CHART: 12 * 3600 * 1000,
   YAHOO_ATMIV: 3 * 3600 * 1000,
+  // derived documents (fitted models, forecast paths, the atlas fan-out).
+  // Six hours: the slowest input is a monthly yield and the fastest a daily
+  // OAS, so nothing underneath moves more than once a day.
+  DERIVED: 6 * 3600 * 1000,
 };
 // Two cache roots. SEED_ROOT is the committed snapshot shipped inside the
 // function bundle (vercel.json includeFiles) — readable everywhere, but the
@@ -184,6 +188,56 @@ function writeCache(kind, key, data) {
     writeFileSync(tmp, JSON.stringify(data));
     renameSync(tmp, p);
   } catch { /* best effort */ }
+}
+
+/**
+ * Cache a whole computed document, not a row series.
+ *
+ * cachedRows exists to memoise an upstream FETCH, and it merges by date, so
+ * it cannot hold a derived result. The expensive part of /api/returns is not
+ * the download — it is the work afterwards: fitting a VAR per panel, lag
+ * selection over a dozen candidates, and an MA expansion for the
+ * forecast-error covariance at every horizon. The sovereign hold book fits 34
+ * separate models and took ~14s warm, which is the slowest thing on the site
+ * and gets worse with every country added.
+ *
+ * The inputs move once a day at most (FRED yields are monthly, OAS daily), so
+ * the derived document is cached against the same dual-root store: /tmp on
+ * Vercel, which survives warm invocations, and the committed snapshot as a
+ * read-only floor. A stale document is served while a refresh runs rather
+ * than making the caller wait, so a cold instance is slow at most once.
+ */
+export async function cachedJson(kind, key, ttlMs, buildFn) {
+  const hit = readCached(kind, key, ttlMs);
+  if (hit?.doc) return { doc: hit.doc, fromCache: true, stale: false };
+
+  const inflightKey = "json:" + kind + ":" + key;
+  if (inflight.has(inflightKey)) return inflight.get(inflightKey);
+
+  const stale = readCached(kind, key, 0); // any age
+  const job = (async () => {
+    try {
+      const doc = await buildFn();
+      writeCache(kind, key, { updated: new Date().toISOString(), kind, key, doc });
+      return { doc, fromCache: false, stale: false };
+    } catch (e) {
+      if (stale?.doc) return { doc: stale.doc, fromCache: true, stale: true, error: String(e) };
+      throw e;
+    } finally {
+      inflight.delete(inflightKey);
+    }
+  })();
+  inflight.set(inflightKey, job);
+
+  // a stale copy beats a 14-second wait; the refresh above still completes
+  // and lands in the cache for the next caller. Its rejection is swallowed
+  // here on purpose — nobody is awaiting it, and an unhandled rejection would
+  // take the whole function down for a refresh that simply failed.
+  if (stale?.doc) {
+    job.catch(() => {});
+    return { doc: stale.doc, fromCache: true, stale: true, refreshing: true };
+  }
+  return job;
 }
 
 /** fetch + store rows keyed by kind/key; ttlMs fresh window; returns

@@ -23,6 +23,7 @@ const LEG_LABEL = {
   bond: "Sovereign bond price (USD)",
   equity: "Country equity ETF",
   credit: "Regional EM corporate credit",
+  fx: "Currency vs USD",
 };
 
 /** an UNAVAILABLE leg is shown with its reason, never hidden */

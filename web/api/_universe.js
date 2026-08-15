@@ -30,6 +30,7 @@ export const REGION_LABELS = {
   africa: "Africa",
   asia: "Developed Asia",
   emasia: "Emerging Asia",
+  seasia: "Southeast Asia",
   apac: "Asia-Pacific",
 };
 
@@ -48,6 +49,7 @@ export const COUNTRIES = {
   CO: { name: "Colombia", iso3: "COL", region: "latam", yield: "COLIRLTLT01STM", etf: null, fx: fxOf("COP"), credit: "latam" },
   PE: { name: "Peru", iso3: "PER", region: "latam", yield: null, etf: "EPU", fx: fxOf("PEN"), credit: "latam" },
   AR: { name: "Argentina", iso3: "ARG", region: "latam", yield: null, etf: "ARGT", fx: fxOf("ARS"), credit: "latam" },
+  CR: { name: "Costa Rica", iso3: "CRI", region: "latam", yield: "CRIIRLTLT01STM", etf: null, fx: fxOf("CRC"), credit: "latam" },
 
   /* ---------------- Europe ---------------- */
   DE: { name: "Germany", iso3: "DEU", region: "europe", yield: "IRLTLT01DEM156N", etf: "EWG", fx: fxDirect("EUR"), credit: null },
@@ -75,6 +77,23 @@ export const COUNTRIES = {
   CZ: { name: "Czechia", iso3: "CZE", region: "emeurope", yield: "IRLTLT01CZM156N", etf: null, fx: fxOf("CZK"), credit: "emea" },
   HU: { name: "Hungary", iso3: "HUN", region: "emeurope", yield: "IRLTLT01HUM156N", etf: null, fx: fxOf("HUF"), credit: "emea" },
   TR: { name: "Turkey", iso3: "TUR", region: "emeurope", yield: null, etf: "TUR", fx: fxOf("TRY"), credit: "emea" },
+  // Latvia and Lithuania are the only additions FRED publishes a long-term
+  // rate for; they join the sovereign forecast book. The rest carry a
+  // currency and World Bank structural leg only — no free source publishes a
+  // 10-year curve for them (checked against FRED's complete 40-series OECD
+  // long-term-rate family and the IMF MFS_IR bond-yield indicators).
+  LV: { name: "Latvia", iso3: "LVA", region: "emeurope", yield: "LVAIRLTLT01STM", etf: null, fx: fxDirect("EUR"), credit: "emea" },
+  LT: { name: "Lithuania", iso3: "LTU", region: "emeurope", yield: "LTUIRLTLT01STM", etf: null, fx: fxDirect("EUR"), credit: "emea" },
+  EE: { name: "Estonia", iso3: "EST", region: "emeurope", yield: null, etf: null, fx: fxDirect("EUR"), credit: "emea" },
+  HR: { name: "Croatia", iso3: "HRV", region: "emeurope", yield: null, etf: null, fx: fxDirect("EUR"), credit: "emea" },
+  BG: { name: "Bulgaria", iso3: "BGR", region: "emeurope", yield: null, etf: null, fx: null, credit: "emea" },
+  RO: { name: "Romania", iso3: "ROU", region: "emeurope", yield: null, etf: null, fx: fxOf("RON"), credit: "emea" },
+  RS: { name: "Serbia", iso3: "SRB", region: "emeurope", yield: null, etf: null, fx: fxOf("RSD"), credit: "emea" },
+  UA: { name: "Ukraine", iso3: "UKR", region: "emeurope", yield: null, etf: null, fx: fxOf("UAH"), credit: "emea" },
+  KZ: { name: "Kazakhstan", iso3: "KAZ", region: "emeurope", yield: null, etf: null, fx: fxOf("KZT"), credit: "emea" },
+  AL: { name: "Albania", iso3: "ALB", region: "emeurope", yield: null, etf: null, fx: fxOf("ALL"), credit: "emea" },
+  MK: { name: "North Macedonia", iso3: "MKD", region: "emeurope", yield: null, etf: null, fx: fxOf("MKD"), credit: "emea" },
+  MD: { name: "Moldova", iso3: "MDA", region: "emeurope", yield: null, etf: null, fx: fxOf("MDL"), credit: "emea" },
 
   /* ---------------- Middle East ---------------- */
   IL: { name: "Israel", iso3: "ISR", region: "mideast", yield: "IRLTLT01ILM156N", etf: null, fx: fxOf("ILS"), credit: "emea" },
@@ -84,6 +103,24 @@ export const COUNTRIES = {
 
   /* ---------------- Africa ---------------- */
   ZA: { name: "South Africa", iso3: "ZAF", region: "africa", yield: "IRLTLT01ZAM156N", etf: "EZA", fx: fxOf("ZAR"), credit: "emea" },
+  // South Africa is the only African sovereign FRED carries a long-term rate
+  // for. NGE and EGPT, the Nigeria and Egypt ETFs, both stopped printing in
+  // 2024 and are excluded rather than quoted from a dead tape.
+  NG: { name: "Nigeria", iso3: "NGA", region: "africa", yield: null, etf: null, fx: fxOf("NGN"), credit: "emea" },
+  EG: { name: "Egypt", iso3: "EGY", region: "africa", yield: null, etf: null, fx: fxOf("EGP"), credit: "emea" },
+  KE: { name: "Kenya", iso3: "KEN", region: "africa", yield: null, etf: null, fx: fxOf("KES"), credit: "emea" },
+  MA: { name: "Morocco", iso3: "MAR", region: "africa", yield: null, etf: null, fx: fxOf("MAD"), credit: "emea" },
+  GH: { name: "Ghana", iso3: "GHA", region: "africa", yield: null, etf: null, fx: fxOf("GHS"), credit: "emea" },
+  TN: { name: "Tunisia", iso3: "TUN", region: "africa", yield: null, etf: null, fx: fxOf("TND"), credit: "emea" },
+  CI: { name: "Ivory Coast", iso3: "CIV", region: "africa", yield: null, etf: null, fx: fxOf("XOF"), credit: "emea" },
+  SN: { name: "Senegal", iso3: "SEN", region: "africa", yield: null, etf: null, fx: fxOf("XOF"), credit: "emea" },
+  ZM: { name: "Zambia", iso3: "ZMB", region: "africa", yield: null, etf: null, fx: fxOf("ZMW"), credit: "emea" },
+  TZ: { name: "Tanzania", iso3: "TZA", region: "africa", yield: null, etf: null, fx: fxOf("TZS"), credit: "emea" },
+  UG: { name: "Uganda", iso3: "UGA", region: "africa", yield: null, etf: null, fx: fxOf("UGX"), credit: "emea" },
+  BW: { name: "Botswana", iso3: "BWA", region: "africa", yield: null, etf: null, fx: fxOf("BWP"), credit: "emea" },
+  MU: { name: "Mauritius", iso3: "MUS", region: "africa", yield: null, etf: null, fx: fxOf("MUR"), credit: "emea" },
+  NA: { name: "Namibia", iso3: "NAM", region: "africa", yield: null, etf: null, fx: fxOf("NAD"), credit: "emea" },
+  ET: { name: "Ethiopia", iso3: "ETH", region: "africa", yield: null, etf: null, fx: fxOf("ETB"), credit: "emea" },
 
   /* ---------------- Developed Asia / Pacific ---------------- */
   JP: { name: "Japan", iso3: "JPN", region: "asia", yield: "IRLTLT01JPM156N", etf: "EWJ", fx: fxOf("JPY"), credit: null },
@@ -96,11 +133,18 @@ export const COUNTRIES = {
   /* ---------------- Emerging Asia ---------------- */
   CN: { name: "China", iso3: "CHN", region: "emasia", yield: null, etf: "MCHI", fx: fxOf("CNY"), credit: "asia" },
   IN: { name: "India", iso3: "IND", region: "emasia", yield: "INDIRLTLT01STM", etf: "INDA", fx: fxOf("INR"), credit: "asia" },
-  ID: { name: "Indonesia", iso3: "IDN", region: "emasia", yield: null, etf: "EIDO", fx: fxOf("IDR"), credit: "asia" },
-  TH: { name: "Thailand", iso3: "THA", region: "emasia", yield: null, etf: "THD", fx: fxOf("THB"), credit: "asia" },
-  MY: { name: "Malaysia", iso3: "MYS", region: "emasia", yield: null, etf: "EWM", fx: fxOf("MYR"), credit: "asia" },
-  PH: { name: "Philippines", iso3: "PHL", region: "emasia", yield: null, etf: "EPHE", fx: fxOf("PHP"), credit: "asia" },
-  VN: { name: "Vietnam", iso3: "VNM", region: "emasia", yield: null, etf: "VNM", fx: fxOf("VND"), credit: "asia" },
+  ID: { name: "Indonesia", iso3: "IDN", region: "seasia", yield: null, etf: "EIDO", fx: fxOf("IDR"), credit: "asia" },
+  TH: { name: "Thailand", iso3: "THA", region: "seasia", yield: null, etf: "THD", fx: fxOf("THB"), credit: "asia" },
+  MY: { name: "Malaysia", iso3: "MYS", region: "seasia", yield: null, etf: "EWM", fx: fxOf("MYR"), credit: "asia" },
+  PH: { name: "Philippines", iso3: "PHL", region: "seasia", yield: null, etf: "EPHE", fx: fxOf("PHP"), credit: "asia" },
+  VN: { name: "Vietnam", iso3: "VNM", region: "seasia", yield: null, etf: "VNM", fx: fxOf("VND"), credit: "asia" },
+  KH: { name: "Cambodia", iso3: "KHM", region: "seasia", yield: null, etf: null, fx: fxOf("KHR"), credit: "asia" },
+  LA: { name: "Laos", iso3: "LAO", region: "seasia", yield: null, etf: null, fx: fxOf("LAK"), credit: "asia" },
+  MM: { name: "Myanmar", iso3: "MMR", region: "seasia", yield: null, etf: null, fx: fxOf("MMK"), credit: "asia" },
+  BN: { name: "Brunei", iso3: "BRN", region: "seasia", yield: null, etf: null, fx: fxOf("BND"), credit: "asia" },
+  BD: { name: "Bangladesh", iso3: "BGD", region: "emasia", yield: null, etf: null, fx: fxOf("BDT"), credit: "asia" },
+  LK: { name: "Sri Lanka", iso3: "LKA", region: "emasia", yield: null, etf: null, fx: fxOf("LKR"), credit: "asia" },
+  PK: { name: "Pakistan", iso3: "PAK", region: "emasia", yield: null, etf: null, fx: fxOf("PKR"), credit: "asia" },
 };
 
 /** ICE BofA EM corporate OAS indices (FRED, daily) used for the credit leg */

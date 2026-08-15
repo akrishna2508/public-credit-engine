@@ -21,7 +21,7 @@
  */
 import {
   fredCsv, yahooChart, yahooAtmIv, ecbCsv, json, pmap, worldBank,
-  toBps, logPriceBps, tradeCostBasis,
+  toBps, logPriceBps, tradeCostBasis, cachedJson, CACHE_TTL,
   SPREAD_DURATION, BOND_DURATION, PRICE_SCALE,
 } from "./_shared.js";
 import {
@@ -402,14 +402,21 @@ export default async function handler(req, res) {
   const market = url.searchParams.get("market") || "us";
   const basis = url.searchParams.get("basis") === "vol" ? "vol" : "hold";
 
-  const { markets, models } = basis === "hold" ? await buildHoldBook(market) : await buildVolBook(market);
+  // fitting one VAR per sovereign is the slowest work on the site, and the
+  // inputs move once a day at most — see cachedJson
+  const cached = await cachedJson("returns", `${market}|${basis}`, CACHE_TTL.DERIVED, async () => {
+    const built = basis === "hold" ? await buildHoldBook(market) : await buildVolBook(market);
+    return { ...built, generated: new Date().toISOString() };
+  });
+  const { markets, models, generated } = cached.doc;
 
   const payload = {
     status: "OK",
-    generated: new Date().toISOString(),
+    generated,
     basis,
     markets,
     models,
+    cache: { hit: !!cached.fromCache, stale: !!cached.stale },
   };
   if (!markets[market] && market !== "all") {
     payload.status = "UNAVAILABLE";

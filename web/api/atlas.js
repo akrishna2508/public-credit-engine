@@ -19,6 +19,7 @@
  */
 import {
   fredCsv, ecbCsv, yahooChart, json, pmap, pctReturn, zLast, worldBank,
+  cachedJson, CACHE_TTL,
 } from "./_shared.js";
 import {
   COUNTRIES, REGION_LABELS, CREDIT_INDICES, WB_INDICATORS, DURATION, CREDIT_SPREAD_DURATION,
@@ -55,6 +56,15 @@ function toMonthly(rows) {
 }
 
 export default async function handler(req, res) {
+  // The fan-out is ~200 upstream series across 84 countries. Each one is
+  // individually cached, but re-assembling the atlas still costs a second or
+  // two of alignment and z-scoring on every request, so the assembled
+  // document is cached too.
+  const cached = await cachedJson("atlas", "v2", CACHE_TTL.DERIVED, () => buildAtlas());
+  json(res, { ...cached.doc, cache: { hit: !!cached.fromCache, stale: !!cached.stale } });
+}
+
+async function buildAtlas() {
   const isoList = Object.keys(COUNTRIES);
 
   /* ---------------- 1. sovereign yields (FRED, monthly) ---------------- */
@@ -232,6 +242,25 @@ export default async function handler(req, res) {
       };
     }
 
+    // Currency leg — ONLY when nothing else country-specific exists.
+    //
+    // Both other legs already contain the currency: the bond leg is compounded
+    // with it a few lines above, and a US-listed country ETF is priced in
+    // dollars, so its return embeds the move too. Adding a standalone FX leg
+    // alongside either one counts the same exposure twice, which is what
+    // happened to Brazil, Peru, Argentina and Turkey on the first pass — no
+    // sovereign curve, but an ETF that was already carrying the currency.
+    //
+    // With neither, the currency is the one country-specific price a dollar
+    // investor actually earns, and without it a market like Kenya or Cambodia
+    // would inherit nothing but its regional credit index — a number identical
+    // for every country in the region, dressing a regional average up as a
+    // country signal.
+    const hasEquityLeg = legs.some((l) => l.leg === "equity");
+    if (bondUsd1m == null && !hasEquityLeg && fx1m != null) {
+      legs.push({ leg: "fx", value: fx1m });
+    }
+
     /* --- credit leg --- */
     if (spec.credit && credit[spec.credit]?.status === "OK") {
       const c = credit[spec.credit];
@@ -358,12 +387,12 @@ export default async function handler(req, res) {
   const withCredit = Object.values(countries).filter((c) => c.instruments.credit?.status === "OK").length;
   const scored = Object.values(countries).filter((c) => c.heat != null).length;
 
-  json(res, {
+  return {
     status: "OK",
     generated: new Date().toISOString(),
     schema: "atlas.v2",
     heatDefinition:
-      "1-month total-return proxy in USD: the unweighted mean of the available legs — sovereign bond price proxy converted to USD, country equity ETF return, and regional EM corporate credit carry. Green means positive compensation over the last month, red negative.",
+      "1-month total-return proxy in USD: the unweighted mean of the available legs — sovereign bond price proxy converted to USD, country equity ETF return, regional EM corporate credit carry, and, for markets with no free sovereign curve, the currency return against the dollar. Green means positive compensation over the last month, red negative.",
     countries,
     regions,
     credit,
@@ -381,5 +410,5 @@ export default async function handler(req, res) {
       "Yahoo Finance — single-country equity ETFs and FX crosses, daily",
       "World Bank — debt/GDP, inflation, lending rate and lending risk premium (annual, lagged)",
     ],
-  });
+  };
 }
