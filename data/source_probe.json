@@ -1,0 +1,163 @@
+[
+  {
+    "name": "fred_ext.treasury_curve",
+    "available": true,
+    "as_of": "2026-08-13",
+    "gap_days": null,
+    "detail": "6533 observations"
+  },
+  {
+    "name": "fred_ext.moodys",
+    "available": true,
+    "as_of": "2026-07-01",
+    "gap_days": null,
+    "detail": "1291 observations"
+  },
+  {
+    "name": "fred_ext.tips",
+    "available": true,
+    "as_of": "2026-08-13",
+    "gap_days": null,
+    "detail": "6161 observations"
+  },
+  {
+    "name": "fred_ext.macro_anchors",
+    "available": true,
+    "as_of": "2026-07-01",
+    "gap_days": null,
+    "detail": "865 observations"
+  },
+  {
+    "name": "fred_ext.regional_credit",
+    "available": true,
+    "as_of": "2026-08-13",
+    "gap_days": null,
+    "detail": "795 observations"
+  },
+  {
+    "name": "fred_ext.global_sovereign",
+    "available": true,
+    "as_of": "2026-06-01",
+    "gap_days": null,
+    "detail": "879 observations"
+  },
+  {
+    "name": "fred_ext.em_sector_credit",
+    "available": true,
+    "as_of": "2026-08-13",
+    "gap_days": null,
+    "detail": "795 observations"
+  },
+  {
+    "name": "fred_ext.inflation",
+    "available": true,
+    "as_of": "2026-08-13",
+    "gap_days": null,
+    "detail": "6161 observations"
+  },
+  {
+    "name": "treasury_api.auctions",
+    "available": true,
+    "as_of": null,
+    "gap_days": null,
+    "detail": "25 observations"
+  },
+  {
+    "name": "treasury_api.debt_to_penny",
+    "available": true,
+    "as_of": null,
+    "gap_days": null,
+    "detail": "60 observations"
+  },
+  {
+    "name": "cftc.cot",
+    "available": true,
+    "as_of": "2026-08-04",
+    "gap_days": null,
+    "detail": "2681 observations"
+  },
+  {
+    "name": "ecb.corp_yields",
+    "available": true,
+    "as_of": "2026-08-14",
+    "gap_days": null,
+    "detail": "5609 observations"
+  },
+  {
+    "name": "world_bank.debt",
+    "available": true,
+    "as_of": null,
+    "gap_days": null,
+    "detail": "4240 observations"
+  },
+  {
+    "name": "world_bank.credit_gap_proxy",
+    "available": true,
+    "as_of": null,
+    "gap_days": null,
+    "detail": "5565 observations"
+  },
+  {
+    "name": "sec_edgar.leverage",
+    "available": true,
+    "as_of": null,
+    "gap_days": null,
+    "detail": "10 keys"
+  },
+  {
+    "name": "bcb.selic",
+    "available": false,
+    "as_of": null,
+    "gap_days": null,
+    "detail": "SourceUnavailable: bcb UNAVAILABLE: selic fetch failed: 502 Server Error: Bad Gateway for url: https://api.bcb.gov.br/dados/serie/bcdata.sgs.4189/dados/ultimos?formato=json | fix: BCB SGS is free/keyless (api.bcb.gov.br"
+  },
+  {
+    "name": "yf_futures.panel",
+    "available": true,
+    "as_of": "2026-08-17",
+    "gap_days": null,
+    "detail": "2170 observations"
+  },
+  {
+    "name": "yf_options.snapshot",
+    "available": true,
+    "as_of": null,
+    "gap_days": null,
+    "detail": "[]"
+  },
+  {
+    "name": "yf_fx.panel",
+    "available": true,
+    "as_of": "2026-08-17",
+    "gap_days": null,
+    "detail": "2764 observations"
+  },
+  {
+    "name": "finra.trace",
+    "available": true,
+    "as_of": null,
+    "gap_days": null,
+    "detail": "3060 observations"
+  },
+  {
+    "name": "optional.alpaca",
+    "available": true,
+    "as_of": null,
+    "gap_days": null,
+    "detail": "1 keys"
+  },
+  {
+    "name": "ndl.yield_curve",
+    "available": false,
+    "as_of": null,
+    "gap_days": null,
+    "detail": "SourceUnavailable: ndl UNAVAILABLE: USTREASURY/YIELD: 403 Client Error: Forbidden for url: https://data.nasdaq.com/api/v3/datasets/USTREASURY/YIELD.json?api_key=***&rows=120"
+  },
+  {
+    "name": "polygon.options",
+    "available": true,
+    "as_of": null,
+    "gap_days": null,
+    "detail": "[]"
+  }
+]

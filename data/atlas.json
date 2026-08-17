@@ -1,0 +1,630 @@
+{
+ "generated": "2026-08-12",
+ "schema": "per-country instrument grid; heat = unweighted mean of available 1m price-return proxies (bonds + equity leg). Spec legs: term structure (2y/5y/10y/30y + 2s10s), real yield (US T10YIE breakeven only), CDS proxy, RV_30d per country ETF, IV/VRP/ATM-straddle yield (accrued chains), index-futures basis (ES/NQ), SOFR implied rate",
+ "regions": {
+  "americas": -1.242,
+  "europe": 0.809,
+  "asia": -0.535,
+  "apac": 1.283,
+  "africa": 2.508
+ },
+ "countries": {
+  "US": {
+   "name": "US",
+   "iso": "US",
+   "region": "americas",
+   "instruments": {
+    "bonds": {
+     "notes": "10Y OECD sovereign yield (FRED, monthly)",
+     "yield_pct": 4.47,
+     "yield_chg_bps": {
+      "1": -1.0,
+      "3": 22.0,
+      "12": 9.0
+     },
+     "yield_z": 1.423,
+     "bond_price_1m_pct": 0.085
+    },
+    "cds": {
+     "status": "proxy",
+     "sovereign_spread_bps": 0.0,
+     "note": "US is the base country; corporate CDS proxy = ICE OAS in spreads.py (no free CDS series exist anywhere)"
+    },
+    "yield_spreads": {
+     "2s10s_bps": 46.0,
+     "2s10s_z": -0.698,
+     "vs_us_10y_bps": 0.0
+    },
+    "equity_etf": {
+     "label": "equity-return leg (no single-country debt ETF)",
+     "ret_1m_pct": null,
+     "ret_3m_pct": null,
+     "ret_12m_pct": null
+    },
+    "bond_curve": {
+     "2y_pct": 4.19,
+     "5y_pct": 4.35,
+     "10y_pct": 4.65,
+     "30y_pct": 5.19,
+     "real_10y_pct": 2.36,
+     "breakeven_10y_pct": 2.29,
+     "2s10s_bps": 46.0
+    },
+    "futures": {
+     "ES=F/^GSPC": {
+      "status": "ok",
+      "as_of": "2026-08-11",
+      "future_last": 7751.75,
+      "spot_last": 7730.64,
+      "dte_days": 10,
+      "basis_ann": 0.0997,
+      "note": "CME third-Friday expiry rule; annualized basis yield = (F-S)/S * 365/DTE (heatmap spec \u00a73.4)"
+     },
+     "NQ=F/^NDX": {
+      "status": "ok",
+      "as_of": "2026-08-11",
+      "future_last": 29614.5,
+      "spot_last": 29525.98,
+      "dte_days": 10,
+      "basis_ann": 0.1094,
+      "note": "CME third-Friday expiry rule; annualized basis yield = (F-S)/S * 365/DTE (heatmap spec \u00a73.4)"
+     },
+     "ZT=F": {
+      "as_of": "2026-08-11",
+      "last": 102.94921875,
+      "mom_21d": 0.0010255241567913576
+     },
+     "ZF=F": {
+      "as_of": "2026-08-11",
+      "last": 106.28125,
+      "mom_21d": -0.0004408523144746601
+     },
+     "ZN=F": {
+      "as_of": "2026-08-11",
+      "last": 108.453125,
+      "mom_21d": -0.0022998418858704017
+     },
+     "ZB=F": {
+      "as_of": "2026-08-11",
+      "last": 109.03125,
+      "mom_21d": -0.015241320914479273
+     },
+     "UB=F": {
+      "as_of": "2026-08-11",
+      "last": 110.34375,
+      "mom_21d": -0.02107014139173824
+     },
+     "SR3=F": {
+      "as_of": "2026-08-11",
+      "last": 96.16500091552734
+     }
+    },
+    "irf_spreads": {
+     "sofr_implied_3m_bps": 383.5,
+     "note": "back-month SOFR contracts are not listed on yfinance (404 verified 2026-08-10); strip slope UNAVAILABLE"
+    },
+    "options": {
+     "HYG": {
+      "obs_days": 3,
+      "atm_iv_last": 0.042,
+      "as_of": "2026-08-11",
+      "straddle_yield_ann": 0.0319,
+      "straddle_price_usd": 0.23,
+      "rv_30d": 0.0266,
+      "vrp": 0.0154
+     },
+     "LQD": {
+      "obs_days": 3,
+      "atm_iv_last": 0.1304,
+      "as_of": "2026-08-11",
+      "straddle_yield_ann": 0.0593,
+      "straddle_price_usd": 0.57,
+      "rv_30d": 0.0508,
+      "vrp": 0.0796
+     },
+     "TLT": {
+      "obs_days": 3,
+      "atm_iv_last": 0.1299,
+      "as_of": "2026-08-11",
+      "straddle_yield_ann": 0.1073,
+      "straddle_price_usd": 0.8,
+      "rv_30d": 0.088,
+      "vrp": 0.0419
+     },
+     "EMB": {
+      "obs_days": 3,
+      "atm_iv_last": 0.1616,
+      "as_of": "2026-08-11",
+      "straddle_yield_ann": 0.0866,
+      "straddle_price_usd": 1.36,
+      "rv_30d": 0.0496,
+      "vrp": 0.112
+     },
+     "ANGL": {
+      "obs_days": 2,
+      "atm_iv_last": 0.2959,
+      "as_of": "2026-08-11",
+      "rv_30d": 0.032,
+      "vrp": 0.2639
+     },
+     "JNK": {
+      "obs_days": 1,
+      "atm_iv_last": 0.2993,
+      "as_of": "2026-08-11",
+      "straddle_yield_ann": 0.0738,
+      "straddle_price_usd": 1.17,
+      "rv_30d": 0.0259,
+      "vrp": 0.2734
+     }
+    }
+   },
+   "heat": 0.085
+  },
+  "DE": {
+   "name": "DE",
+   "iso": "DE",
+   "region": "europe",
+   "instruments": {
+    "bonds": {
+     "notes": "10Y OECD sovereign yield (FRED, monthly)",
+     "yield_pct": 2.97,
+     "yield_chg_bps": {
+      "1": -7.65,
+      "3": 6.0,
+      "12": 45.1
+     },
+     "yield_z": 1.646,
+     "bond_price_1m_pct": 0.65
+    },
+    "cds": {
+     "status": "proxy",
+     "sovereign_spread_bps": -150.0
+    },
+    "yield_spreads": {
+     "vs_us_10y_bps": -150.0,
+     "vs_us_10y_z": null
+    },
+    "equity_etf": {
+     "label": "equity-return leg (no single-country debt ETF)",
+     "ret_1m_pct": null,
+     "ret_3m_pct": null,
+     "ret_12m_pct": null
+    }
+   },
+   "heat": 0.65
+  },
+  "FR": {
+   "name": "FR",
+   "iso": "FR",
+   "region": "europe",
+   "instruments": {
+    "bonds": {
+     "notes": "10Y OECD sovereign yield (FRED, monthly)",
+     "yield_pct": 3.68,
+     "yield_chg_bps": {
+      "1": -6.0,
+      "3": 4.0,
+      "12": 44.0
+     },
+     "yield_z": 1.644,
+     "bond_price_1m_pct": 0.51
+    },
+    "cds": {
+     "status": "proxy",
+     "sovereign_spread_bps": -79.0
+    },
+    "yield_spreads": {
+     "vs_us_10y_bps": -79.0,
+     "vs_us_10y_z": null
+    },
+    "equity_etf": {
+     "label": "equity-return leg (no single-country debt ETF)",
+     "ret_1m_pct": null,
+     "ret_3m_pct": null,
+     "ret_12m_pct": null
+    }
+   },
+   "heat": 0.51
+  },
+  "IT": {
+   "name": "IT",
+   "iso": "IT",
+   "region": "europe",
+   "instruments": {
+    "bonds": {
+     "notes": "10Y OECD sovereign yield (FRED, monthly)",
+     "yield_pct": 3.734,
+     "yield_chg_bps": {
+      "1": -10.5,
+      "3": 0.1,
+      "12": 23.3
+     },
+     "yield_z": 0.985,
+     "bond_price_1m_pct": 0.892
+    },
+    "cds": {
+     "status": "proxy",
+     "sovereign_spread_bps": -73.6
+    },
+    "yield_spreads": {
+     "vs_us_10y_bps": -73.6,
+     "vs_us_10y_z": null
+    },
+    "equity_etf": {
+     "label": "equity-return leg (no single-country debt ETF)",
+     "ret_1m_pct": null,
+     "ret_3m_pct": null,
+     "ret_12m_pct": null
+    }
+   },
+   "heat": 0.892
+  },
+  "ES": {
+   "name": "ES",
+   "iso": "ES",
+   "region": "europe",
+   "instruments": {
+    "bonds": {
+     "notes": "10Y OECD sovereign yield (FRED, monthly)",
+     "yield_pct": 3.421,
+     "yield_chg_bps": {
+      "1": -6.11,
+      "3": 3.54,
+      "12": 25.38
+     },
+     "yield_z": 1.311,
+     "bond_price_1m_pct": 0.519
+    },
+    "cds": {
+     "status": "proxy",
+     "sovereign_spread_bps": -104.9
+    },
+    "yield_spreads": {
+     "vs_us_10y_bps": -104.88,
+     "vs_us_10y_z": null
+    },
+    "equity_etf": {
+     "label": "equity-return leg (no single-country debt ETF)",
+     "ret_1m_pct": null,
+     "ret_3m_pct": null,
+     "ret_12m_pct": null
+    }
+   },
+   "heat": 0.519
+  },
+  "GB": {
+   "name": "GB",
+   "iso": "GB",
+   "region": "europe",
+   "instruments": {
+    "bonds": {
+     "notes": "10Y OECD sovereign yield (FRED, monthly)",
+     "yield_pct": 4.796,
+     "yield_chg_bps": {
+      "1": -14.56,
+      "3": 9.53,
+      "12": 27.12
+     },
+     "yield_z": 1.599,
+     "bond_price_1m_pct": 1.238
+    },
+    "cds": {
+     "status": "proxy",
+     "sovereign_spread_bps": 32.6
+    },
+    "yield_spreads": {
+     "vs_us_10y_bps": 32.6,
+     "vs_us_10y_z": null
+    },
+    "equity_etf": {
+     "label": "equity-return leg (no single-country debt ETF)",
+     "ret_1m_pct": null,
+     "ret_3m_pct": null,
+     "ret_12m_pct": null
+    }
+   },
+   "heat": 1.238
+  },
+  "JP": {
+   "name": "JP",
+   "iso": "JP",
+   "region": "asia",
+   "instruments": {
+    "bonds": {
+     "notes": "10Y OECD sovereign yield (FRED, monthly)",
+     "yield_pct": 2.67,
+     "yield_chg_bps": {
+      "1": 2.0,
+      "3": 32.5,
+      "12": 125.0
+     },
+     "yield_z": 3.313,
+     "bond_price_1m_pct": -0.17
+    },
+    "cds": {
+     "status": "proxy",
+     "sovereign_spread_bps": -180.0
+    },
+    "yield_spreads": {
+     "vs_us_10y_bps": -180.0,
+     "vs_us_10y_z": null
+    },
+    "equity_etf": {
+     "label": "equity-return leg (no single-country debt ETF)",
+     "ret_1m_pct": null,
+     "ret_3m_pct": null,
+     "ret_12m_pct": null
+    }
+   },
+   "heat": -0.17
+  },
+  "CA": {
+   "name": "CA",
+   "iso": "CA",
+   "region": "americas",
+   "instruments": {
+    "bonds": {
+     "notes": "10Y OECD sovereign yield (FRED, monthly)",
+     "yield_pct": 3.42,
+     "yield_chg_bps": {
+      "1": -12.15,
+      "3": -2.09,
+      "12": 10.6
+     },
+     "yield_z": 1.229,
+     "bond_price_1m_pct": 1.033
+    },
+    "cds": {
+     "status": "proxy",
+     "sovereign_spread_bps": -105.0
+    },
+    "yield_spreads": {
+     "vs_us_10y_bps": -105.0,
+     "vs_us_10y_z": null
+    },
+    "equity_etf": {
+     "label": "equity-return leg (no single-country debt ETF)",
+     "ret_1m_pct": null,
+     "ret_3m_pct": null,
+     "ret_12m_pct": null
+    }
+   },
+   "heat": 1.033
+  },
+  "CH": {
+   "name": "CH",
+   "iso": "CH",
+   "region": "europe",
+   "instruments": {
+    "bonds": {
+     "notes": "10Y OECD sovereign yield (FRED, monthly)",
+     "yield_pct": 0.31,
+     "yield_chg_bps": {
+      "1": -13.0,
+      "3": -9.0,
+      "12": -10.0
+     },
+     "yield_z": 0.343,
+     "bond_price_1m_pct": 1.105
+    },
+    "cds": {
+     "status": "proxy",
+     "sovereign_spread_bps": -416.0
+    },
+    "yield_spreads": {
+     "vs_us_10y_bps": -416.0,
+     "vs_us_10y_z": null
+    },
+    "equity_etf": {
+     "label": "equity-return leg (no single-country debt ETF)",
+     "ret_1m_pct": null,
+     "ret_3m_pct": null,
+     "ret_12m_pct": null
+    }
+   },
+   "heat": 1.105
+  },
+  "AU": {
+   "name": "AU",
+   "iso": "AU",
+   "region": "apac",
+   "instruments": {
+    "bonds": {
+     "notes": "10Y OECD sovereign yield (FRED, monthly)",
+     "yield_pct": 4.831,
+     "yield_chg_bps": {
+      "1": -15.1,
+      "3": -9.5,
+      "12": 62.3
+     },
+     "yield_z": 1.608,
+     "bond_price_1m_pct": 1.283
+    },
+    "cds": {
+     "status": "proxy",
+     "sovereign_spread_bps": 36.1
+    },
+    "yield_spreads": {
+     "vs_us_10y_bps": 36.1,
+     "vs_us_10y_z": null
+    },
+    "equity_etf": {
+     "label": "equity-return leg (no single-country debt ETF)",
+     "ret_1m_pct": null,
+     "ret_3m_pct": null,
+     "ret_12m_pct": null
+    }
+   },
+   "heat": 1.283
+  },
+  "NL": {
+   "name": "NL",
+   "iso": "NL",
+   "region": "europe",
+   "instruments": {
+    "bonds": {
+     "notes": "10Y OECD sovereign yield (FRED, monthly)",
+     "yield_pct": 3.077,
+     "yield_chg_bps": {
+      "1": -8.8,
+      "3": 5.0,
+      "12": 32.0
+     },
+     "yield_z": 1.502,
+     "bond_price_1m_pct": 0.748
+    },
+    "cds": {
+     "status": "proxy",
+     "sovereign_spread_bps": -139.3
+    },
+    "yield_spreads": {
+     "vs_us_10y_bps": -139.3,
+     "vs_us_10y_z": null
+    },
+    "equity_etf": {
+     "label": "equity-return leg (no single-country debt ETF)",
+     "ret_1m_pct": null,
+     "ret_3m_pct": null,
+     "ret_12m_pct": null
+    }
+   },
+   "heat": 0.748
+  },
+  "KR": {
+   "name": "KR",
+   "iso": "KR",
+   "region": "asia",
+   "instruments": {
+    "bonds": {
+     "notes": "10Y OECD sovereign yield (FRED, monthly)",
+     "yield_pct": 4.181,
+     "yield_chg_bps": {
+      "1": 10.6,
+      "3": 45.3,
+      "12": 133.9
+     },
+     "yield_z": 2.042,
+     "bond_price_1m_pct": -0.901
+    },
+    "cds": {
+     "status": "proxy",
+     "sovereign_spread_bps": -28.9
+    },
+    "yield_spreads": {
+     "vs_us_10y_bps": -28.9,
+     "vs_us_10y_z": null
+    },
+    "equity_etf": {
+     "label": "equity-return leg (no single-country debt ETF)",
+     "ret_1m_pct": null,
+     "ret_3m_pct": null,
+     "ret_12m_pct": null
+    }
+   },
+   "heat": -0.901
+  },
+  "MX": {
+   "name": "MX",
+   "iso": "MX",
+   "region": "americas",
+   "instruments": {
+    "bonds": {
+     "notes": "10Y OECD sovereign yield (FRED, monthly)",
+     "yield_pct": 9.45,
+     "yield_chg_bps": {
+      "1": 57.0,
+      "3": 71.0,
+      "12": 4.0
+     },
+     "yield_z": 1.129,
+     "bond_price_1m_pct": -4.845
+    },
+    "cds": {
+     "status": "proxy",
+     "sovereign_spread_bps": 498.0
+    },
+    "yield_spreads": {
+     "vs_us_10y_bps": 498.0,
+     "vs_us_10y_z": null
+    },
+    "equity_etf": {
+     "label": "equity-return leg (no single-country debt ETF)",
+     "ret_1m_pct": null,
+     "ret_3m_pct": null,
+     "ret_12m_pct": null
+    }
+   },
+   "heat": -4.845
+  },
+  "ZA": {
+   "name": "ZA",
+   "iso": "ZA",
+   "region": "africa",
+   "instruments": {
+    "bonds": {
+     "notes": "10Y OECD sovereign yield (FRED, monthly)",
+     "yield_pct": 8.7,
+     "yield_chg_bps": {
+      "1": -29.5,
+      "3": -35.41,
+      "12": -187.95
+     },
+     "yield_z": -1.182,
+     "bond_price_1m_pct": 2.508
+    },
+    "cds": {
+     "status": "proxy",
+     "sovereign_spread_bps": 423.0
+    },
+    "yield_spreads": {
+     "vs_us_10y_bps": 423.0,
+     "vs_us_10y_z": null
+    },
+    "equity_etf": {
+     "label": "equity-return leg (no single-country debt ETF)",
+     "ret_1m_pct": null,
+     "ret_3m_pct": null,
+     "ret_12m_pct": null
+    }
+   },
+   "heat": 2.508
+  },
+  "EZ": {
+   "name": "Euro Area",
+   "iso": "EZ",
+   "region": "europe",
+   "heat": -0.772,
+   "instruments": {
+    "bonds": {
+     "yield_pct": 3.199,
+     "source": "ECB AAA 10Y (daily)",
+     "yield_chg_bps": {
+      "1": 9.08,
+      "3": 14.71,
+      "12": 44.19
+     },
+     "curve": {
+      "1y_pct": 2.595,
+      "2y_pct": 2.721,
+      "5y_pct": 2.863,
+      "10y_pct": 3.199,
+      "30y_pct": 3.65,
+      "2s10s_bps": 47.8,
+      "note": "real yield UNAVAILABLE: no free euro-area breakeven series"
+     }
+    },
+    "yield_spreads": {
+     "2s10s_bps": 47.86,
+     "2s10s_z": -0.521
+    },
+    "cds": {
+     "status": "UNAVAILABLE"
+    },
+    "irf_spreads": {
+     "status": "UNAVAILABLE",
+     "reason": "no Bund futures on yfinance (FGBL=F not listed)"
+    }
+   }
+  }
+ }
+}

@@ -367,6 +367,19 @@ npm run serve         # node scripts/serve.mjs 8787 (dist + API handlers; loads
 npm run dev           # vite dev server (proxies /api to 127.0.0.1:8787)
 ```
 
+**Vercel Deployment** (production):
+- **Root Directory**: `web` (Vite app lives in `web/`)
+- **Framework Preset**: Vite
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Install Command**: `npm install`
+- **Environment Variables** (Settings → Environment Variables):
+  - Required: `FRED_API_KEY` (fred.stlouisfed.org → API Keys)
+  - Optional free-tier: `FINRA_API_CLIENT_ID`, `FINRA_API_SECRET`, `ALPACA_API_KEY`, `ALPACA_API_SECRET`, `NASDAQ_DATA_LINK_API_KEY`, `POLYGON_API_KEY`
+  - NOT needed on Vercel: `DATABASE_URL`, `REDIS_URL` (local Docker only)
+- **Serverless Runtime**: all `web/api/*.js` use `runtime: "nodejs"` (not `nodejs20`)
+- **Auto-redeploy**: push to `master` triggers build; env var changes require manual redeploy
+
 Every US/EU/EM volatility run now also prints **hold-horizon return curves**
 (one line per item over hold days 1..21, solid = HF net, dashed = retail net,
 legend + zero line; PNG `*_return_curves.png` next to the heatmaps) plus a
