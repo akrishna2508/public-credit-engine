@@ -2014,3 +2014,66 @@ open_items after every run."
 #### Docs touched
 - CONTEXT.md: §3 web/src pages comment (region dropdown on the map page).
 - open_items.md: §6 session log entry.
+
+### Session 32 — "add Maldives and all other countries" (2026-08-18)
+
+#### What was instructed
+1. "add Maldives" (it had a heat value but no polygon on the map).
+2. "and add all other countries to the atlas" (regions with no projected
+   returns / grey areas on the map).
+
+#### What was followed
+- Instr. 1 → FOLLOWED. A real Natural Earth 50m geometry for the Maldives
+  atoll chain (2 polys, 467 vertices, bbox 73.38-73.53E / 3.23-4.25N) was
+  appended to the vendored basemap as feature 217 (`properties.name:
+  "Maldives"`, matching `COUNTRIES.MV.name`); the other 216 features are
+  untouched. Maldives is now drawn and heat-coloured; the map note drops
+  it from the unmatched list.
+- Instr. 2 → FOLLOWED (data-gated). A full sweep found every remaining
+  sovereign gap and classified it by the iron rule (real live series or
+  honest UNAVAILABLE — never imputed). NEW live legs, every cross
+  live-verified on the atlas's own 2y fetch:
+  - LS Lesotho — `USDLSL=X` n=517 (never probed before) → Africa 48,
+    credit emea.
+  - AG/DM/GD/LC/VC — the East Caribbean dollar (`USDXCD=X` n=517) is the
+    literal currency of these five sovereigns; union-currency treatment
+    like the CFA countries → LatAm 31, fx-only (no ICE index covers them).
+  - CU Cuba — `USDCUP=X` n=517 → LatAm, fx-only.
+  - KI Kiribati (`fxDirect("AUD")`) and NU Niue (`fxDirect("NZD")`) —
+    the anchor cross IS their currency (no extra fetch; same symbols as
+    AU/NZ) → Asia-Pacific 6.
+  - AD Andorra (EUR) and LI Liechtenstein (CHF, euro-pegged 1.20) →
+    Europe 24, fx-only.
+  - XK Kosovo (euroised) → Emerging Europe 19; NO basemap feature at this
+    resolution → table + drill-down only, the note says so.
+  - DR alias added ("Dominican Rep." feature was never matched) — now
+    drawn; the only remaining table-only market is Kosovo.
+- Instr. 2, honest exclusions (probed again this session, still dead or
+  1-obs, stay out): AO ER SL SS ZW (dead/single-obs), AM AZ GE MN TJ
+  (1-obs placeholders), BA SR SB WS TO VU SY (single-obs 2y charts), BT
+  (stale 2024), dollarised PW/FM/MH/TL (no cross — the USD has no quote),
+  KN (no basemap feature). Territories/dependencies stay out BY DESIGN —
+  the universe is countries (Greenland, W. Sahara, Palestine, N. Cyprus,
+  NC/PF, UK/US overseas territories): the map note's grey is "outside the
+  atlas", never zero.
+
+#### Verification
+- Probe: USDXCD=X n=517 age 0d; USDCUP=X n=517 age 0d; LS n=517 (all on
+  the 2y fetch the atlas uses).
+- Seed (after deleting cache/atlas/v2.json to force a fresh build): 168
+  countries, all scored, null-FX sweep clean (every OK leg has a value);
+  coverage {total 168, sovereignYield 38, equityEtf 35, credit 118,
+  fallenAngel 25}.
+- Build clean; Playwright on serve 8787: zero console/page errors;
+  map note "…166 of 167 markets are drawn on the basemap; Kosovo has no
+  matching map feature and appears in the table only."; dropdown group
+  "Emerging Asia" lists Maldives · -1.04%; country drill-downs render
+  for MV and AG (h1 "Maldives", "Antigua and Barbuda"); region rail:
+  Africa 48, Asia-Pacific 6, Europe 24, Emerging Europe 19 (incl. Kosovo),
+  Emerging Asia 7.
+- pytest untouched (no Python change).
+
+#### Docs touched
+- CONTEXT.md: §4 fourth-sweep bullet (universe 156 → 168, territory
+  boundary, exclusions).
+- open_items.md: §6 session log entry.

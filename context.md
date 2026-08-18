@@ -216,6 +216,26 @@ look-ahead).
   basemap feature — table + drill-down only, the note says so). Probed
   and excluded: BA/SR/SB/WS/TO (single obs), VU/SY (2y-range chart 1 obs
   — Sierra Leone class), BT (stale 2024).
+  **Fourth sweep (2026-08-18): "add Maldives and all other countries" —
+  universe 156 → 168.** Maldives is now DRAWN: a real Natural Earth 50m
+  geometry for the atoll chain was appended to the vendored basemap (the
+  first feature ever added; the other 216 features untouched). New live
+  legs, every cross live-verified on the atlas's own 2y fetch: LS (LSL
+  n=517 — Lesotho was never probed before), the East Caribbean dollar
+  (USDXCD=X live; XCD is the literal currency of AG/DM/GD/LC/VC — the
+  union-currency treatment, CFA-style), CU (USDCUP=X live), anchor-currency
+  members KI (AUD) and NU (NZD), AD (EUR) and LI (CHF — pegged 1.20 to the
+  euro), XK (euroised; NO basemap feature at this resolution — table-only,
+  the map note says so). DR alias added ("Dominican Rep." feature). The
+  map note is now fully honest: 166 of 167 markets drawn; Kosovo table-only.
+  Territories and dependencies stay out of the atlas by design — the
+  universe is countries: Greenland, W. Sahara, Palestine, N. Cyprus, New
+  Caledonia, Fr. Polynesia, UK/US overseas territories (the map note's
+  grey = outside the atlas, never zero). Still probed-and-excluded on data:
+  AO/ER/SL/SS/ZW (dead or single-obs), AM/AZ/GE/MN/TJ (1-obs placeholders),
+  BA/SR/SB/WS/TO/VU/SY (single-obs 2y charts), BT (stale 2024), dollarised
+  PW/FM/MH/TL (no cross exists — the USD has no quote), KN (no basemap
+  feature).
 - **CFTC COT (keyless)**: `fut_fin_txt_{year}.zip` per-year files -> net
   leveraged-money / dealer positioning z-scores for UST 2Y/5Y/10Y/BOND/
   ULTRA/SOFR-3M and BBG IG/HY credit futures (≥2y history gate; the IG/HY

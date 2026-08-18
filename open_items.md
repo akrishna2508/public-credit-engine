@@ -222,6 +222,24 @@ and each is surfaced in the payload or on the page rather than hidden.
   every other line until toggled off in the legend.
 
 ## 6. Session log (most recent first)
+- **"Add Maldives and all other countries"** (2026-08-18, session 32):
+  - Maldives is now DRAWN — a real Natural Earth 50m atoll-chain geometry
+    appended to the vendored basemap (feature 217; the other 216 features
+    untouched). Map note: "166 of 167 markets are drawn; Kosovo has no
+    matching map feature and appears in the table only."
+  - Universe 156 → 168, every new leg live-verified on the atlas's own
+    2y fetch: LS (LSL n=517), the East Caribbean dollar five
+    (AG/DM/GD/LC/VC — union-currency treatment, USDXCD=X n=517), CU
+    (USDCUP=X n=517), anchor-currency members KI (AUD) / NU (NZD), AD
+    (EUR), LI (CHF, euro-pegged), XK Kosovo (euroised, table-only — no
+    basemap feature). DR alias added ("Dominican Rep.").
+  - Still excluded on data (probed again): AO/ER/SL/SS/ZW, AM/AZ/GE/MN/TJ,
+    BA/SR/SB/WS/TO/VU/SY, BT (stale), dollarised PW/FM/MH/TL (no cross),
+    KN (no feature). Territories/dependencies stay out by design —
+    universe is countries (Greenland, W. Sahara, Palestine, N. Cyprus,
+    overseas territories: the map's grey = outside the atlas, never zero).
+  - Verified: seed clean (168 scored, zero null-FX), build clean,
+    Playwright zero errors, dropdown + drill-downs for MV/AG render.
 - **Region-heat country dropdown** (2026-08-18, session 31 — "add a drop
   down menu where under each region the countries part of it are displayed"):
   - Region heat card now leads with a native select: one optgroup per

@@ -1,6 +1,6 @@
 {
  "status": "OK",
- "generated": "2026-08-18T17:28:18.549Z",
+ "generated": "2026-08-18T17:50:54.173Z",
  "schema": "atlas.v2",
  "heatDefinition": "1-month total-return proxy in USD: the unweighted mean of the available legs — sovereign bond price proxy converted to USD, country equity ETF return, regional EM corporate credit carry, the fallen-angel ETF proxy, and, for markets with no free sovereign curve, the currency return against the dollar. Green means positive compensation over the last month, red negative.",
  "countries": {
@@ -82,24 +82,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 115.77,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.95,
-      "year": 2024,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 3.25,
-      "year": 2021,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 3.21,
-      "year": 2021,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -177,24 +169,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 64.13,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.07,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 2.7,
-      "year": 2017,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 2.18,
-      "year": 2017,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -282,24 +266,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 50.27,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.81,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 8.79,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 0.66,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -368,24 +344,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 81.86,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 5.02,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 45.33,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 30.76,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -476,14 +444,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 4.21,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 4.18,
-      "year": 2018,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -564,19 +528,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 71.2,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 5.14,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 14.31,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -648,19 +606,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 35.24,
-      "year": 2021,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.53,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 12.6,
-      "year": 2022,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -735,14 +687,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 219.88,
-      "year": 2024,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 46.02,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -826,14 +774,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": -0.07,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 6.88,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -899,24 +843,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 65.31,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 4.65,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 10.06,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 1.13,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -982,14 +918,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.87,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 15.25,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -1058,14 +990,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.49,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 12.85,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -1134,14 +1062,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 4.6,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 18.58,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -1210,14 +1134,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 4.04,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 12.51,
-      "year": 2021,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -1274,14 +1194,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": -0.19,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 6.91,
-      "year": 2022,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -1338,9 +1254,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.71,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -1397,14 +1311,10 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 107.28,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.26,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -1476,19 +1386,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 19.52,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 10.19,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 7.63,
-      "year": 2022,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -1554,14 +1458,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 254.95,
-      "year": 2016,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 21.06,
-      "year": 2017,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -1620,14 +1520,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.08,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 9.16,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -1683,24 +1579,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 97.87,
-      "year": 2020,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 4,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 12.14,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 6.66,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -1756,19 +1644,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.99,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 7.5,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 4.97,
-      "year": 2024,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -1821,24 +1703,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 71.46,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.41,
-      "year": 2024,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 4.25,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 1.18,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -1891,24 +1765,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 125.03,
-      "year": 2016,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.85,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 8.05,
-      "year": 2022,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 7.55,
-      "year": 2022,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -1964,19 +1830,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.06,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 8.48,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 7.88,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -2032,19 +1892,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.33,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 8.23,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 7.14,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -2100,14 +1954,382 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 28.64,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 13.01,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "AG": {
+   "name": "Antigua and Barbuda",
+   "iso": "AG",
+   "iso3": "ATG",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -0.44,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -0.44
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDXCD=X",
+     "currency": "XCD",
+     "quote": 2.700000047683716,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -0.44,
+     "ret_3m_pct": -0.44,
+     "ret_12m_pct": -0.44,
+     "note": "XCD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "status": "UNAVAILABLE"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "DM": {
+   "name": "Dominica",
+   "iso": "DM",
+   "iso3": "DMA",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -0.44,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -0.44
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDXCD=X",
+     "currency": "XCD",
+     "quote": 2.700000047683716,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -0.44,
+     "ret_3m_pct": -0.44,
+     "ret_12m_pct": -0.44,
+     "note": "XCD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "status": "UNAVAILABLE"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "GD": {
+   "name": "Grenada",
+   "iso": "GD",
+   "iso3": "GRD",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -0.44,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -0.44
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDXCD=X",
+     "currency": "XCD",
+     "quote": 2.700000047683716,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -0.44,
+     "ret_3m_pct": -0.44,
+     "ret_12m_pct": -0.44,
+     "note": "XCD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "status": "UNAVAILABLE"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "LC": {
+   "name": "Saint Lucia",
+   "iso": "LC",
+   "iso3": "LCA",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -0.44,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -0.44
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDXCD=X",
+     "currency": "XCD",
+     "quote": 2.700000047683716,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -0.44,
+     "ret_3m_pct": -0.44,
+     "ret_12m_pct": -0.44,
+     "note": "XCD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "status": "UNAVAILABLE"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "VC": {
+   "name": "St. Vincent and the Grenadines",
+   "iso": "VC",
+   "iso3": "VCT",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -0.44,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -0.44
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDXCD=X",
+     "currency": "XCD",
+     "quote": 2.700000047683716,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -0.44,
+     "ret_3m_pct": -0.44,
+     "ret_12m_pct": -0.44,
+     "note": "XCD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "status": "UNAVAILABLE"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "CU": {
+   "name": "Cuba",
+   "iso": "CU",
+   "iso3": "CUB",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -0.23,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -0.23
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDCUP=X",
+     "currency": "CUP",
+     "quote": 24,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -0.23,
+     "ret_3m_pct": -0.08,
+     "ret_12m_pct": -0.18,
+     "note": "CUP return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "status": "UNAVAILABLE"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -2204,9 +2426,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.17,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -2306,9 +2526,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.94,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -2408,19 +2626,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.53,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 4.07,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 1.94,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -2511,14 +2723,10 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 105.64,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.7,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -2618,9 +2826,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.26,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -2710,9 +2916,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.47,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -2802,9 +3006,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.53,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -2894,9 +3096,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.34,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -2986,9 +3186,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.21,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -3078,9 +3276,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.34,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -3180,9 +3376,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.48,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -3272,9 +3466,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 4,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -3364,9 +3556,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.37,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -3456,9 +3646,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.26,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -3555,14 +3743,10 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 130.74,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.88,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -3659,19 +3843,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 22.28,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.15,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 2.98,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -3758,14 +3936,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.06,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 5.88,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -3852,9 +4026,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.68,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -3944,9 +4116,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.89,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -4018,24 +4188,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 80.09,
-      "year": 2023,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 4.09,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 11.01,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 3.14,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -4114,9 +4276,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.13,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -4201,9 +4361,157 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.36,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "AD": {
+   "name": "Andorra",
+   "iso": "AD",
+   "iso3": "AND",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 0.857,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": 1.44
+    },
+    {
+     "leg": "fallen_angel",
+     "value": 0.273
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: fx, fallen_angel",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1582117080688477,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": 1.44,
+     "ret_3m_pct": -0.34,
+     "ret_12m_pct": -0.57,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "OK",
+     "ticker": "EM1A.DE",
+     "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
+     "quote_ccy": "EUR",
+     "last": 21.67300033569336,
+     "asOf": "2026-08-18",
+     "ret_1m_local_pct": -1.15,
+     "ret_1m_usd_pct": 0.273,
+     "ret_3m_usd_pct": 3.134,
+     "ret_12m_usd_pct": 7.435,
+     "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "status": "UNAVAILABLE"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "LI": {
+   "name": "Liechtenstein",
+   "iso": "LI",
+   "iso3": "LIE",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 0.007,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -0.26
+    },
+    {
+     "leg": "fallen_angel",
+     "value": 0.273
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: fx, fallen_angel",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDCHF=X",
+     "currency": "CHF",
+     "quote": 0.8121299743652344,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -0.26,
+     "ret_3m_pct": -3.16,
+     "ret_12m_pct": -1.31,
+     "note": "CHF return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "OK",
+     "ticker": "EM1A.DE",
+     "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
+     "quote_ccy": "EUR",
+     "last": 21.67300033569336,
+     "asOf": "2026-08-18",
+     "ret_1m_local_pct": -1.15,
+     "ret_1m_usd_pct": 0.273,
+     "ret_3m_usd_pct": 3.134,
+     "ret_12m_usd_pct": 7.435,
+     "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -4300,9 +4608,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.81,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -4389,19 +4695,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.46,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 4.67,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 3.06,
-      "year": 2018,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -4479,24 +4779,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 81.99,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 4.41,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 8.01,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 1.88,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -4565,14 +4857,10 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 26.62,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 34.88,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -4659,9 +4947,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.75,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -4748,9 +5034,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.79,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -4822,9 +5106,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 4.83,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -4896,9 +5178,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.69,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -4958,19 +5238,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 4.58,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 4.24,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 7.08,
-      "year": 2015,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -5036,19 +5310,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 7.19,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 8.52,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 1.25,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -5114,9 +5382,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.89,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -5185,19 +5451,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 58.72,
-      "year": 2020,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 12.73,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 19.7,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -5263,24 +5523,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 49.96,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.15,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 6.44,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 3.37,
-      "year": 2024,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -5346,14 +5598,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 4.07,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 5.42,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -5419,24 +5667,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 34.26,
-      "year": 2023,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 7.76,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 8.99,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": -0.12,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -5499,19 +5739,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 17.85,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 8.72,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 17.09,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -5577,19 +5811,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 33.24,
-      "year": 2019,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 6.6,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 10.95,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -5658,19 +5886,75 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.9,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 6.32,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 2.57,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "XK": {
+   "name": "Kosovo",
+   "iso": "XK",
+   "iso3": "XKX",
+   "region": "emeurope",
+   "regionLabel": "Emerging Europe",
+   "heat": 1.44,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": 1.44
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1582117080688477,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": 1.44,
+     "ret_3m_pct": -0.34,
+     "ret_12m_pct": -0.57,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "status": "UNAVAILABLE"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -5733,14 +6017,10 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 20.89,
-      "year": 2023,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 11.39,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -5812,19 +6092,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 8.8,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 23.13,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 6.86,
-      "year": 2024,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -5962,14 +6236,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": -6.6,
-      "year": 2024,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 14.84,
-      "year": 2017,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -6053,19 +6323,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.04,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 2.96,
-      "year": 2022,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 1.29,
-      "year": 2022,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -6137,9 +6401,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.08,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -6217,9 +6479,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.25,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -6297,14 +6557,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.27,
-      "year": 2024,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 4.75,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -6373,14 +6629,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.36,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 5.03,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -6449,14 +6701,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.97,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 5.5,
-      "year": 2021,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -6522,19 +6770,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 111.6,
-      "year": 2020,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": -0.14,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 5.16,
-      "year": 2015,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -6600,19 +6842,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 93.62,
-      "year": 2023,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.77,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 8.1,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -6678,19 +6914,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 27.44,
-      "year": 2018,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.3,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 12.29,
-      "year": 2015,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -6831,19 +7061,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 14.6,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 10.51,
-      "year": 2019,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 6.07,
-      "year": 2019,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -6899,14 +7123,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 42.17,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 18,
-      "year": 2016,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -6997,24 +7217,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 82.76,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.21,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 10.69,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 3.52,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -7080,19 +7292,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 23.01,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 14.01,
-      "year": 2023,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 9.28,
-      "year": 2023,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -7158,19 +7364,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 14.07,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 24.29,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": -3.44,
-      "year": 2024,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -7236,19 +7436,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 4.07,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 16.59,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 1.32,
-      "year": 2024,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -7314,9 +7508,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.7,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -7388,9 +7580,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 14.2,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -7462,9 +7652,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 5.15,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -7536,14 +7724,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.13,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 5.3,
-      "year": 2016,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -7612,14 +7796,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.46,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 5.3,
-      "year": 2016,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -7685,24 +7865,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 71.41,
-      "year": 2021,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 13.91,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 9.48,
-      "year": 2020,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": -11.32,
-      "year": 2020,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -7768,19 +7940,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.33,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 16.68,
-      "year": 2020,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 12.26,
-      "year": 2020,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -7843,24 +8009,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 54.43,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.58,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 19.85,
-      "year": 2018,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 10.04,
-      "year": 2018,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -7923,19 +8081,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 19.75,
-      "year": 2023,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.66,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 6.26,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -8001,24 +8153,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 57.13,
-      "year": 2019,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.67,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 9,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 4.31,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -8081,24 +8225,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 4.67,
-      "year": 2015,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.51,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 10.96,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 2.24,
-      "year": 2024,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -8161,14 +8297,10 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 31.45,
-      "year": 2019,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 13.23,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -8240,19 +8372,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.42,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 8,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 5.29,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -8318,9 +8444,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.84,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -8392,9 +8516,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 138.81,
-      "year": 2022,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -8466,19 +8588,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.55,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 17,
-      "year": 2017,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 12.33,
-      "year": 2017,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -8544,14 +8660,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.28,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 5.3,
-      "year": 2016,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -8617,19 +8729,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 64.18,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": -0.59,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 6.25,
-      "year": 2021,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -8698,14 +8804,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": -4.45,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 5.3,
-      "year": 2016,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -8774,14 +8876,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.1,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 6.25,
-      "year": 2021,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -8850,14 +8948,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.43,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 5.3,
-      "year": 2016,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -8926,14 +9020,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.87,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 5.3,
-      "year": 2016,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -9002,19 +9092,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 11.56,
-      "year": 2024,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 22,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 8.34,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -9080,9 +9164,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.55,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -9154,14 +9236,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 8.32,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 13.25,
-      "year": 2017,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -9230,9 +9308,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.4,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -9304,9 +9380,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.77,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -9378,9 +9452,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.4,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -9449,19 +9521,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 14.94,
-      "year": 2022,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.89,
-      "year": 2016,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 23.29,
-      "year": 2021,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -9530,9 +9596,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": -3.91,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -9604,9 +9668,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -9678,9 +9740,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.92,
-      "year": 2024,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -9752,14 +9812,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 34.13,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 12.37,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -9828,19 +9884,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 5.91,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 16.02,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 8.42,
-      "year": 2024,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -9903,9 +9953,7 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 12.66,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
       "status": "UNAVAILABLE"
@@ -9980,9 +10028,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": -0.31,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -10054,14 +10100,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.25,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 8.03,
-      "year": 2022,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -10130,19 +10172,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 8.05,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 60,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 48.65,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -10205,24 +10241,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 61.81,
-      "year": 2023,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 28.37,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 37.06,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 21.22,
-      "year": 2024,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -10285,24 +10313,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 71.77,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 4.37,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 17.53,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 5.02,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -10368,19 +10388,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.3,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 9.85,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 7.39,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -10446,19 +10460,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.34,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 7.75,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 6.44,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -10521,24 +10529,88 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 35.72,
-      "year": 2021,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.6,
-      "year": 2019,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 10.88,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 1.67,
-      "year": 2024,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "LS": {
+   "name": "Lesotho",
+   "iso": "LS",
+   "iso3": "LSO",
+   "region": "africa",
+   "regionLabel": "Africa",
+   "heat": -0.485,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -1.33
+    },
+    {
+     "leg": "credit",
+     "value": 0.36
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: fx, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDLSL=X",
+     "currency": "LSL",
+     "quote": 16.209999084472656,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -1.33,
+     "ret_3m_pct": 1.42,
+     "ret_12m_pct": 8.7,
+     "note": "LSL return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 147,
+     "oas_chg_1m_bps": -8,
+     "oas_z": -0.948,
+     "credit_1m_pct": 0.36,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "status": "UNAVAILABLE"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -10619,19 +10691,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.17,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 0.99,
-      "year": 2017,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 1.2,
-      "year": 2017,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -10719,19 +10785,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 47.81,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.12,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 4.19,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -10803,19 +10863,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 167.8,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.9,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 5.25,
-      "year": 2021,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -10968,19 +11022,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.44,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 5.18,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 2.73,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -11058,19 +11106,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 57.88,
-      "year": 2022,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.87,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 5.1,
-      "year": 2019,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -11141,24 +11183,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 51.99,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.84,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 4.76,
-      "year": 2017,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 3,
-      "year": 2017,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -11214,19 +11248,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": -1.38,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 4.56,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 4.4,
-      "year": 2024,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -11279,24 +11307,140 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 52.01,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 4.42,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 8.29,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 4.06,
-      "year": 2024,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "KI": {
+   "name": "Kiribati",
+   "iso": "KI",
+   "iso3": "KIR",
+   "region": "apac",
+   "regionLabel": "Asia-Pacific",
+   "heat": 1.39,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": 1.39
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "AUDUSD=X",
+     "currency": "AUD",
+     "quote": 0.7098239660263062,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": 1.39,
+     "ret_3m_pct": -0.7,
+     "ret_12m_pct": 9.01,
+     "note": "AUD return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "status": "UNAVAILABLE"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "NU": {
+   "name": "Niue",
+   "iso": "NU",
+   "iso3": "NIU",
+   "region": "apac",
+   "regionLabel": "Asia-Pacific",
+   "heat": 0.47,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": 0.47
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "NZDUSD=X",
+     "currency": "NZD",
+     "quote": 0.5880277156829834,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": 0.47,
+     "ret_3m_pct": 0.03,
+     "ret_12m_pct": 0.33,
+     "note": "NZD return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "status": "UNAVAILABLE"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -11368,14 +11512,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 0.06,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 4.35,
-      "year": 2024,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -11466,19 +11606,13 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 46.52,
-      "year": 2018,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.4,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 8.57,
-      "year": 2022,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -11553,14 +11687,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.91,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 8.5,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -11632,24 +11762,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 61.86,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": -0.13,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 3.94,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 2.41,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -11718,24 +11840,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 64.57,
-      "year": 2024,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.38,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 4.82,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 1.77,
-      "year": 2016,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -11807,19 +11921,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 1.66,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 7.1,
-      "year": 2019,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 2.77,
-      "year": 2019,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -11891,19 +11999,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.31,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 9.32,
-      "year": 2023,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 2.89,
-      "year": 2015,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -11966,14 +12068,10 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 50.34,
-      "year": 2023,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.35,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -12045,9 +12143,7 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 7.74,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -12119,14 +12215,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 8.83,
-      "year": 2019,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 14.83,
-      "year": 2020,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -12195,14 +12287,10 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": -0.3,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 5.5,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -12271,19 +12359,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 8.77,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 8.62,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": -2.13,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -12346,24 +12428,16 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 73.51,
-      "year": 2015,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": -4.76,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 11.24,
-      "year": 2019,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 2.15,
-      "year": 2019,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -12429,19 +12503,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 3.55,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 8.67,
-      "year": 2021,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 1.08,
-      "year": 2021,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -12494,14 +12562,10 @@
     },
     "structural": {
      "debtGdp": {
-      "value": 39.92,
-      "year": 2021,
-      "label": "Central government debt (% of GDP)"
+      "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 2.65,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
@@ -12563,19 +12627,13 @@
       "status": "UNAVAILABLE"
      },
      "inflation": {
-      "value": 4.01,
-      "year": 2025,
-      "label": "Consumer price inflation (% a year)"
+      "status": "UNAVAILABLE"
      },
      "lendingRate": {
-      "value": 11.63,
-      "year": 2025,
-      "label": "Domestic lending interest rate (%)"
+      "status": "UNAVAILABLE"
      },
      "riskPremium": {
-      "value": 8.13,
-      "year": 2025,
-      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+      "status": "UNAVAILABLE"
      },
      "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
     }
@@ -12646,18 +12704,18 @@
   },
   "latam": {
    "label": "Latin America",
-   "heat": -0.335,
-   "countries": 25
+   "heat": -0.348,
+   "countries": 31
   },
   "europe": {
    "label": "Europe",
-   "heat": 1.657,
-   "countries": 22
+   "heat": 1.555,
+   "countries": 24
   },
   "emeurope": {
    "label": "Emerging Europe",
-   "heat": 0.516,
-   "countries": 18
+   "heat": 0.565,
+   "countries": 19
   },
   "centralasia": {
    "label": "Central Asia",
@@ -12671,8 +12729,8 @@
   },
   "africa": {
    "label": "Africa",
-   "heat": -0.205,
-   "countries": 47
+   "heat": -0.21,
+   "countries": 48
   },
   "asia": {
    "label": "Developed Asia",
@@ -12681,8 +12739,8 @@
   },
   "apac": {
    "label": "Asia-Pacific",
-   "heat": 1.891,
-   "countries": 4
+   "heat": 1.571,
+   "countries": 6
   },
   "emasia": {
    "label": "Emerging Asia",
@@ -12731,12 +12789,12 @@
   }
  },
  "coverage": {
-  "total": 156,
-  "scored": 156,
+  "total": 168,
+  "scored": 168,
   "withSovereignYield": 38,
   "withEquityEtf": 35,
-  "withCreditLeg": 117,
-  "withFallenAngelEtf": 23
+  "withCreditLeg": 118,
+  "withFallenAngelEtf": 25
  },
  "sources": [
   "FRED — OECD long-term (10Y) government bond yields, monthly",

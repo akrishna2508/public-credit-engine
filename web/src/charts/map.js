@@ -60,6 +60,9 @@ const NAME_ALIASES = {
   "Central African Republic": ["Central African Rep."],
   "Equatorial Guinea": ["Eq. Guinea"],
   Eswatini: ["Swaziland"],
+  "Antigua and Barbuda": ["Antigua and Barb."],
+  "St. Vincent and the Grenadines": ["St. Vin. and Gren."],
+  "Dominican Republic": ["Dominican Rep."],
   // Natural Earth at this resolution carries no Taiwan polygon at all, so it
   // stays table-only however it is named — the coverage note says so
   "Euro Area": [],

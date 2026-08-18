@@ -79,6 +79,16 @@ export const COUNTRIES = {
   BZ: { name: "Belize", iso3: "BLZ", region: "latam", yield: null, etf: null, fx: fxOf("BZD"), credit: null },
   GY: { name: "Guyana", iso3: "GUY", region: "latam", yield: null, etf: null, fx: fxOf("GYD"), credit: null },
   HT: { name: "Haiti", iso3: "HTI", region: "latam", yield: null, etf: null, fx: fxOf("HTG"), credit: null },
+  // 2026-08-18 final sweep: the East Caribbean dollar (XCD) prints a real
+  // daily cross (n=517) and is the literal currency of five sovereigns —
+  // same union-currency treatment as the CFA countries. Cuba's CUP cross is
+  // live too. None of these are in an ICE BofA regional index — fx-only.
+  AG: { name: "Antigua and Barbuda", iso3: "ATG", region: "latam", yield: null, etf: null, fx: fxOf("XCD"), credit: null },
+  DM: { name: "Dominica", iso3: "DMA", region: "latam", yield: null, etf: null, fx: fxOf("XCD"), credit: null },
+  GD: { name: "Grenada", iso3: "GRD", region: "latam", yield: null, etf: null, fx: fxOf("XCD"), credit: null },
+  LC: { name: "Saint Lucia", iso3: "LCA", region: "latam", yield: null, etf: null, fx: fxOf("XCD"), credit: null },
+  VC: { name: "St. Vincent and the Grenadines", iso3: "VCT", region: "latam", yield: null, etf: null, fx: fxOf("XCD"), credit: null },
+  CU: { name: "Cuba", iso3: "CUB", region: "latam", yield: null, etf: null, fx: fxOf("CUP"), credit: null },
 
   /* ---------------- Europe ---------------- */
   DE: { name: "Germany", iso3: "DEU", region: "europe", yield: "IRLTLT01DEM156N", etf: "EWG", fx: fxDirect("EUR"), credit: null },
@@ -109,6 +119,13 @@ export const COUNTRIES = {
   // regional credit leg (2026-08-18, RUB-cross-style live verification).
   CY: { name: "Cyprus", iso3: "CYP", region: "europe", yield: null, etf: null, fx: fxDirect("EUR"), credit: "emea" },
   MT: { name: "Malta", iso3: "MLT", region: "europe", yield: null, etf: null, fx: fxDirect("EUR"), credit: "emea" },
+  // Andorra (euro) and Liechtenstein (Swiss franc — pegged to the euro at
+  // 1.20:1 since 2011) are WB members with real crosses; developed-market
+  // treatment, fx-only. Territories and dependencies (Greenland, New
+  // Caledonia, the UK/US overseas territories, W. Sahara, Palestine, N.
+  // Cyprus) stay out of the atlas by design — the universe is countries.
+  AD: { name: "Andorra", iso3: "AND", region: "europe", yield: null, etf: null, fx: fxDirect("EUR"), credit: null },
+  LI: { name: "Liechtenstein", iso3: "LIE", region: "europe", yield: null, etf: null, fx: fxOf("CHF"), credit: null },
 
   /* ---------------- Emerging Europe ---------------- */
   PL: { name: "Poland", iso3: "POL", region: "emeurope", yield: "IRLTLT01PLM156N", etf: "EPOL", fx: fxOf("PLN"), credit: "emea" },
@@ -141,6 +158,9 @@ export const COUNTRIES = {
   // Montenegro is euroised — no local currency cross, the euro IS the
   // currency — and its corporates sit in the EMEA index.
   ME: { name: "Montenegro", iso3: "MNE", region: "emeurope", yield: null, etf: null, fx: fxDirect("EUR"), credit: "emea" },
+  // Kosovo is euroised and has no basemap feature at this resolution —
+  // table + drill-down only, the map note says so.
+  XK: { name: "Kosovo", iso3: "XKX", region: "emeurope", yield: null, etf: null, fx: fxDirect("EUR"), credit: null },
 
   /* ---------------- Central Asia ---------------- */
   // Kazakhstan moved here from Emerging Europe (2026-08-18): it IS Central
@@ -231,6 +251,8 @@ export const COUNTRIES = {
   SC: { name: "Seychelles", iso3: "SYC", region: "africa", yield: null, etf: null, fx: fxOf("SCR"), credit: "emea" },
   CV: { name: "Cape Verde", iso3: "CPV", region: "africa", yield: null, etf: null, fx: fxOf("CVE"), credit: "emea" },
   SZ: { name: "Eswatini", iso3: "SWZ", region: "africa", yield: null, etf: null, fx: fxOf("SZL"), credit: "emea" },
+  // Lesotho (2026-08-18): the LSL cross prints a real daily series (n=517).
+  LS: { name: "Lesotho", iso3: "LSO", region: "africa", yield: null, etf: null, fx: fxOf("LSL"), credit: "emea" },
 
   /* ---------------- Developed Asia / Pacific ---------------- */
   JP: { name: "Japan", iso3: "JPN", region: "asia", yield: "IRLTLT01JPM156N", etf: "EWJ", fx: fxOf("JPY"), credit: null },
@@ -246,6 +268,10 @@ export const COUNTRIES = {
   // Sierra Leone class), BTN (stale 2024).
   FJ: { name: "Fiji", iso3: "FJI", region: "apac", yield: null, etf: null, fx: fxOf("FJD"), credit: null },
   PG: { name: "Papua New Guinea", iso3: "PNG", region: "apac", yield: null, etf: null, fx: fxOf("PGK"), credit: null },
+  // Kiribati and Niue use the Australian and New Zealand dollars as their
+  // own currencies — the anchor crosses are their literal currency return.
+  KI: { name: "Kiribati", iso3: "KIR", region: "apac", yield: null, etf: null, fx: fxDirect("AUD"), credit: null },
+  NU: { name: "Niue", iso3: "NIU", region: "apac", yield: null, etf: null, fx: fxDirect("NZD"), credit: null },
 
   /* ---------------- Emerging Asia ---------------- */
   CN: { name: "China", iso3: "CHN", region: "emasia", yield: null, etf: "MCHI", fx: fxOf("CNY"), credit: "asia" },
