@@ -23,3 +23,8 @@ irf_contagion_matrix_*.json
 # Keep committed data files under data/
 !data/dealer_markup.json
 !data/expected_loss_by_grade.json
+
+# Never tracked: the archived notebook carries the leaked-key literal and the
+# Python-side series cache is regenerated every run (2026-08-18)
+notebooks/
+data/cache/
