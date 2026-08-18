@@ -1859,3 +1859,16 @@ open_items after every run."
   bundle), §4 (yfinance bullet — atlas fallen-angel leg + universe
   expansion), §9 (new entry 19 — basemap Taiwan/HK correction).
 - open_items.md: §6 session log entry added.
+
+#### Incident note (2026-08-18, appended to session 28)
+- `git add -A` on the deploy sweep swept in `notebooks/Credit_engine.ipynb`
+  (contains the full leaked FRED key literal `ccb67ba5...`) and
+  `data/cache/` (288 regenerable series-cache files) — both deliberately
+  excluded from the repo per CONTEXT §5.
+- Corrected in two follow-up commits: `fad1e98` removes both paths
+  (`git rm --cached`), `9f0...`/gitignore commit adds `notebooks/` and
+  `data/cache/` to `.gitignore` so `git add -A` can never sweep them again.
+- The leaked literal exists in the push history of `06ee2c5` (and the repo
+  never rewrites history), but the key itself was replaced 2026-08-12
+  (CONTEXT §5) — the literal is dead. Verified post-removal: `git ls-files`
+  scan finds zero `ccb67ba5` matches among tracked files.
