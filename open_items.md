@@ -222,6 +222,25 @@ and each is surfaced in the payload or on the page rather than hidden.
   every other line until toggled off in the legend.
 
 ## 6. Session log (most recent first)
+- **Africa + Central Asia coverage sweep** (2026-08-18, session 29 —
+  "add even more countries … focus on Africa and Central Asia"):
+  - Universe 99 → 133: +32 African markets (DZ LY SD MR ML BF NE BJ TG GW
+    GM GN LR CM GA CG CD TD CF GQ BI RW SO DJ KM MG MW MZ SC CV SZ; CFA
+    countries share the XOF/XAF union-peg crosses), +2 Central Asian (UZ,
+    TM, AF), and KZ re-homed into a new **centralasia** region (Emerging
+    Europe no longer mislabels it). Every FX cross live-verified n=260.
+  - Honest exclusions recorded in-code: AOA/ERN/STN/AMD/AZN/GEL/MNT/TJS
+    (single placeholder quote), KG/SS/ZW (dead), SL (2y-range chart the
+    atlas uses returns one obs), NGE/EGPT (delisted).
+  - Map aliases for the basemap's pre-2019 forms (Congo / Dem. Rep.
+    Congo / Central African Rep. / Eq. Guinea / Swaziland) — all 133
+    country names verified against basemap features.
+  - Gotcha re-documented: seed serves the STALE atlas doc while the
+    previous build is still inside the DERIVED TTL — delete
+    `web/public/data/cache/atlas/v2.json` to force a fresh build.
+  - Verified: live /api/atlas 133/133 scored, null-return sweep clean,
+    Playwright country pages (CD/UZ/SO) render, pytest 157 passed.
+
 - **Map coverage expansion + fallen-angel ETF leg** (2026-08-18, session 28 —
   "take a look at the countries not yet covered and add that … add things
   like fallen angels as well where you can use ETFs as proxies"):

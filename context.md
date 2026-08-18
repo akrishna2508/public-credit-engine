@@ -120,7 +120,7 @@ Public Credit/
                           #   merge refresh, stale fallback on rate-limit/error.
     public/data/          # world.json (vendored echarts@4.9.0 basemap — China
                           #   split into China/Hong Kong/Taiwan, see §9.19) +
-                          #   bundle.json (99-market seed snapshot — offline fallback)
+                          #   bundle.json (133-market seed snapshot — offline fallback)
   data/                    # dealer_markup.json, expected_loss_by_grade.json,
                            # cache/, iv_history.json, source_probe.json, atlas.json,
                            # backtest_legs.json (walk-forward sign fits, board vote gate)
@@ -193,6 +193,15 @@ look-ahead).
   crosses), PA/EC/SV (dollarised — credit leg only), IS (ISK only),
   KW/OM/BH/JO (pegged FX + EMEA credit); every new leg live-verified. RSX
   (Russia) excluded — dead tape on yfinance (1 obs).
+  **Africa + Central Asia pass (2026-08-18, second sweep)**: universe
+  99 → 133. +32 African markets (DZ/LY/SD/MR/ML/BF/NE/BJ/TG/GW/GM/GN/LR/CM/
+  GA/CG/CD/TD/CF/GQ/BI/RW/SO/DJ/KM/MG/MW/MZ/SC/CV/SZ — every FX cross
+  live-verified n=260; CFA countries share the XOF/XAF union-peg crosses).
+  New **centralasia** region (KZ moved from Emerging Europe, + UZ/TM/AF).
+  Honest exclusions: AOA/ERN/STN/AMD/AZN/GEL/MNT/TJS (single placeholder
+  quote, no history), KG/SS/ZW/SL (dead or single-obs chart), NGE/EGPT
+  (delisted). Map aliases added for the basemap's pre-2019 forms (Congo,
+  Dem. Rep. Congo, Central African Rep., Eq. Guinea, Swaziland).
 - **CFTC COT (keyless)**: `fut_fin_txt_{year}.zip` per-year files -> net
   leveraged-money / dealer positioning z-scores for UST 2Y/5Y/10Y/BOND/
   ULTRA/SOFR-3M and BBG IG/HY credit futures (≥2y history gate; the IG/HY

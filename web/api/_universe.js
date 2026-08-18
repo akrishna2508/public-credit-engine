@@ -2,7 +2,8 @@
  * The country universe, and for each country the free live sources that
  * genuinely cover it. Nothing here is a placeholder: a country appears with a
  * leg only when a real, free, keyless-or-FRED-keyed series was verified to
- * return data for it (probed 2026-08-13).
+ * return data for it (probed 2026-08-13, 2026-08-18 — the 2026-08-18 pass
+ * added 34 Africa / Central Asia markets, every FX cross verified live).
  *
  *   yield   FRED series id for a 10-year government bond yield, monthly.
  *           Most follow the OECD MEI pattern IRLTLT01<ISO2>M156N; India and
@@ -26,6 +27,7 @@ export const REGION_LABELS = {
   latam: "Latin America",
   europe: "Europe",
   emeurope: "Emerging Europe",
+  centralasia: "Central Asia",
   mideast: "Middle East",
   africa: "Africa",
   asia: "Developed Asia",
@@ -106,10 +108,20 @@ export const COUNTRIES = {
   RO: { name: "Romania", iso3: "ROU", region: "emeurope", yield: null, etf: null, fx: fxOf("RON"), credit: "emea" },
   RS: { name: "Serbia", iso3: "SRB", region: "emeurope", yield: null, etf: null, fx: fxOf("RSD"), credit: "emea" },
   UA: { name: "Ukraine", iso3: "UKR", region: "emeurope", yield: null, etf: null, fx: fxOf("UAH"), credit: "emea" },
-  KZ: { name: "Kazakhstan", iso3: "KAZ", region: "emeurope", yield: null, etf: null, fx: fxOf("KZT"), credit: "emea" },
   AL: { name: "Albania", iso3: "ALB", region: "emeurope", yield: null, etf: null, fx: fxOf("ALL"), credit: "emea" },
   MK: { name: "North Macedonia", iso3: "MKD", region: "emeurope", yield: null, etf: null, fx: fxOf("MKD"), credit: "emea" },
   MD: { name: "Moldova", iso3: "MDA", region: "emeurope", yield: null, etf: null, fx: fxOf("MDL"), credit: "emea" },
+
+  /* ---------------- Central Asia ---------------- */
+  // Kazakhstan moved here from Emerging Europe (2026-08-18): it IS Central
+  // Asia, and the region now has a group of its own. No free 10Y series and
+  // no country ETF exist for any of these markets — currency + the regional
+  // EMEA corporate credit index are the real signals.
+  KZ: { name: "Kazakhstan", iso3: "KAZ", region: "centralasia", yield: null, etf: null, fx: fxOf("KZT"), credit: "emea" },
+  // 2026-08-18 additions — every cross below verified live on yfinance.
+  UZ: { name: "Uzbekistan", iso3: "UZB", region: "centralasia", yield: null, etf: null, fx: fxOf("UZS"), credit: "emea" },
+  TM: { name: "Turkmenistan", iso3: "TKM", region: "centralasia", yield: null, etf: null, fx: fxOf("TMT"), credit: "emea" },
+  AF: { name: "Afghanistan", iso3: "AFG", region: "centralasia", yield: null, etf: null, fx: fxOf("AFN"), credit: "emea" },
 
   /* ---------------- Middle East ---------------- */
   IL: { name: "Israel", iso3: "ISR", region: "mideast", yield: "IRLTLT01ILM156N", etf: null, fx: fxOf("ILS"), credit: "emea" },
@@ -144,6 +156,44 @@ export const COUNTRIES = {
   MU: { name: "Mauritius", iso3: "MUS", region: "africa", yield: null, etf: null, fx: fxOf("MUR"), credit: "emea" },
   NA: { name: "Namibia", iso3: "NAM", region: "africa", yield: null, etf: null, fx: fxOf("NAD"), credit: "emea" },
   ET: { name: "Ethiopia", iso3: "ETH", region: "africa", yield: null, etf: null, fx: fxOf("ETB"), credit: "emea" },
+  // 2026-08-18 additions — Africa was the map's thinnest region; every FX
+  // cross below was verified live on yfinance (n=260, current as of
+  // 2026-08-18) before inclusion. CFA countries share the union-peg crosses
+  // (XOF / XAF) — one currency, one real price. Probed and honestly EXCLUDED:
+  // AOA/ERN/STN (single placeholder quote, no history), SS (dead), ZW (dead),
+  // SL (USDSLL=X exists but the 2y-range chart the atlas uses returns a
+  // single observation — no usable return series, so no FX leg).
+  DZ: { name: "Algeria", iso3: "DZA", region: "africa", yield: null, etf: null, fx: fxOf("DZD"), credit: "emea" },
+  LY: { name: "Libya", iso3: "LBY", region: "africa", yield: null, etf: null, fx: fxOf("LYD"), credit: "emea" },
+  SD: { name: "Sudan", iso3: "SDN", region: "africa", yield: null, etf: null, fx: fxOf("SDG"), credit: "emea" },
+  MR: { name: "Mauritania", iso3: "MRT", region: "africa", yield: null, etf: null, fx: fxOf("MRU"), credit: "emea" },
+  ML: { name: "Mali", iso3: "MLI", region: "africa", yield: null, etf: null, fx: fxOf("XOF"), credit: "emea" },
+  BF: { name: "Burkina Faso", iso3: "BFA", region: "africa", yield: null, etf: null, fx: fxOf("XOF"), credit: "emea" },
+  NE: { name: "Niger", iso3: "NER", region: "africa", yield: null, etf: null, fx: fxOf("XOF"), credit: "emea" },
+  BJ: { name: "Benin", iso3: "BEN", region: "africa", yield: null, etf: null, fx: fxOf("XOF"), credit: "emea" },
+  TG: { name: "Togo", iso3: "TGO", region: "africa", yield: null, etf: null, fx: fxOf("XOF"), credit: "emea" },
+  GW: { name: "Guinea-Bissau", iso3: "GNB", region: "africa", yield: null, etf: null, fx: fxOf("XOF"), credit: "emea" },
+  GM: { name: "Gambia", iso3: "GMB", region: "africa", yield: null, etf: null, fx: fxOf("GMD"), credit: "emea" },
+  GN: { name: "Guinea", iso3: "GIN", region: "africa", yield: null, etf: null, fx: fxOf("GNF"), credit: "emea" },
+  LR: { name: "Liberia", iso3: "LBR", region: "africa", yield: null, etf: null, fx: fxOf("LRD"), credit: "emea" },
+  CM: { name: "Cameroon", iso3: "CMR", region: "africa", yield: null, etf: null, fx: fxOf("XAF"), credit: "emea" },
+  GA: { name: "Gabon", iso3: "GAB", region: "africa", yield: null, etf: null, fx: fxOf("XAF"), credit: "emea" },
+  CG: { name: "Republic of the Congo", iso3: "COG", region: "africa", yield: null, etf: null, fx: fxOf("XAF"), credit: "emea" },
+  CD: { name: "DR Congo", iso3: "COD", region: "africa", yield: null, etf: null, fx: fxOf("CDF"), credit: "emea" },
+  TD: { name: "Chad", iso3: "TCD", region: "africa", yield: null, etf: null, fx: fxOf("XAF"), credit: "emea" },
+  CF: { name: "Central African Republic", iso3: "CAF", region: "africa", yield: null, etf: null, fx: fxOf("XAF"), credit: "emea" },
+  GQ: { name: "Equatorial Guinea", iso3: "GNQ", region: "africa", yield: null, etf: null, fx: fxOf("XAF"), credit: "emea" },
+  BI: { name: "Burundi", iso3: "BDI", region: "africa", yield: null, etf: null, fx: fxOf("BIF"), credit: "emea" },
+  RW: { name: "Rwanda", iso3: "RWA", region: "africa", yield: null, etf: null, fx: fxOf("RWF"), credit: "emea" },
+  SO: { name: "Somalia", iso3: "SOM", region: "africa", yield: null, etf: null, fx: fxOf("SOS"), credit: "emea" },
+  DJ: { name: "Djibouti", iso3: "DJI", region: "africa", yield: null, etf: null, fx: fxOf("DJF"), credit: "emea" },
+  KM: { name: "Comoros", iso3: "COM", region: "africa", yield: null, etf: null, fx: fxOf("KMF"), credit: "emea" },
+  MG: { name: "Madagascar", iso3: "MDG", region: "africa", yield: null, etf: null, fx: fxOf("MGA"), credit: "emea" },
+  MW: { name: "Malawi", iso3: "MWI", region: "africa", yield: null, etf: null, fx: fxOf("MWK"), credit: "emea" },
+  MZ: { name: "Mozambique", iso3: "MOZ", region: "africa", yield: null, etf: null, fx: fxOf("MZN"), credit: "emea" },
+  SC: { name: "Seychelles", iso3: "SYC", region: "africa", yield: null, etf: null, fx: fxOf("SCR"), credit: "emea" },
+  CV: { name: "Cape Verde", iso3: "CPV", region: "africa", yield: null, etf: null, fx: fxOf("CVE"), credit: "emea" },
+  SZ: { name: "Eswatini", iso3: "SWZ", region: "africa", yield: null, etf: null, fx: fxOf("SZL"), credit: "emea" },
 
   /* ---------------- Developed Asia / Pacific ---------------- */
   JP: { name: "Japan", iso3: "JPN", region: "asia", yield: "IRLTLT01JPM156N", etf: "EWJ", fx: fxOf("JPY"), credit: null },

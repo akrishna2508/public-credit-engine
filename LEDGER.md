@@ -1872,3 +1872,60 @@ open_items after every run."
   never rewrites history), but the key itself was replaced 2026-08-12
   (CONTEXT §5) — the literal is dead. Verified post-removal: `git ls-files`
   scan finds zero `ccb67ba5` matches among tracked files.
+
+### Session 29 — Africa + Central Asia coverage sweep (2026-08-18)
+
+#### What was instructed
+1. "Now attempt to add even more countries, of course focus on Africa and
+   Central Asia as many countries from there have been neglected."
+
+#### What was followed
+- Instr. 1 → FOLLOWED. Universe 133 → 133... no: 99 → 133 markets
+  (+32 African, +2 Central Asian, Kazakhstan re-homed).
+  - **Africa +32**: DZ LY SD MR ML BF NE BJ TG GW GM GN LR CM GA CG CD TD CF
+    GQ BI RW SO DJ KM MG MW MZ SC CV SZ (+ existing 16 → 47). Every FX
+    cross verified live on yfinance 2026-08-18 (n=260, current date);
+    CFA countries share the union-peg crosses (XOF: ML/BF/NE/BJ/TG/GW,
+    XAF: CM/GA/CG/TD/CF/GQ) — one currency, one real price, deduped by the
+    atlas FX fetch.
+  - **Central Asia**: new `centralasia` region (REGION_LABELS "Central
+    Asia"); KZ moved from Emerging Europe (it IS Central Asia — honest
+    correction); + UZ (UZS), TM (TMT), AF (AFN). All credit legs map to
+    the ICE BofA EMEA corporate OAS index.
+  - **Honest exclusions** (probed, all verified): AOA/ERN/STN/AMD/AZN/
+    GEL/MNT/TJS — single placeholder quote, no history (same class as
+    RSX); KG/SS/ZW — dead tape (0 obs); SL — USDSLL=X has full history on
+    period=max but the 2y-range chart the atlas uses returns ONE obs, so
+    no usable return series; NGE/EGPT ETFs — delisted (existing). Every
+    exclusion recorded in the _universe.js comment.
+  - **Map aliases**: NAME_ALIASES += Republic of the Congo→Congo,
+    DR Congo→Dem. Rep. Congo, Central African Republic→Central African
+    Rep., Equatorial Guinea→Eq. Guinea, Eswatini→Swaziland (basemap keeps
+    pre-2019/abbreviated forms). Verified all 133 country names match
+    basemap features.
+- No new calibrated constants (→ no §6 changes). No Python changes.
+
+#### Verification
+- Live yfinance probes 2026-08-18 (two passes; the first probe run had a
+  tz-naive/tz-aware bug in the age check — fixed and re-run).
+- `npm run seed` ×3: the first two runs silently served the STALE atlas
+  doc — previous session's v2.json (updated 15:59Z) was still inside the
+  DERIVED TTL, so `cachedJson` returned it without rebuilding and the
+  bundle got 99. Fixed by deleting cache/atlas/v2.json → the build is
+  then awaited and both v2.json + bundle.json land at 133 (stamp
+  16:40:06Z). Documented the delete-to-force-rebuild path.
+- Local API (`npm run serve` 8787, rebuilt dist): /api/atlas = 133
+  countries, 133 scored, regions roll up (africa 47, centralasia 4,
+  emeurope 15); spot-checked CD/DZ/UZ/TM/AF/KZ/SO/BI — all fx + credit
+  legs live, heat values real (SO −2.66 on a −5.67% SOS 1M move).
+- Null-return sweep: exactly ONE country had an OK-status FX instrument
+  with null returns (SL) → excluded as unusable by the 2y fetch.
+- Playwright smoke: #/country/CD (DR Congo), #/country/UZ (Uzbekistan),
+  #/country/SO (Somalia) render h1 + FX row + EMEA credit card; zero
+  console/page errors; map note renders.
+- `pytest tests/ -q` → 157 passed.
+
+#### Docs touched
+- CONTEXT.md: §3 (seed snapshot 99 → 133), §4 (universe + exclusions +
+  centralasia region), LEDGER (this entry).
+- open_items.md: §6 session log entry.

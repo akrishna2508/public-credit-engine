@@ -54,6 +54,12 @@ const NAME_ALIASES = {
   "North Macedonia": ["Macedonia"],
   "Ivory Coast": ["Côte d'Ivoire", "Cote d'Ivoire"],
   Laos: ["Lao PDR", "Lao People's Democratic Republic"],
+  // the basemap keeps pre-2019 or abbreviated forms for these five
+  "Republic of the Congo": ["Congo"],
+  "DR Congo": ["Dem. Rep. Congo"],
+  "Central African Republic": ["Central African Rep."],
+  "Equatorial Guinea": ["Eq. Guinea"],
+  Eswatini: ["Swaziland"],
   // Natural Earth at this resolution carries no Taiwan polygon at all, so it
   // stays table-only however it is named — the coverage note says so
   "Euro Area": [],
