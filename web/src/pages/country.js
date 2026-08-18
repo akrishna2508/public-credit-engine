@@ -24,6 +24,7 @@ const LEG_LABEL = {
   equity: "Country equity ETF",
   credit: "Regional EM corporate credit",
   fx: "Currency vs USD",
+  fallen_angel: "Fallen-angel ETF proxy",
 };
 
 /** an UNAVAILABLE leg is shown with its reason, never hidden */
@@ -50,6 +51,7 @@ export async function render(root, { iso }) {
   const e = c.instruments?.equity_etf || {};
   const fx = c.instruments?.fx || {};
   const cr = c.instruments?.credit || {};
+  const fa = c.instruments?.fallen_angel || {};
   const sp = c.instruments?.sovereign_spread || {};
   const st = c.instruments?.structural || {};
 
@@ -162,6 +164,23 @@ export async function render(root, { iso }) {
         </tbody></table>
         <div class="pc-note">${esc(cr.note || "")}</div>`,
         cr.why
+      )}
+    </div>
+
+    <div class="col-6">
+      ${legCard(
+        "Fallen angels (ETF proxy)",
+        fa.status === "OK",
+        `<table class="pc-table"><tbody>
+          <tr><td>Instrument</td><td class="num"><b>${esc(fa.label || "")}</b></td></tr>
+          <tr><td>Quote currency</td><td class="num">${esc(fa.quote_ccy || "—")}</td></tr>
+          <tr><td>1M return — local</td><td class="num">${colored(fa.ret_1m_local_pct)}</td></tr>
+          <tr><td>1M return — USD</td><td class="num">${colored(fa.ret_1m_usd_pct)}</td></tr>
+          <tr><td>3M / 12M — USD</td><td class="num">${colored(fa.ret_3m_usd_pct)} / ${colored(fa.ret_12m_usd_pct)}</td></tr>
+          <tr><td>As of</td><td class="num" style="color:var(--text-faint)">${esc(fa.asOf || "—")}</td></tr>
+        </tbody></table>
+        <div class="pc-note">${esc(fa.note || "")}</div>`,
+        fa.why
       )}
     </div>
 

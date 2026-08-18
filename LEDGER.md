@@ -1795,3 +1795,67 @@ open_items after every run."
 - open_items.md: §0 FRED key marked DONE
 - LEDGER.md: this entry
 
+
+### Session 28 — map coverage expansion + fallen-angel ETF leg (2026-08-18)
+
+#### What was instructed
+1. "Now you must take a look at the countries not yet covered and add that."
+2. "Also add things like fallen angels as well where you can use ETFs as proxies."
+
+#### What was followed
+- Instr. 1 → FOLLOWED (web map layer). The deployed map runs on
+  `web/api/_universe.js` (85 markets) + `web/api/atlas.js`; the Python
+  `data/atlas.json` (15 markets) is FRED-yield-driven and cannot grow
+  beyond the ~40 OECD long-term series FRED publishes. Added 14 markets to
+  the universe, every leg live-verified 2026-08-18 on yfinance before
+  inclusion: HK (EWH + USDHKD=X + Asia credit), UY/DO/GT/HN/PY (FX crosses
+  + LatAm credit), PA/EC/SV (dollarised — credit leg only, no FX leg by
+  design), IS (ISK cross only — developed, no credit bucket), KW/OM/BH/JO
+  (pegged FX + EMEA credit). RSX (Russia) probed and EXCLUDED: dead tape on
+  yfinance (1 obs) — honest gate. Universe 85 → 99, coverage reported in
+  the API (`coverage.withFallenAngelEtf`).
+- Instr. 2 → FOLLOWED. New `fallen_angel` instrument + heat leg in the
+  atlas, one ETF per market the map can honestly proxy: ANGL (US, USD —
+  the same instrument engine/spreads.py uses), EM1A.DE (VanEck US Fallen
+  Angel UCITS A USD Acc, EUR-quoted on Xetra, converted to USD via
+  EURUSD=X) for the europe region, GFA.L (VanEck Global Fallen Angel UCITS,
+  GBp, converted via GBPUSD=X) for GB. EM countries report the leg
+  UNAVAILABLE — no fallen-angel EM ETF exists (EMHY is ordinary HY). All
+  three tickers live-verified on yfinance (2026-08-18): ANGL/FALN/EM1A.DE/
+  GFA.L/GFGB.L/USFA.PA probed; FALN kept in the probe record but ANGL
+  chosen as the project-convention US vehicle; FAHY.L (Invesco US HY FA
+  UCITS) verified but not used (duplicate coverage). New country-page card
+  "Fallen angels (ETF proxy)" + tooltip leg label in charts/map.js.
+- Cartographic correction discovered en route (→ CONTEXT §9.19): the
+  basemap's China feature still contained a 10-vertex Taiwan polygon (the
+  standalone Taiwan feature from 2026-08-18 rendered on top of it), an
+  empty degenerate polygon, and the Hong Kong landmass as two small
+  polygons (10/11) matched exactly to Natural Earth 50m "Hong Kong S.A.R."
+  bboxes. China trimmed to 11 mainland+island polys (remainder
+  byte-identical), Hong Kong became its own feature, Taiwan duplicate
+  dropped. Verified: 216 features, all untouched features byte-identical.
+
+#### Verification
+- Live yfinance probes (2026-08-18): 11 FX pairs OK, EWH OK, RSX THIN(1),
+  ANGL/EM1A.DE/GFA.L/GFGB.L/USFA.PA/FALN OK, all speculative FA tickers
+  dead (honest exclusions).
+- `npm run seed` ×2: first run exposed a cache-race (cachedJson returns the
+  stale doc while the rebuild refreshes in the background — bundle.json got
+  85 while cache/atlas/v2.json got 99); second run produced bundle.json
+  with 99 markets. Cache freshness is stamp-based (§1.29) — expected
+  behaviour, not a bug.
+- `npm run build` clean (577 modules). Local serve smoke (Playwright,
+  headless): map canvas renders, no console errors; /api/atlas live
+  returns 99 countries, US fallen_angel ANGL ret_1m_usd −0.22, DE EM1A.DE,
+  GB GFA.L, BD UNAVAILABLE, HK heat +0.973 (equity+credit legs);
+  #/country/HK and #/country/US render (HK heat badge, US Fallen angels
+  card with ANGL). coverage: 99/99 scored, 38 yields, 35 equity, 73
+  credit, 21 fallen-angel.
+- `pytest tests/ -q` → 157 passed (was 149; no new tests added this
+  session — the web layer has no Python tests).
+
+#### Docs touched
+- CONTEXT.md: §3 (world.json note → China/HK/Taiwan split, 99-market seed
+  bundle), §4 (yfinance bullet — atlas fallen-angel leg + universe
+  expansion), §9 (new entry 19 — basemap Taiwan/HK correction).
+- open_items.md: §6 session log entry added.

@@ -113,7 +113,7 @@ export async function buildMapChart(el, atlas, { onSelect } = {}) {
   }));
   const span = heatRange(data.map((d) => d.value).filter((v) => v != null));
 
-  const legLabel = { bond: "Sovereign bond", equity: "Equity ETF", credit: "Regional credit" };
+  const legLabel = { bond: "Sovereign bond", equity: "Equity ETF", credit: "Regional credit", fallen_angel: "Fallen-angel ETF" };
 
   const buildOption = () => ({
     animation: false,

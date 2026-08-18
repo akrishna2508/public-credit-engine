@@ -50,6 +50,19 @@ export const COUNTRIES = {
   PE: { name: "Peru", iso3: "PER", region: "latam", yield: null, etf: "EPU", fx: fxOf("PEN"), credit: "latam" },
   AR: { name: "Argentina", iso3: "ARG", region: "latam", yield: null, etf: "ARGT", fx: fxOf("ARS"), credit: "latam" },
   CR: { name: "Costa Rica", iso3: "CRI", region: "latam", yield: "CRIIRLTLT01STM", etf: null, fx: fxOf("CRC"), credit: "latam" },
+  // 2026-08-18 additions: every leg below verified live (yfinance FX pairs +
+  // country ETFs, 2026-08-18). No free 10Y series exists for these markets,
+  // so they carry the bond leg UNAVAILABLE and are scored on the real legs.
+  UY: { name: "Uruguay", iso3: "URY", region: "latam", yield: null, etf: null, fx: fxOf("UYU"), credit: "latam" },
+  DO: { name: "Dominican Republic", iso3: "DOM", region: "latam", yield: null, etf: null, fx: fxOf("DOP"), credit: "latam" },
+  GT: { name: "Guatemala", iso3: "GTM", region: "latam", yield: null, etf: null, fx: fxOf("GTQ"), credit: "latam" },
+  HN: { name: "Honduras", iso3: "HND", region: "latam", yield: null, etf: null, fx: fxOf("HNL"), credit: "latam" },
+  PY: { name: "Paraguay", iso3: "PRY", region: "latam", yield: null, etf: null, fx: fxOf("PYG"), credit: "latam" },
+  // PA/EC/SV are dollarised economies — the local currency IS the dollar, so
+  // there is no currency leg to quote and the credit leg is the honest signal.
+  PA: { name: "Panama", iso3: "PAN", region: "latam", yield: null, etf: null, fx: null, credit: "latam" },
+  EC: { name: "Ecuador", iso3: "ECU", region: "latam", yield: null, etf: null, fx: null, credit: "latam" },
+  SV: { name: "El Salvador", iso3: "SLV", region: "latam", yield: null, etf: null, fx: null, credit: "latam" },
 
   /* ---------------- Europe ---------------- */
   DE: { name: "Germany", iso3: "DEU", region: "europe", yield: "IRLTLT01DEM156N", etf: "EWG", fx: fxDirect("EUR"), credit: null },
@@ -71,6 +84,9 @@ export const COUNTRIES = {
   NO: { name: "Norway", iso3: "NOR", region: "europe", yield: "IRLTLT01NOM156N", etf: null, fx: fxOf("NOK"), credit: null },
   SE: { name: "Sweden", iso3: "SWE", region: "europe", yield: "IRLTLT01SEM156N", etf: null, fx: fxOf("SEK"), credit: null },
   DK: { name: "Denmark", iso3: "DNK", region: "europe", yield: "IRLTLT01DKM156N", etf: null, fx: fxOf("DKK"), credit: null },
+  // Iceland: no free 10Y series and no listed country ETF, but the ISK
+  // cross is live — the currency leg is the one real country-specific price.
+  IS: { name: "Iceland", iso3: "ISL", region: "europe", yield: null, etf: null, fx: fxOf("ISK"), credit: null },
 
   /* ---------------- Emerging Europe ---------------- */
   PL: { name: "Poland", iso3: "POL", region: "emeurope", yield: "IRLTLT01PLM156N", etf: "EPOL", fx: fxOf("PLN"), credit: "emea" },
@@ -100,6 +116,13 @@ export const COUNTRIES = {
   SA: { name: "Saudi Arabia", iso3: "SAU", region: "mideast", yield: null, etf: "KSA", fx: fxOf("SAR"), credit: "emea" },
   AE: { name: "United Arab Emirates", iso3: "ARE", region: "mideast", yield: null, etf: "UAE", fx: fxOf("AED"), credit: "emea" },
   QA: { name: "Qatar", iso3: "QAT", region: "mideast", yield: null, etf: "QAT", fx: fxOf("QAR"), credit: "emea" },
+  // Gulf + Levant additions (2026-08-18): pegged-currency crosses are live on
+  // yfinance; no free 10Y series covers them, so the regional EMEA corporate
+  // credit index carries the signal alongside the (near-zero) FX leg.
+  KW: { name: "Kuwait", iso3: "KWT", region: "mideast", yield: null, etf: null, fx: fxOf("KWD"), credit: "emea" },
+  OM: { name: "Oman", iso3: "OMN", region: "mideast", yield: null, etf: null, fx: fxOf("OMR"), credit: "emea" },
+  BH: { name: "Bahrain", iso3: "BHR", region: "mideast", yield: null, etf: null, fx: fxOf("BHD"), credit: "emea" },
+  JO: { name: "Jordan", iso3: "JOR", region: "mideast", yield: null, etf: null, fx: fxOf("JOD"), credit: "emea" },
 
   /* ---------------- Africa ---------------- */
   ZA: { name: "South Africa", iso3: "ZAF", region: "africa", yield: "IRLTLT01ZAM156N", etf: "EZA", fx: fxOf("ZAR"), credit: "emea" },
@@ -127,6 +150,7 @@ export const COUNTRIES = {
   KR: { name: "South Korea", iso3: "KOR", region: "asia", yield: "IRLTLT01KRM156N", etf: "EWY", fx: fxOf("KRW"), credit: "asia" },
   SG: { name: "Singapore", iso3: "SGP", region: "asia", yield: null, etf: "EWS", fx: fxOf("SGD"), credit: "asia" },
   TW: { name: "Taiwan", iso3: "TWN", region: "asia", yield: null, etf: "EWT", fx: fxOf("TWD"), credit: "asia" },
+  HK: { name: "Hong Kong", iso3: "HKG", region: "asia", yield: null, etf: "EWH", fx: fxOf("HKD"), credit: "asia" },
   AU: { name: "Australia", iso3: "AUS", region: "apac", yield: "IRLTLT01AUM156N", etf: "EWA", fx: fxDirect("AUD"), credit: null },
   NZ: { name: "New Zealand", iso3: "NZL", region: "apac", yield: "IRLTLT01NZM156N", etf: null, fx: fxDirect("NZD"), credit: null },
 
@@ -152,6 +176,30 @@ export const CREDIT_INDICES = {
   asia: { id: "BAMLEMRACRPIASIAOAS", label: "ICE BofA Asia Emerging Markets Corporate Plus OAS" },
   latam: { id: "BAMLEMRLCRPILAOAS", label: "ICE BofA Latin America Emerging Markets Corporate Plus OAS" },
   emea: { id: "BAMLEMRECRPIEMEAOAS", label: "ICE BofA EMEA Emerging Markets Corporate Plus OAS" },
+};
+
+/**
+ * Fallen-angel ETFs used as the fallen-angel credit leg, one per market the
+ * map can honestly proxy. All verified live on Yahoo (2026-08-18).
+ *
+ *   us   ANGL — VanEck Fallen Angel High Yield Bond ETF (USD). The same
+ *        instrument engine/spreads.py uses for the US fallen-angel market.
+ *   eur  EM1A.DE — VanEck US Fallen Angel High Yield Bond UCITS ETF A USD
+ *        Acc, quoted on Xetra in EUR: the euro-area trading vehicle for the
+ *        US fallen-angel market. Return is converted to USD with the EURUSD
+ *        move like any other foreign-quoted leg.
+ *   gbp  GFA.L — VanEck Global Fallen Angel High Yield Bond UCITS ETF
+ *        (GBp): the GBP-quoted global fallen-angel market. Converted to USD
+ *        with GBPUSD.
+ *
+ * No fallen-angel ETF covers emerging markets (EMHY is ordinary HY, not
+ * fallen angels), so EM countries report the leg as UNAVAILABLE rather than
+ * mislabeling a non-FA ETF.
+ */
+export const FALLEN_ANGEL_ETFS = {
+  us: { ticker: "ANGL", ccy: "USD", fx: null, label: "VanEck Fallen Angel High Yield Bond ETF (ANGL) — US fallen-angel market" },
+  eur: { ticker: "EM1A.DE", ccy: "EUR", fx: "EURUSD=X", label: "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market" },
+  gbp: { ticker: "GFA.L", ccy: "GBP", fx: "GBPUSD=X", label: "VanEck Global Fallen Angel High Yield Bond UCITS ETF (GFA.L) — GBP-quoted global fallen-angel market" },
 };
 
 /** the wider EM/global credit panel surfaced on the Opportunities page */

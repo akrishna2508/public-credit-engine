@@ -222,6 +222,25 @@ and each is surfaced in the payload or on the page rather than hidden.
   every other line until toggled off in the legend.
 
 ## 6. Session log (most recent first)
+- **Map coverage expansion + fallen-angel ETF leg** (2026-08-18, session 28 —
+  "take a look at the countries not yet covered and add that … add things
+  like fallen angels as well where you can use ETFs as proxies"):
+  - Universe 85 → 99 markets on the deployed map: HK (EWH + HKD + Asia
+    credit), UY/DO/GT/HN/PY (FX + LatAm credit), PA/EC/SV (dollarised —
+    credit leg only), IS (ISK-only, developed), KW/OM/BH/JO (pegged FX +
+    EMEA credit). Every leg live-verified on yfinance before inclusion;
+    RSX (Russia) excluded — dead tape (1 obs).
+  - New `fallen_angel` instrument + heat leg: ANGL (US), EM1A.DE (EUR-
+    quoted UCITS, →USD via EURUSD), GFA.L (GBp global UCITS, →USD via
+    GBPUSD). EM reports UNAVAILABLE (no EM fallen-angel ETF exists).
+    Country page gains a "Fallen angels (ETF proxy)" card.
+  - Basemap fix (§9.19): China feature still held a Taiwan polygon + empty
+    degenerate poly + the HK landmass; China trimmed, HK its own feature,
+    Taiwan dup dropped. 216 features, untouched features byte-identical.
+  - Verified: 2× seed (cache race → correct on re-run), build clean,
+    Playwright smoke (99 countries, FA legs live, HK/US pages render,
+    zero console errors), pytest 157 passed.
+
 
 - **Simulated futures + registry sweep** (2026-08-15, session 27 — "still
   looks too flat and uniform … simulate all the future values forecasted with

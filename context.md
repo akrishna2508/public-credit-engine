@@ -118,8 +118,9 @@ Public Credit/
         cache/          # rate-limit defense layer (§4): per-series JSON files
                           #   for FRED/ECB/Yahoo/ATM-IV with TTL reads, append-
                           #   merge refresh, stale fallback on rate-limit/error.
-    public/data/          # world.json (vendored echarts@4.9.0 basemap) + bundle.json
-                          #   (15-country seed snapshot — offline fallback)
+    public/data/          # world.json (vendored echarts@4.9.0 basemap — China
+                          #   split into China/Hong Kong/Taiwan, see §9.19) +
+                          #   bundle.json (99-market seed snapshot — offline fallback)
   data/                    # dealer_markup.json, expected_loss_by_grade.json,
                            # cache/, iv_history.json, source_probe.json, atlas.json,
                            # backtest_legs.json (walk-forward sign fits, board vote gate)
@@ -182,6 +183,16 @@ look-ahead).
 - **yfinance**: ANGL (fallen angels), EUR UCITS IEAC.L/IHYG.L, EM ETFs
   EMB/CEMB/EMHY/LEMB, ^IRX 13-week T-bill, ^MOVE/^TNX for dealer markup,
   and ML screen ETFs SHY/TLT/LQD/HYG/ANGL/PFF.
+  **Atlas fallen-angel leg (2026-08-18)**: the map's `fallen_angel`
+  instrument/heat leg uses ANGL (US), EM1A.DE (VanEck US Fallen Angel UCITS,
+  EUR-quoted on Xetra — converted to USD via EURUSD) and GFA.L (VanEck
+  Global Fallen Angel UCITS, GBp — converted via GBPUSD); all three verified
+  live 2026-08-18. No EM fallen-angel ETF exists (EMHY is ordinary HY) —
+  EM countries report the leg honestly UNAVAILABLE. Universe expanded
+  85 → 99 markets (2026-08-18, §9.19): HK (EWH), UY/DO/GT/HN/PY (FX
+  crosses), PA/EC/SV (dollarised — credit leg only), IS (ISK only),
+  KW/OM/BH/JO (pegged FX + EMEA credit); every new leg live-verified. RSX
+  (Russia) excluded — dead tape on yfinance (1 obs).
 - **CFTC COT (keyless)**: `fut_fin_txt_{year}.zip` per-year files -> net
   leveraged-money / dealer positioning z-scores for UST 2Y/5Y/10Y/BOND/
   ULTRA/SOFR-3M and BBG IG/HY credit futures (≥2y history gate; the IG/HY
@@ -584,6 +595,18 @@ CI-free by design; run `pytest tests/ -q`.
     `fredgraph` references in the Python tree. Live proof: 6-series fetch
     + `--market global --source curve|sovereign` board runs (CURVE
     VALIDATED, sovereign RISING_DEBT rows).
+19. ~~**Basemap: Taiwan inside China's polygon + no Hong Kong feature**~~
+    **RESOLVED 2026-08-18**: a deep inspection of the vendored echarts
+    basemap found the China feature still CONTAINED a 10-vertex Taiwan
+    polygon (poly 14) — the standalone Taiwan feature added 2026-08-18
+    rendered on top of it — plus an empty degenerate polygon (12) and the
+    Hong Kong landmass split across two small polygons (10/11, matched
+    exactly to Natural Earth 50m "Hong Kong S.A.R." bboxes). The China
+    MultiPolygon was trimmed to its mainland + real islands (11 polys,
+    byte-identical remainder), Hong Kong became its own feature, and the
+    Taiwan duplicate was dropped so the standalone feature stands alone.
+    Verified: all untouched features byte-identical; map renders Taiwan and
+    Hong Kong as separate regions from China.
 
 ## 10. Pending items (yet to be done)
 

@@ -123,6 +123,17 @@
    "put_call_oi_ratio": 0.3829,
    "atm_straddle_price": 0.81,
    "dte_days": 2
+  },
+  "2026-08-18": {
+   "ticker": "TLT",
+   "as_of": "2026-08-18",
+   "expiry": "2026-08-21",
+   "underlying": 82.04,
+   "atm_strike": 82,
+   "atm_iv": 0.0312596875,
+   "put_call_oi_ratio": 0.5492,
+   "atm_straddle_price": 0.97,
+   "dte_days": 3
   }
  },
  "EMB": {

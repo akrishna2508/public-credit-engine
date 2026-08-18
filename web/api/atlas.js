@@ -23,6 +23,7 @@ import {
 } from "./_shared.js";
 import {
   COUNTRIES, REGION_LABELS, CREDIT_INDICES, WB_INDICATORS, DURATION, CREDIT_SPREAD_DURATION,
+  FALLEN_ANGEL_ETFS,
 } from "./_universe.js";
 
 export const config = { runtime: "nodejs" };
@@ -96,6 +97,17 @@ async function buildAtlas() {
   fxSymbols.forEach((s, i) => {
     const r = fxRes[i];
     if (r && !r.unavailable && r.rows?.length) fxRows[s] = r.rows;
+  });
+
+  /* ------------ 3b. fallen-angel ETFs (Yahoo, daily) — one per market ---- */
+  const faKeys = Object.keys(FALLEN_ANGEL_ETFS);
+  const faRes = await pmap(faKeys, 3, (k) =>
+    yahooChart(FALLEN_ANGEL_ETFS[k].ticker, { range: "5y", interval: "1d" })
+  );
+  const faRows = {};
+  faKeys.forEach((k, i) => {
+    const r = faRes[i];
+    if (r && !r.unavailable && r.rows?.length) faRows[k] = r.rows;
   });
 
   /* ---------------- 4. regional EM credit OAS (FRED, daily) ------------- */
@@ -284,6 +296,46 @@ async function buildAtlas() {
       };
     }
 
+    /* --- fallen-angel leg (ETF proxy, where a real market vehicle exists) */
+    // US trades its own fallen-angel market (ANGL); the euro-area members
+    // get the EUR-quoted UCITS wrapper; the UK the GBP-quoted global UCITS.
+    // EM markets have NO fallen-angel ETF — reported UNAVAILABLE, never
+    // mislabeled with an ordinary HY fund.
+    const faBucket = iso === "US" ? "us" : iso === "GB" ? "gbp" : spec.region === "europe" ? "eur" : null;
+    const faSpec = faBucket ? FALLEN_ANGEL_ETFS[faBucket] : null;
+    let fa1mUsd = null;
+    if (faSpec && faRows[faBucket]) {
+      const fr = faRows[faBucket];
+      const local1m = pctReturn(fr, 21);
+      const conv1m = (v) => {
+        if (v == null) return null;
+        const f = faSpec.fx && fxRows[faSpec.fx] ? pctReturn(fxRows[faSpec.fx], 21) : null;
+        return f == null ? r2(v) : r3(((1 + v / 100) * (1 + f / 100) - 1) * 100);
+      };
+      fa1mUsd = conv1m(local1m);
+      instruments.fallen_angel = {
+        status: "OK",
+        ticker: faSpec.ticker,
+        label: faSpec.label,
+        quote_ccy: faSpec.ccy,
+        last: fr[fr.length - 1].v,
+        asOf: fr[fr.length - 1].date,
+        ret_1m_local_pct: r2(local1m),
+        ret_1m_usd_pct: fa1mUsd,
+        ret_3m_usd_pct: conv1m(pctReturn(fr, 63)),
+        ret_12m_usd_pct: conv1m(pctReturn(fr, 252)),
+        note: `${faSpec.label}. Regional proxy — not country-specific. ${faSpec.fx ? "Foreign-quoted, converted to USD with the 1M FX move." : "USD-quoted — the return already embeds the currency."}`,
+      };
+      if (fa1mUsd != null) legs.push({ leg: "fallen_angel", value: fa1mUsd });
+    } else {
+      instruments.fallen_angel = {
+        status: "UNAVAILABLE",
+        why: faBucket
+          ? `the ${faSpec.ccy} fallen-angel ETF returned no closes`
+          : "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only",
+      };
+    }
+
     /* --- sovereign spread vs the US --- */
     const yieldPct = instruments.bonds.yield_pct;
     instruments.sovereign_spread = us10Pct != null && yieldPct != null
@@ -385,6 +437,7 @@ async function buildAtlas() {
   const withBond = Object.values(countries).filter((c) => c.instruments.bonds?.status === "OK").length;
   const withEquity = Object.values(countries).filter((c) => c.instruments.equity_etf?.status === "OK").length;
   const withCredit = Object.values(countries).filter((c) => c.instruments.credit?.status === "OK").length;
+  const withFallen = Object.values(countries).filter((c) => c.instruments.fallen_angel?.status === "OK").length;
   const scored = Object.values(countries).filter((c) => c.heat != null).length;
 
   return {
@@ -392,7 +445,7 @@ async function buildAtlas() {
     generated: new Date().toISOString(),
     schema: "atlas.v2",
     heatDefinition:
-      "1-month total-return proxy in USD: the unweighted mean of the available legs — sovereign bond price proxy converted to USD, country equity ETF return, regional EM corporate credit carry, and, for markets with no free sovereign curve, the currency return against the dollar. Green means positive compensation over the last month, red negative.",
+      "1-month total-return proxy in USD: the unweighted mean of the available legs — sovereign bond price proxy converted to USD, country equity ETF return, regional EM corporate credit carry, the fallen-angel ETF proxy, and, for markets with no free sovereign curve, the currency return against the dollar. Green means positive compensation over the last month, red negative.",
     countries,
     regions,
     credit,
@@ -402,12 +455,13 @@ async function buildAtlas() {
       withSovereignYield: withBond,
       withEquityEtf: withEquity,
       withCreditLeg: withCredit,
+      withFallenAngelEtf: withFallen,
     },
     sources: [
       "FRED — OECD long-term (10Y) government bond yields, monthly",
       "FRED — ICE BofA emerging-market corporate OAS by region, daily",
       "ECB Data Portal — euro-area AAA government curve, keyless",
-      "Yahoo Finance — single-country equity ETFs and FX crosses, daily",
+      "Yahoo Finance — single-country equity ETFs, fallen-angel ETFs (ANGL / EM1A.DE / GFA.L) and FX crosses, daily",
       "World Bank — debt/GDP, inflation, lending rate and lending risk premium (annual, lagged)",
     ],
   };

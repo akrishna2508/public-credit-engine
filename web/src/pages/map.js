@@ -157,7 +157,7 @@ export async function render(root) {
   const mapNote = root.querySelector("#map-note");
   try {
     mapRec = await buildMapChart(root.querySelector("#map-el"), atlas, { onSelect: go });
-    mapNote.innerHTML = `Heat is the unweighted mean of the available live legs per country — sovereign bond price proxy in USD, country equity ETF return, regional emerging-market corporate credit carry, and, where no sovereign curve or ETF exists, the currency against the dollar. ${mapRec.matched} of ${list.length} markets are drawn on the basemap${mapRec.unmatched.length ? `; ${esc(mapRec.unmatched.join(", "))} ${mapRec.unmatched.length === 1 ? "has" : "have"} no matching map feature and appear${mapRec.unmatched.length === 1 ? "s" : ""} in the table only` : ""}.`;
+    mapNote.innerHTML = `Heat is the unweighted mean of the available live legs per country — sovereign bond price proxy in USD, country equity ETF return, regional emerging-market corporate credit carry, the fallen-angel ETF proxy, and, where no sovereign curve or ETF exists, the currency against the dollar. ${mapRec.matched} of ${list.length} markets are drawn on the basemap${mapRec.unmatched.length ? `; ${esc(mapRec.unmatched.join(", "))} ${mapRec.unmatched.length === 1 ? "has" : "have"} no matching map feature and appear${mapRec.unmatched.length === 1 ? "s" : ""} in the table only` : ""}.`;
   } catch (e) {
     root.querySelector("#map-el").innerHTML =
       `<div class="pc-empty">The world basemap could not be loaded, so the map is unavailable. Every number below is still live.<div style="font-size:11.5px;color:var(--text-faint);margin-top:8px">${esc(e.message)}</div></div>`;

@@ -1,6 +1,6 @@
 {
  "status": "OK",
- "generated": "2026-08-15T04:46:04.888Z",
+ "generated": "2026-08-18T16:00:51.814Z",
  "schema": "signals.v1",
  "features": [
   {
@@ -11,11 +11,11 @@
    "live": false,
    "status": "accruing",
    "progress": {
-    "accrued": 4,
+    "accrued": 5,
     "needed": 20
    },
-   "goLiveDate": "2026-09-03",
-   "note": "Accruing real daily snapshots (weekday 18:00 launchd). Per ticker: HYG 4/20 · LQD 4/20 · TLT 4/20 · EMB 4/20 · ANGL 2/20 · JNK 2/20.",
+   "goLiveDate": "2026-09-08",
+   "note": "Accruing real daily snapshots (weekday 18:00 launchd). Per ticker: HYG 4/20 · LQD 4/20 · TLT 5/20 · EMB 4/20 · ANGL 2/20 · JNK 2/20.",
    "dateNote": "Weekday estimate from the last real snapshot; a degraded-feed day (IV gate) adds a day. The leg unlocks itself the day the 20th real snapshot lands."
   },
   {
@@ -80,7 +80,7 @@
   }
  ],
  "snapshot": {
-  "lastDate": "2026-08-12",
+  "lastDate": "2026-08-18",
   "source": "api/iv_history.json (refreshed daily by the accrual daemon via npm run seed)"
  }
 }
