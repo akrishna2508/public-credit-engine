@@ -222,6 +222,24 @@ and each is surfaced in the payload or on the page rather than hidden.
   every other line until toggled off in the legend.
 
 ## 6. Session log (most recent first)
+- **Russia + worldwide sweep** (2026-08-18, session 30 — "add more
+  countries including Russia"):
+  - Universe 133 → 156. Russia is BACK on the map via a live USDRUB=X
+    series (n=517, current): FX leg + EMEA corporate credit; equity stays
+    honestly UNAVAILABLE (RSX/ERUS 1 stale obs, RUSL stopped 2022). Heat
+    −4.23 on the real 1M ruble move (−8.8%).
+  - +22 more: BY, ME (euroised EUR), CY/MT (EU periphery, EMEA credit),
+    IQ/YE/LB (EMEA credit), IR (fx-only), BO/VE (LatAm credit),
+    NI + Caribbean JM/TT/BS/BB/BZ/GY/HT (fx-only), FJ/PG (fx-only,
+    Pacific), NP/MV (fx-only; Maldives = table + drill-down only — no
+    basemap feature).
+  - Excluded after live probes: BA/SR/SB/WS/TO (single obs), VU/SY
+    (2y-range fetch returns 1 obs — Sierra Leone class), BT (stale 2024).
+  - Probe standard hardened: the atlas's actual 2y-range fetch is the
+    test, not period=max (SL/VU/SY trap).
+  - Verified: live API 156/156 scored, null-FX sweep clean, Playwright
+    RU/MV/JM country pages, pytest 157 passed.
+
 - **Africa + Central Asia coverage sweep** (2026-08-18, session 29 —
   "add even more countries … focus on Africa and Central Asia"):
   - Universe 99 → 133: +32 African markets (DZ LY SD MR ML BF NE BJ TG GW

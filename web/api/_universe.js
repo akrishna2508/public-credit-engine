@@ -65,6 +65,20 @@ export const COUNTRIES = {
   PA: { name: "Panama", iso3: "PAN", region: "latam", yield: null, etf: null, fx: null, credit: "latam" },
   EC: { name: "Ecuador", iso3: "ECU", region: "latam", yield: null, etf: null, fx: null, credit: "latam" },
   SV: { name: "El Salvador", iso3: "SLV", region: "latam", yield: null, etf: null, fx: null, credit: "latam" },
+  // 2026-08-18 sweep: Bolivia and Venezuela sit in the ICE BofA LatAm
+  // corporate index; the Caribbean markets (and Nicaragua) print real
+  // crosses but no EM corporate index covers them — fx-only, honestly.
+  // Probed and excluded: SRD (single placeholder quote), BA (BAM 1 obs).
+  BO: { name: "Bolivia", iso3: "BOL", region: "latam", yield: null, etf: null, fx: fxOf("BOB"), credit: "latam" },
+  VE: { name: "Venezuela", iso3: "VEN", region: "latam", yield: null, etf: null, fx: fxOf("VES"), credit: "latam" },
+  NI: { name: "Nicaragua", iso3: "NIC", region: "latam", yield: null, etf: null, fx: fxOf("NIO"), credit: null },
+  JM: { name: "Jamaica", iso3: "JAM", region: "latam", yield: null, etf: null, fx: fxOf("JMD"), credit: null },
+  TT: { name: "Trinidad and Tobago", iso3: "TTO", region: "latam", yield: null, etf: null, fx: fxOf("TTD"), credit: null },
+  BS: { name: "Bahamas", iso3: "BHS", region: "latam", yield: null, etf: null, fx: fxOf("BSD"), credit: null },
+  BB: { name: "Barbados", iso3: "BRB", region: "latam", yield: null, etf: null, fx: fxOf("BBD"), credit: null },
+  BZ: { name: "Belize", iso3: "BLZ", region: "latam", yield: null, etf: null, fx: fxOf("BZD"), credit: null },
+  GY: { name: "Guyana", iso3: "GUY", region: "latam", yield: null, etf: null, fx: fxOf("GYD"), credit: null },
+  HT: { name: "Haiti", iso3: "HTI", region: "latam", yield: null, etf: null, fx: fxOf("HTG"), credit: null },
 
   /* ---------------- Europe ---------------- */
   DE: { name: "Germany", iso3: "DEU", region: "europe", yield: "IRLTLT01DEM156N", etf: "EWG", fx: fxDirect("EUR"), credit: null },
@@ -89,6 +103,12 @@ export const COUNTRIES = {
   // Iceland: no free 10Y series and no listed country ETF, but the ISK
   // cross is live — the currency leg is the one real country-specific price.
   IS: { name: "Iceland", iso3: "ISL", region: "europe", yield: null, etf: null, fx: fxOf("ISK"), credit: null },
+  // Cyprus and Malta are EU members the basemap and World Bank cover, but
+  // they are not core-eurozone like their region neighbours: the ICE BofA
+  // EMEA corporate index genuinely covers their corporates, so they get the
+  // regional credit leg (2026-08-18, RUB-cross-style live verification).
+  CY: { name: "Cyprus", iso3: "CYP", region: "europe", yield: null, etf: null, fx: fxDirect("EUR"), credit: "emea" },
+  MT: { name: "Malta", iso3: "MLT", region: "europe", yield: null, etf: null, fx: fxDirect("EUR"), credit: "emea" },
 
   /* ---------------- Emerging Europe ---------------- */
   PL: { name: "Poland", iso3: "POL", region: "emeurope", yield: "IRLTLT01PLM156N", etf: "EPOL", fx: fxOf("PLN"), credit: "emea" },
@@ -111,6 +131,16 @@ export const COUNTRIES = {
   AL: { name: "Albania", iso3: "ALB", region: "emeurope", yield: null, etf: null, fx: fxOf("ALL"), credit: "emea" },
   MK: { name: "North Macedonia", iso3: "MKD", region: "emeurope", yield: null, etf: null, fx: fxOf("MKD"), credit: "emea" },
   MD: { name: "Moldova", iso3: "MDA", region: "emeurope", yield: null, etf: null, fx: fxOf("MDL"), credit: "emea" },
+  // 2026-08-18 sweep: Russia is back — the RUB cross prints a real daily
+  // series on Yahoo (USDRUB=X, n=517, current). The Russia equity ETFs are
+  // still dead tape (RSX/ERUS: 1 stale obs from 2026-07-17; RUSL stopped
+  // printing 2022), so the equity leg stays honestly UNAVAILABLE. Russian
+  // corporates are covered by the ICE BofA EMEA corporate OAS index.
+  RU: { name: "Russia", iso3: "RUS", region: "emeurope", yield: null, etf: null, fx: fxOf("RUB"), credit: "emea" },
+  BY: { name: "Belarus", iso3: "BLR", region: "emeurope", yield: null, etf: null, fx: fxOf("BYN"), credit: "emea" },
+  // Montenegro is euroised — no local currency cross, the euro IS the
+  // currency — and its corporates sit in the EMEA index.
+  ME: { name: "Montenegro", iso3: "MNE", region: "emeurope", yield: null, etf: null, fx: fxDirect("EUR"), credit: "emea" },
 
   /* ---------------- Central Asia ---------------- */
   // Kazakhstan moved here from Emerging Europe (2026-08-18): it IS Central
@@ -135,6 +165,13 @@ export const COUNTRIES = {
   OM: { name: "Oman", iso3: "OMN", region: "mideast", yield: null, etf: null, fx: fxOf("OMR"), credit: "emea" },
   BH: { name: "Bahrain", iso3: "BHR", region: "mideast", yield: null, etf: null, fx: fxOf("BHD"), credit: "emea" },
   JO: { name: "Jordan", iso3: "JOR", region: "mideast", yield: null, etf: null, fx: fxOf("JOD"), credit: "emea" },
+  // 2026-08-18 sweep: Iraq, Yemen and Lebanon print real crosses and their
+  // corporates sit in the EMEA index. Iran's IRR cross is live too, but Iran
+  // is NOT in any ICE BofA regional index — fx-only, reported honestly.
+  IQ: { name: "Iraq", iso3: "IRQ", region: "mideast", yield: null, etf: null, fx: fxOf("IQD"), credit: "emea" },
+  YE: { name: "Yemen", iso3: "YEM", region: "mideast", yield: null, etf: null, fx: fxOf("YER"), credit: "emea" },
+  LB: { name: "Lebanon", iso3: "LBN", region: "mideast", yield: null, etf: null, fx: fxOf("LBP"), credit: "emea" },
+  IR: { name: "Iran", iso3: "IRN", region: "mideast", yield: null, etf: null, fx: fxOf("IRR"), credit: null },
 
   /* ---------------- Africa ---------------- */
   ZA: { name: "South Africa", iso3: "ZAF", region: "africa", yield: "IRLTLT01ZAM156N", etf: "EZA", fx: fxOf("ZAR"), credit: "emea" },
@@ -203,6 +240,12 @@ export const COUNTRIES = {
   HK: { name: "Hong Kong", iso3: "HKG", region: "asia", yield: null, etf: "EWH", fx: fxOf("HKD"), credit: "asia" },
   AU: { name: "Australia", iso3: "AUS", region: "apac", yield: "IRLTLT01AUM156N", etf: "EWA", fx: fxDirect("AUD"), credit: null },
   NZ: { name: "New Zealand", iso3: "NZL", region: "apac", yield: "IRLTLT01NZM156N", etf: null, fx: fxDirect("NZD"), credit: null },
+  // 2026-08-18 sweep: the Pacific markets print real crosses (FJD/PGK,
+  // n≈517 current) and sit in no EM corporate index — fx-only. Probed and
+  // excluded: SBD/VUV/WST/TOP (2y-range chart returns a single obs — the
+  // Sierra Leone class), BTN (stale 2024).
+  FJ: { name: "Fiji", iso3: "FJI", region: "apac", yield: null, etf: null, fx: fxOf("FJD"), credit: null },
+  PG: { name: "Papua New Guinea", iso3: "PNG", region: "apac", yield: null, etf: null, fx: fxOf("PGK"), credit: null },
 
   /* ---------------- Emerging Asia ---------------- */
   CN: { name: "China", iso3: "CHN", region: "emasia", yield: null, etf: "MCHI", fx: fxOf("CNY"), credit: "asia" },
@@ -219,6 +262,10 @@ export const COUNTRIES = {
   BD: { name: "Bangladesh", iso3: "BGD", region: "emasia", yield: null, etf: null, fx: fxOf("BDT"), credit: "asia" },
   LK: { name: "Sri Lanka", iso3: "LKA", region: "emasia", yield: null, etf: null, fx: fxOf("LKR"), credit: "asia" },
   PK: { name: "Pakistan", iso3: "PAK", region: "emasia", yield: null, etf: null, fx: fxOf("PKR"), credit: "asia" },
+  // 2026-08-18 sweep: Nepal and Maldives print real crosses but no EM
+  // corporate index covers them (they are not in CEMBI Asia) — fx-only.
+  NP: { name: "Nepal", iso3: "NPL", region: "emasia", yield: null, etf: null, fx: fxOf("NPR"), credit: null },
+  MV: { name: "Maldives", iso3: "MDV", region: "emasia", yield: null, etf: null, fx: fxOf("MVR"), credit: null },
 };
 
 /** ICE BofA EM corporate OAS indices (FRED, daily) used for the credit leg */

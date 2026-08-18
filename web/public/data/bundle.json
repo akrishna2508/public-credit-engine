@@ -1,6 +1,6 @@
 {
  "status": "OK",
- "generated": "2026-08-18T16:41:00.357Z",
+ "generated": "2026-08-18T17:28:18.549Z",
  "schema": "atlas.v2",
  "heatDefinition": "1-month total-return proxy in USD: the unweighted mean of the available legs — sovereign bond price proxy converted to USD, country equity ETF return, regional EM corporate credit carry, the fallen-angel ETF proxy, and, for markets with no free sovereign curve, the currency return against the dollar. Green means positive compensation over the last month, red negative.",
  "countries": {
@@ -1408,6 +1408,706 @@
      },
      "lendingRate": {
       "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "BO": {
+   "name": "Bolivia",
+   "iso": "BO",
+   "iso3": "BOL",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -3.992,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -8.39
+    },
+    {
+     "leg": "credit",
+     "value": 0.405
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: fx, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDBOB=X",
+     "currency": "BOB",
+     "quote": 11.479999542236328,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -8.39,
+     "ret_3m_pct": -41.29,
+     "ret_12m_pct": -41.13,
+     "note": "BOB return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "latam",
+     "label": "ICE BofA Latin America Emerging Markets Corporate Plus OAS",
+     "oas_bps": 201,
+     "oas_chg_1m_bps": -9,
+     "oas_z": -1.954,
+     "credit_1m_pct": 0.405,
+     "note": "ICE BofA Latin America Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 19.52,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 10.19,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 7.63,
+      "year": 2022,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "VE": {
+   "name": "Venezuela",
+   "iso": "VE",
+   "iso3": "VEN",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -2.872,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -6.15
+    },
+    {
+     "leg": "credit",
+     "value": 0.405
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: fx, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDVES=X",
+     "currency": "VES",
+     "quote": 771.3792114257812,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -6.15,
+     "ret_3m_pct": -33.02,
+     "ret_12m_pct": -81.97,
+     "note": "VES return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "latam",
+     "label": "ICE BofA Latin America Emerging Markets Corporate Plus OAS",
+     "oas_bps": 201,
+     "oas_chg_1m_bps": -9,
+     "oas_z": -1.954,
+     "credit_1m_pct": 0.405,
+     "note": "ICE BofA Latin America Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 254.95,
+      "year": 2016,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 21.06,
+      "year": 2017,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "NI": {
+   "name": "Nicaragua",
+   "iso": "NI",
+   "iso3": "NIC",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -0.83,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -0.83
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDNIO=X",
+     "currency": "NIO",
+     "quote": 36.624298095703125,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -0.83,
+     "ret_3m_pct": -0.26,
+     "ret_12m_pct": -0.2,
+     "note": "NIO return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 2.08,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 9.16,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "JM": {
+   "name": "Jamaica",
+   "iso": "JM",
+   "iso3": "JAM",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": 0.42,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": 0.42
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDJMD=X",
+     "currency": "JMD",
+     "quote": 155.97999572753906,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": 0.42,
+     "ret_3m_pct": 0.46,
+     "ret_12m_pct": 1.6,
+     "note": "JMD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 97.87,
+      "year": 2020,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 4,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 12.14,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 6.66,
+      "year": 2025,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "TT": {
+   "name": "Trinidad and Tobago",
+   "iso": "TT",
+   "iso3": "TTO",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -0.85,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -0.85
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDTTD=X",
+     "currency": "TTD",
+     "quote": 6.709199905395508,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -0.85,
+     "ret_3m_pct": -0.86,
+     "ret_12m_pct": -0.72,
+     "note": "TTD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 0.99,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 7.5,
+      "year": 2024,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 4.97,
+      "year": 2024,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "BS": {
+   "name": "Bahamas",
+   "iso": "BS",
+   "iso3": "BHS",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -0.73,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -0.73
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDBSD=X",
+     "currency": "BSD",
+     "quote": 1,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -0.73,
+     "ret_3m_pct": -0.58,
+     "ret_12m_pct": -0.68,
+     "note": "BSD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 71.46,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 0.41,
+      "year": 2024,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 4.25,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 1.18,
+      "year": 2025,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "BB": {
+   "name": "Barbados",
+   "iso": "BB",
+   "iso3": "BRB",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -1.6,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -1.6
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDBBD=X",
+     "currency": "BBD",
+     "quote": 2,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -1.6,
+     "ret_3m_pct": -1.42,
+     "ret_12m_pct": -1.46,
+     "note": "BBD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 125.03,
+      "year": 2016,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 0.85,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 8.05,
+      "year": 2022,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 7.55,
+      "year": 2022,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "BZ": {
+   "name": "Belize",
+   "iso": "BZ",
+   "iso3": "BLZ",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -1.76,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -1.76
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDBZD=X",
+     "currency": "BZD",
+     "quote": 2.000200033187866,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -1.76,
+     "ret_3m_pct": -1.57,
+     "ret_12m_pct": -1.67,
+     "note": "BZD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 1.06,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 8.48,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 7.88,
+      "year": 2025,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "GY": {
+   "name": "Guyana",
+   "iso": "GY",
+   "iso3": "GUY",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -3.74,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -3.74
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDGYD=X",
+     "currency": "GYD",
+     "quote": 207.97999572753906,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -3.74,
+     "ret_3m_pct": -3.57,
+     "ret_12m_pct": -3.64,
+     "note": "GYD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 3.33,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 8.23,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 7.14,
+      "year": 2025,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "HT": {
+   "name": "Haiti",
+   "iso": "HT",
+   "iso3": "HTI",
+   "region": "latam",
+   "regionLabel": "Latin America",
+   "heat": -0.59,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -0.59
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDHTG=X",
+     "currency": "HTG",
+     "quote": 130.42999267578125,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -0.59,
+     "ret_3m_pct": -0.27,
+     "ret_12m_pct": -0.41,
+     "note": "HTG return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 28.64,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 13.01,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
      },
      "riskPremium": {
       "status": "UNAVAILABLE"
@@ -3341,6 +4041,180 @@
     }
    }
   },
+  "CY": {
+   "name": "Cyprus",
+   "iso": "CY",
+   "iso3": "CYP",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 0.691,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": 1.44
+    },
+    {
+     "leg": "credit",
+     "value": 0.36
+    },
+    {
+     "leg": "fallen_angel",
+     "value": 0.273
+    }
+   ],
+   "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: fx, credit, fallen_angel",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1582117080688477,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": 1.44,
+     "ret_3m_pct": -0.34,
+     "ret_12m_pct": -0.57,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 147,
+     "oas_chg_1m_bps": -8,
+     "oas_z": -0.948,
+     "credit_1m_pct": 0.36,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "fallen_angel": {
+     "status": "OK",
+     "ticker": "EM1A.DE",
+     "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
+     "quote_ccy": "EUR",
+     "last": 21.67300033569336,
+     "asOf": "2026-08-18",
+     "ret_1m_local_pct": -1.15,
+     "ret_1m_usd_pct": 0.273,
+     "ret_3m_usd_pct": 3.134,
+     "ret_12m_usd_pct": 7.435,
+     "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 0.13,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "MT": {
+   "name": "Malta",
+   "iso": "MT",
+   "iso3": "MLT",
+   "region": "europe",
+   "regionLabel": "Europe",
+   "heat": 0.691,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": 1.44
+    },
+    {
+     "leg": "credit",
+     "value": 0.36
+    },
+    {
+     "leg": "fallen_angel",
+     "value": 0.273
+    }
+   ],
+   "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: fx, credit, fallen_angel",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1582117080688477,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": 1.44,
+     "ret_3m_pct": -0.34,
+     "ret_12m_pct": -0.57,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 147,
+     "oas_chg_1m_bps": -8,
+     "oas_z": -0.948,
+     "credit_1m_pct": 0.36,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "fallen_angel": {
+     "status": "OK",
+     "ticker": "EM1A.DE",
+     "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
+     "quote_ccy": "EUR",
+     "last": 21.67300033569336,
+     "asOf": "2026-08-18",
+     "ret_1m_local_pct": -1.15,
+     "ret_1m_usd_pct": 0.273,
+     "ret_3m_usd_pct": 3.134,
+     "ret_12m_usd_pct": 7.435,
+     "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 2.36,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
   "PL": {
    "name": "Poland",
    "iso": "PL",
@@ -4568,6 +5442,240 @@
     }
    }
   },
+  "RU": {
+   "name": "Russia",
+   "iso": "RU",
+   "iso3": "RUS",
+   "region": "emeurope",
+   "regionLabel": "Emerging Europe",
+   "heat": -4.225,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -8.81
+    },
+    {
+     "leg": "credit",
+     "value": 0.36
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: fx, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDRUB=X",
+     "currency": "RUB",
+     "quote": 84.98999786376953,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -8.81,
+     "ret_3m_pct": -16.21,
+     "ret_12m_pct": -5.29,
+     "note": "RUB return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 147,
+     "oas_chg_1m_bps": -8,
+     "oas_z": -0.948,
+     "credit_1m_pct": 0.36,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 17.85,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 8.72,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 17.09,
+      "year": 2024,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "BY": {
+   "name": "Belarus",
+   "iso": "BY",
+   "iso3": "BLR",
+   "region": "emeurope",
+   "regionLabel": "Emerging Europe",
+   "heat": -2.2,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -4.76
+    },
+    {
+     "leg": "credit",
+     "value": 0.36
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: fx, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDBYN=X",
+     "currency": "BYN",
+     "quote": 3.0299999713897705,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -4.76,
+     "ret_3m_pct": -9.57,
+     "ret_12m_pct": 11.67,
+     "note": "BYN return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 147,
+     "oas_chg_1m_bps": -8,
+     "oas_z": -0.948,
+     "credit_1m_pct": 0.36,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 33.24,
+      "year": 2019,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 6.6,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 10.95,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "ME": {
+   "name": "Montenegro",
+   "iso": "ME",
+   "iso3": "MNE",
+   "region": "emeurope",
+   "regionLabel": "Emerging Europe",
+   "heat": 0.9,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": 1.44
+    },
+    {
+     "leg": "credit",
+     "value": 0.36
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: fx, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "EURUSD=X",
+     "currency": "EUR",
+     "quote": 1.1582117080688477,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": 1.44,
+     "ret_3m_pct": -0.34,
+     "ret_12m_pct": -0.57,
+     "note": "EUR return against the US dollar"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 147,
+     "oas_chg_1m_bps": -8,
+     "oas_z": -0.948,
+     "credit_1m_pct": 0.36,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 3.9,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 6.32,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 2.57,
+      "year": 2025,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
   "KZ": {
    "name": "Kazakhstan",
    "iso": "KZ",
@@ -5504,6 +6612,300 @@
      "lendingRate": {
       "value": 8.1,
       "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "IQ": {
+   "name": "Iraq",
+   "iso": "IQ",
+   "iso3": "IRQ",
+   "region": "mideast",
+   "regionLabel": "Middle East",
+   "heat": -0.865,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -2.09
+    },
+    {
+     "leg": "credit",
+     "value": 0.36
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: fx, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDIQD=X",
+     "currency": "IQD",
+     "quote": 1309.5,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -2.09,
+     "ret_3m_pct": -0.11,
+     "ret_12m_pct": -0.19,
+     "note": "IQD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 147,
+     "oas_chg_1m_bps": -8,
+     "oas_z": -0.948,
+     "credit_1m_pct": 0.36,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 27.44,
+      "year": 2018,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 0.3,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 12.29,
+      "year": 2015,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "YE": {
+   "name": "Yemen",
+   "iso": "YE",
+   "iso3": "YEM",
+   "region": "mideast",
+   "regionLabel": "Middle East",
+   "heat": -0.14,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -0.64
+    },
+    {
+     "leg": "credit",
+     "value": 0.36
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: fx, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDYER=X",
+     "currency": "YER",
+     "quote": 236.8000030517578,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -0.64,
+     "ret_3m_pct": 0.65,
+     "ret_12m_pct": 1.29,
+     "note": "YER return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 147,
+     "oas_chg_1m_bps": -8,
+     "oas_z": -0.948,
+     "credit_1m_pct": 0.36,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "status": "UNAVAILABLE"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "LB": {
+   "name": "Lebanon",
+   "iso": "LB",
+   "iso3": "LBN",
+   "region": "mideast",
+   "regionLabel": "Middle East",
+   "heat": 0.13,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -0.1
+    },
+    {
+     "leg": "credit",
+     "value": 0.36
+    }
+   ],
+   "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: fx, credit",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDLBP=X",
+     "currency": "LBP",
+     "quote": 89500,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -0.1,
+     "ret_3m_pct": 0,
+     "ret_12m_pct": 0.01,
+     "note": "LBP return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "OK",
+     "region": "emea",
+     "label": "ICE BofA EMEA Emerging Markets Corporate Plus OAS",
+     "oas_bps": 147,
+     "oas_chg_1m_bps": -8,
+     "oas_z": -0.948,
+     "credit_1m_pct": 0.36,
+     "note": "ICE BofA EMEA Emerging Markets Corporate Plus OAS — the regional EM corporate index covering this country. Not country-specific: no free per-country corporate OAS exists."
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 14.6,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 10.51,
+      "year": 2019,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 6.07,
+      "year": 2019,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "IR": {
+   "name": "Iran",
+   "iso": "IR",
+   "iso3": "IRN",
+   "region": "mideast",
+   "regionLabel": "Middle East",
+   "heat": -0.04,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -0.04
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDIRR=X",
+     "currency": "IRR",
+     "quote": 1374985.25,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -0.04,
+     "ret_3m_pct": -3.98,
+     "ret_12m_pct": -96.94,
+     "note": "IRR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 42.17,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 18,
+      "year": 2016,
       "label": "Domestic lending interest rate (%)"
      },
      "riskPremium": {
@@ -9762,6 +11164,144 @@
     }
    }
   },
+  "FJ": {
+   "name": "Fiji",
+   "iso": "FJ",
+   "iso3": "FJI",
+   "region": "apac",
+   "regionLabel": "Asia-Pacific",
+   "heat": 0.36,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": 0.36
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDFJD=X",
+     "currency": "FJD",
+     "quote": 2.2216999530792236,
+     "asOf": "2026-08-16",
+     "ret_1m_pct": 0.36,
+     "ret_3m_pct": -1.14,
+     "ret_12m_pct": 1.4,
+     "note": "FJD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": -1.38,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 4.56,
+      "year": 2024,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 4.4,
+      "year": 2024,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "PG": {
+   "name": "Papua New Guinea",
+   "iso": "PG",
+   "iso3": "PNG",
+   "region": "apac",
+   "regionLabel": "Asia-Pacific",
+   "heat": 1.51,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": 1.51
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDPGK=X",
+     "currency": "PGK",
+     "quote": 4.328400135040283,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": 1.51,
+     "ret_3m_pct": -1.1,
+     "ret_12m_pct": -5.71,
+     "note": "PGK return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 52.01,
+      "year": 2024,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 4.42,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 8.29,
+      "year": 2024,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 4.06,
+      "year": 2024,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
   "CN": {
    "name": "China",
    "iso": "CN",
@@ -10907,6 +12447,140 @@
     }
    }
   },
+  "NP": {
+   "name": "Nepal",
+   "iso": "NP",
+   "iso3": "NPL",
+   "region": "emasia",
+   "regionLabel": "Emerging Asia",
+   "heat": -0.39,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -0.39
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDNPR=X",
+     "currency": "NPR",
+     "quote": 152.9011993408203,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -0.39,
+     "ret_3m_pct": 0.34,
+     "ret_12m_pct": -9.32,
+     "note": "NPR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "value": 39.92,
+      "year": 2021,
+      "label": "Central government debt (% of GDP)"
+     },
+     "inflation": {
+      "value": 2.65,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "status": "UNAVAILABLE"
+     },
+     "riskPremium": {
+      "status": "UNAVAILABLE"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
+  "MV": {
+   "name": "Maldives",
+   "iso": "MV",
+   "iso3": "MDV",
+   "region": "emasia",
+   "regionLabel": "Emerging Asia",
+   "heat": -1.04,
+   "heatLegs": [
+    {
+     "leg": "fx",
+     "value": -1.04
+    }
+   ],
+   "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
+   "instruments": {
+    "bonds": {
+     "status": "UNAVAILABLE",
+     "why": "no free 10-year government bond series covers this country — the bond leg is genuinely unavailable, not imputed"
+    },
+    "fx": {
+     "status": "OK",
+     "symbol": "USDMVR=X",
+     "currency": "MVR",
+     "quote": 15.420000076293945,
+     "asOf": "2026-08-18",
+     "ret_1m_pct": -1.04,
+     "ret_3m_pct": -1.1,
+     "ret_12m_pct": -1.1,
+     "note": "MVR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
+    },
+    "equity_etf": {
+     "status": "UNAVAILABLE",
+     "why": "no listed single-country ETF with a live free quote"
+    },
+    "credit": {
+     "status": "UNAVAILABLE",
+     "why": "developed market — no EM regional corporate OAS index covers it"
+    },
+    "fallen_angel": {
+     "status": "UNAVAILABLE",
+     "why": "no fallen-angel ETF covers this market — the available funds track the US, euro-area and UK fallen-angel markets only"
+    },
+    "sovereign_spread": {
+     "status": "UNAVAILABLE"
+    },
+    "structural": {
+     "debtGdp": {
+      "status": "UNAVAILABLE"
+     },
+     "inflation": {
+      "value": 4.01,
+      "year": 2025,
+      "label": "Consumer price inflation (% a year)"
+     },
+     "lendingRate": {
+      "value": 11.63,
+      "year": 2025,
+      "label": "Domestic lending interest rate (%)"
+     },
+     "riskPremium": {
+      "value": 8.13,
+      "year": 2025,
+      "label": "Risk premium on lending (lending rate minus treasury bill rate, %)"
+     },
+     "note": "World Bank annual indicators — structural context, lagged by 1-2 years. Never used in heat."
+    }
+   }
+  },
   "EZ": {
    "name": "Euro Area",
    "iso": "EZ",
@@ -10972,18 +12646,18 @@
   },
   "latam": {
    "label": "Latin America",
-   "heat": 0.545,
-   "countries": 15
+   "heat": -0.335,
+   "countries": 25
   },
   "europe": {
    "label": "Europe",
-   "heat": 1.753,
-   "countries": 20
+   "heat": 1.657,
+   "countries": 22
   },
   "emeurope": {
    "label": "Emerging Europe",
-   "heat": 0.988,
-   "countries": 15
+   "heat": 0.516,
+   "countries": 18
   },
   "centralasia": {
    "label": "Central Asia",
@@ -10992,8 +12666,8 @@
   },
   "mideast": {
    "label": "Middle East",
-   "heat": 0.559,
-   "countries": 8
+   "heat": 0.297,
+   "countries": 12
   },
   "africa": {
    "label": "Africa",
@@ -11007,13 +12681,13 @@
   },
   "apac": {
    "label": "Asia-Pacific",
-   "heat": 2.848,
-   "countries": 2
+   "heat": 1.891,
+   "countries": 4
   },
   "emasia": {
    "label": "Emerging Asia",
-   "heat": 0.267,
-   "countries": 5
+   "heat": -0.014,
+   "countries": 7
   },
   "seasia": {
    "label": "Southeast Asia",
@@ -11057,12 +12731,12 @@
   }
  },
  "coverage": {
-  "total": 133,
-  "scored": 133,
+  "total": 156,
+  "scored": 156,
   "withSovereignYield": 38,
   "withEquityEtf": 35,
-  "withCreditLeg": 107,
-  "withFallenAngelEtf": 21
+  "withCreditLeg": 117,
+  "withFallenAngelEtf": 23
  },
  "sources": [
   "FRED — OECD long-term (10Y) government bond yields, monthly",

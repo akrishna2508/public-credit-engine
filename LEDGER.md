@@ -1929,3 +1929,53 @@ open_items after every run."
 - CONTEXT.md: §3 (seed snapshot 99 → 133), §4 (universe + exclusions +
   centralasia region), LEDGER (this entry).
 - open_items.md: §6 session log entry.
+
+### Session 30 — Russia + worldwide sweep (2026-08-18)
+
+#### What was instructed
+1. "Add more countries including Russia."
+
+#### What was followed
+- Instr. 1 → FOLLOWED. Universe 133 → 156 (+23 markets).
+  - **Russia**: re-probed live 2026-08-18 — USDRUB=X prints a real daily
+    series (n=517, current) → FX leg + EMEA corporate credit (Russian
+    corporates are in the ICE BofA EMEA index). Equity stays honestly
+    UNAVAILABLE: RSX/ERUS are 1 stale obs (2026-07-17) and RUSL stopped
+    printing in 2022 — no live Russia ETF tape. Heat −4.23 (RUB −8.8% 1M,
+    −16.2% 3M — the real ruble move).
+  - **Europe/EMEA**: BY (BYN live), ME (euroised — fxDirect EUR, EMEA
+    credit), CY + MT (EU periphery — EUR + EMEA credit, the one case a
+    europe-region country carries the regional index; they also inherit
+    the euro-area fallen-angel proxy like every europe member).
+  - **Middle East**: IQ/YE/LB (EMEA credit), IR (fx-only — Iran is in no
+    ICE regional index, reported honestly).
+  - **LatAm**: BO + VE (in the ICE BofA LatAm index), NI + Caribbean
+    JM/TT/BS/BB/BZ/GY/HT (fx-only — no EM corporate index covers them).
+  - **Pacific/South Asia**: FJ/PG (fx-only), NP/MV (fx-only; Maldives has
+    no basemap feature at this resolution — table + drill-down only, the
+    map note explains).
+  - **Probed and excluded** (same standard as ever): BA/SR/SB/WS/TO
+    (single obs), VU/SY (period=max has history but the 2y-range chart the
+    atlas fetches returns 1 obs — the Sierra Leone class), BT (stale
+    2024), AM/AZ/GE/MN/AO/TJ/ER/ST (re-probed, still single placeholder
+    quotes).
+- The atlas fetch range (2y) is now the probe standard — period=max
+  history is NOT enough (SL/VU/SY trap), the map's actual fetch path must
+  return a usable series.
+
+#### Verification
+- Live yfinance probes (2026-08-18): 40+ symbols, 2y-range + max fallback.
+- Seed with cache/atlas/v2.json deleted (forced rebuild): v2.json +
+  bundle.json both 156 countries, all scored.
+- Null-return sweep: zero OK-status FX instruments with null 1M returns.
+- Live API (serve 8787, fresh build): 156 countries, regions roll up
+  (latam 25, europe 22, emeurope 18, mideast 12, apac 4, emasia 7);
+  RU fx OK/credit OK/equity UNAVAILABLE; CY/MT fallen_angel legs live.
+- Playwright: map page renders; country pages RU (FX + EMEA credit),
+  MV and JM (fx-only, no EMEA card) render; zero console/page errors.
+- `pytest tests/ -q` → 157 passed.
+
+#### Docs touched
+- CONTEXT.md: §3 (seed snapshot 133 → 156), §4 (third-sweep bullet:
+  Russia back via USDRUB=X, exclusions).
+- open_items.md: §6 session log entry.

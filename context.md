@@ -120,7 +120,7 @@ Public Credit/
                           #   merge refresh, stale fallback on rate-limit/error.
     public/data/          # world.json (vendored echarts@4.9.0 basemap — China
                           #   split into China/Hong Kong/Taiwan, see §9.19) +
-                          #   bundle.json (133-market seed snapshot — offline fallback)
+                          #   bundle.json (156-market seed snapshot — offline fallback)
   data/                    # dealer_markup.json, expected_loss_by_grade.json,
                            # cache/, iv_history.json, source_probe.json, atlas.json,
                            # backtest_legs.json (walk-forward sign fits, board vote gate)
@@ -202,6 +202,18 @@ look-ahead).
   quote, no history), KG/SS/ZW/SL (dead or single-obs chart), NGE/EGPT
   (delisted). Map aliases added for the basemap's pre-2019 forms (Congo,
   Dem. Rep. Congo, Central African Rep., Eq. Guinea, Swaziland).
+  **Third sweep (2026-08-18): Russia + 21 more — universe 133 → 156.**
+  RU back via a LIVE USDRUB=X series (n=517; RSX/ERUS dead tapes — 1 stale
+  2026-07-17 obs — and RUSL stopped 2022, so the equity leg stays honestly
+  UNAVAILABLE; Russian corporates are in the ICE BofA EMEA index). Also:
+  BY, ME (euroised, EUR), CY/MT (EU periphery — EMEA credit, the one case
+  where a europe-region country carries the regional index), IQ/YE/LB
+  (EMEA credit), IR (fx-only — not in any ICE index), BO/VE (LatAm
+  credit), NI + Caribbean JM/TT/BS/BB/BZ/GY/HT (fx-only — no index
+  covers them), FJ/PG (fx-only, Pacific), NP/MV (fx-only; Maldives has no
+  basemap feature — table + drill-down only, the note says so). Probed
+  and excluded: BA/SR/SB/WS/TO (single obs), VU/SY (2y-range chart 1 obs
+  — Sierra Leone class), BT (stale 2024).
 - **CFTC COT (keyless)**: `fut_fin_txt_{year}.zip` per-year files -> net
   leveraged-money / dealer positioning z-scores for UST 2Y/5Y/10Y/BOND/
   ULTRA/SOFR-3M and BBG IG/HY credit futures (≥2y history gate; the IG/HY
