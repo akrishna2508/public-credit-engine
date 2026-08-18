@@ -98,7 +98,9 @@ Public Credit/
     src/                  # store (API-first + bundle fallback), router (main.js),
                           #   charts (map / projection / history), custom legend,
                           #   period/zoom controls, pages (map/returns/history/
-                          #   country/signals — signals = the gated-feature
+                          #   country/signals — the map page carries the region
+                          #   heat card with its per-region country dropdown;
+                          #   signals = the gated-feature
                           #   registry with auto-go-live cards per §10, driven
                           #   by /api/status)
     api/                  # Vercel-compatible serverless handlers on web/api/_shared.js:

@@ -100,6 +100,7 @@ export async function render(root) {
       <div class="pc-card pc-card-pad">
         <div class="pc-card-title">Region heat</div>
         <div class="pc-card-sub">Unweighted mean of member markets</div>
+        <select id="region-select" class="pc-btn" style="width:100%;margin:10px 0 4px" aria-label="Browse markets by region"></select>
         <div id="region-list"></div>
       </div>
       <div class="pc-card pc-card-pad" style="margin-top:20px">
@@ -163,6 +164,31 @@ export async function render(root) {
       `<div class="pc-empty">The world basemap could not be loaded, so the map is unavailable. Every number below is still live.<div style="font-size:11.5px;color:var(--text-faint);margin-top:8px">${esc(e.message)}</div></div>`;
     mapNote.textContent = "The table and rankings below are unaffected — they read the same atlas payload the map would have used.";
   }
+
+  /* ---------------- region dropdown ---------------- */
+  // One dropdown, grouped by region — every market under its region, with
+  // its 1-month heat. Choosing a market opens its country drill-down.
+  const regionSelect = root.querySelector("#region-select");
+  const byRegionKey = {};
+  for (const c of list) (byRegionKey[c.region] = byRegionKey[c.region] || []).push(c);
+  regionSelect.innerHTML =
+    `<option value="">Browse markets by region…</option>` +
+    Object.entries(byRegionKey)
+      .sort((a, b) => a[1][0].regionLabel.localeCompare(b[1][0].regionLabel))
+      .map(([, cs]) => {
+        const label = cs[0].regionLabel || cs[0].region;
+        const opts = [...cs]
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((c) => `<option value="${c.iso}">${esc(c.name)} · ${pct(c.heat)}</option>`)
+          .join("");
+        return `<optgroup label="${esc(label)} (${cs.length})">${opts}</optgroup>`;
+      })
+      .join("");
+  regionSelect.addEventListener("change", () => {
+    if (!regionSelect.value) return;
+    go(regionSelect.value);
+    regionSelect.value = "";
+  });
 
   /* ---------------- region rail ---------------- */
   const regionList = root.querySelector("#region-list");

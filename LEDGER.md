@@ -1979,3 +1979,38 @@ open_items after every run."
 - CONTEXT.md: §3 (seed snapshot 133 → 156), §4 (third-sweep bullet:
   Russia back via USDRUB=X, exclusions).
 - open_items.md: §6 session log entry.
+
+### Session 31 — region-heat country dropdown (2026-08-18)
+
+#### What was instructed
+1. "For the 'region heat' sub section with the atlas please add a drop down
+   menu where under each region the countries part of it are displayed."
+
+#### What was followed
+- Instr. 1 → FOLLOWED. The Region heat card (map page, col-4 rail) gains a
+  native `<select class="pc-btn" id="region-select">` above the region rows:
+  one optgroup per region (alphabetical, label + member count), one option
+  per country — "Name · ±heat%" — so every market sits under its region.
+  Picking an option navigates to that country's drill-down
+  (`go(iso)`, the same hash route the table rows use); the select resets to
+  the placeholder so the same market can be picked again. The heat-sorted
+  region rail is unchanged.
+
+#### Verification
+- `npm run build` clean. Playwright (serve 8787):
+  - 11 optgroups, 156 options incl. placeholder: Africa (47), Latin
+    America (25), Europe (22), Emerging Europe (18), Middle East (12),
+    Southeast Asia (9), Emerging Asia (7), Developed Asia (5), Asia-
+    Pacific (4), Central Asia (4), North America (2) — counts match
+    /api/atlas regions.
+  - Africa sample options render "Algeria · +0.13% · Benin · -0.60% …".
+  - Selecting an option navigates: only #page-country is active, h1
+    "Benin", FX leg row present. (First check read the hidden map h1 —
+    both sections stay in the DOM; verified via section.active.)
+  - Table-row clicks navigate the same way (hash route works).
+  - Zero console/page errors.
+- pytest untouched (no Python change).
+
+#### Docs touched
+- CONTEXT.md: §3 web/src pages comment (region dropdown on the map page).
+- open_items.md: §6 session log entry.

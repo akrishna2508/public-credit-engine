@@ -222,6 +222,17 @@ and each is surfaced in the payload or on the page rather than hidden.
   every other line until toggled off in the legend.
 
 ## 6. Session log (most recent first)
+- **Region-heat country dropdown** (2026-08-18, session 31 — "add a drop
+  down menu where under each region the countries part of it are displayed"):
+  - Region heat card now leads with a native select: one optgroup per
+    region (label + member count), every country listed beneath its region
+    with its 1M heat ("Benin · -0.60%"), picking one opens its country
+    drill-down. Rail unchanged; counts match the live API.
+  - Verified: build clean, Playwright — 11 optgroups / 156 options,
+    select → #page-country active with h1 "Benin", zero console errors.
+  - Note: both map and country sections stay in the DOM; the map's hidden
+    h1 misleads naive h1 checks (read section.active instead).
+
 - **Russia + worldwide sweep** (2026-08-18, session 30 — "add more
   countries including Russia"):
   - Universe 133 → 156. Russia is BACK on the map via a live USDRUB=X
