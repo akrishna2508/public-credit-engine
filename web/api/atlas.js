@@ -25,6 +25,21 @@ import {
   COUNTRIES, REGION_LABELS, CREDIT_INDICES, WB_INDICATORS, DURATION, CREDIT_SPREAD_DURATION,
   FALLEN_ANGEL_ETFS,
 } from "./_universe.js";
+import { readFileSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const BUNDLE_PATH = join(__dirname, "..", "public", "data", "bundle.json");
+function getStaticGenerated() {
+  try {
+    const raw = readFileSync(BUNDLE_PATH, "utf8");
+    return JSON.parse(raw).generated;
+  } catch {
+    return null;
+  }
+}
+const STATIC_GENERATED = getStaticGenerated();
 
 export const config = { runtime: "nodejs" };
 
@@ -442,7 +457,7 @@ async function buildAtlas() {
 
   return {
     status: "OK",
-    generated: new Date().toISOString(),
+    generated: STATIC_GENERATED || new Date().toISOString(),
     schema: "atlas.v2",
     heatDefinition:
       "1-month total-return proxy in USD: the unweighted mean of the available legs — sovereign bond price proxy converted to USD, country equity ETF return, regional EM corporate credit carry, the fallen-angel ETF proxy, and, for markets with no free sovereign curve, the currency return against the dollar. Green means positive compensation over the last month, red negative.",
