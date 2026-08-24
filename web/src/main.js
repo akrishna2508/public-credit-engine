@@ -88,10 +88,24 @@ async function route() {
   current.dispose = rendered?.dispose || null;
 }
 
+function formatPacificTime(isoString) {
+  const date = new Date(isoString);
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Los_Angeles",
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+    timeZoneName: "short",
+  }).format(date);
+}
+
 subscribe(() => {
   const stamp = document.getElementById("pc-stamp");
   const g = window.__pc?.state?.generated;
-  if (stamp && g) stamp.textContent = new Date(g).toUTCString().slice(5, 22);
+  if (stamp && g) stamp.textContent = formatPacificTime(g);
 });
 
 /* ---------------- theme toggle ---------------- */
