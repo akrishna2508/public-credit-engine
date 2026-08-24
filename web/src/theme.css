@@ -168,14 +168,6 @@ button, select, input { font-family: inherit; }
   min-height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 20px;
 }
 .pc-brand { display: flex; align-items: center; gap: 13px; min-width: 0; }
-.pc-brand-logo {
-  width: 34px; height: 34px; border-radius: 10px; flex: none;
-  background: linear-gradient(145deg, #1f5eff, #7c3aed);
-  color: #fff; display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 14px; letter-spacing: -0.03em;
-  box-shadow: 0 2px 8px -2px rgba(31, 94, 255, 0.6);
-}
-.pc-brand-name { font-weight: 650; font-size: 15.5px; letter-spacing: -0.02em; white-space: nowrap; }
 .pc-brand-sub { color: var(--text-faint); font-size: 11px; margin-top: 1px; white-space: nowrap; }
 
 .pc-nav { display: flex; gap: 2px; margin-left: 24px; }
