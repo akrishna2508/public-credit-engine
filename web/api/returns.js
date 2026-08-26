@@ -47,6 +47,8 @@ const ETF_ASSETS = {
   CEMB: { symbol: "CEMB", label: "EM US-dollar corporates — iShares CEMB" },
   EMHY: { symbol: "EMHY", label: "EM high yield — iShares EMHY" },
   LEMB: { symbol: "LEMB", label: "EM local currency — iShares LEMB" },
+  EM1ADE: { symbol: "EM1A.DE", label: "Fallen angels — VanEck EM1A.DE (EUR-quoted UCITS)" },
+  GFA: { symbol: "GFA.L", label: "Fallen angels — VanEck GFA.L (GBP-quoted global UCITS)" },
 };
 
 const ECB_LTIR = {
@@ -393,17 +395,25 @@ async function buildVolBook(market) {
         cols.push(g);
       }
     });
-    const fc = buildForecast(cols, seriesMap, { freq: "days", scale: 100, floorAt: 0 });
+    // Fallen angel ETF for US
+    const anglRes = await yahooChart(ETF_ASSETS.ANGL.symbol, { range: "15y", interval: "1d" });
+    if (anglRes && !anglRes.unavailable && anglRes.rows?.length) {
+      const lp = logPriceBps(anglRes.rows);
+      seriesMap.ANGL = Object.fromEntries(anglRes.rows.map((x, j) => [x.date, lp[j] / 100]));
+      raw.ANGL = lp;
+      cols.push("ANGL");
+    }
+    const fc = buildForecast(cols, seriesMap, { freq: "days", scale: 100, floorAt: -Infinity });
     const pure = [];
     const spread = [];
     if (fc.ok) {
       models.us = { lag: fc.lag, nobs: fc.nobs, rho: r2(fc.rho), stable: fc.stable, horizonMonths: fc.horizonMonths, why: fc.why };
       cols.forEach((c, k) => {
-        const costs = tradeCostBasis(raw[c], { name: c, unit: "days", pnlScale: SPREAD_DURATION });
+        const costs = tradeCostBasis(raw[c], { name: c, unit: "days", pnlScale: PRICE_SCALE });
         pure.push(straddleAsset(fc, {
-          id: c, name: c,
-          standsFor: `${US_GRADES[c].label} — straddle on the spread, ${SPREAD_DURATION}-year duration`,
-          w: weightFor(fc.fit.K, k), costs, pnlScale: SPREAD_DURATION, riskFree: USD_RF,
+          id: c, name: c.replace(/_/g, " "),
+          standsFor: `${ETF_ASSETS[c]?.label || US_GRADES[c]?.label || c} — straddle on the price`,
+          w: weightFor(fc.fit.K, k), costs, pnlScale: PRICE_SCALE, riskFree: USD_RF,
         }));
       });
       // straddles ON THE SPREAD between adjacent grades: you trade the
@@ -494,9 +504,11 @@ async function buildVolBook(market) {
         cols.push(iso);
       }
     });
-    const fc = buildForecast(cols, seriesMap, { freq: "months", scale: 100, floorAt: -Infinity });
     const pure = [];
     const spread = [];
+
+    // 1. Joint VAR for sovereign yields (long history)
+    const fc = buildForecast(cols, seriesMap, { freq: "months", scale: 100, floorAt: -Infinity });
     if (fc.ok) {
       models.countries = { lag: fc.lag, nobs: fc.nobs, rho: r2(fc.rho), stable: fc.stable, horizonMonths: fc.horizonMonths, why: fc.why };
       cols.forEach((c, k) => {
@@ -507,8 +519,7 @@ async function buildVolBook(market) {
           w: weightFor(fc.fit.K, k), costs, pnlScale: BOND_DURATION, riskFree: EUR_RF,
         }));
       });
-      // the canonical euro rates trade: a straddle on the sovereign spread
-      // over Bund, which is far less volatile than either leg on its own
+      // sovereign spreads over Bund
       const de = cols.indexOf("DE");
       if (de >= 0) {
         cols.forEach((c, k) => {
@@ -525,6 +536,24 @@ async function buildVolBook(market) {
     } else {
       models.countries = { why: fc.why };
     }
+
+    // 2. Separate univariate VAR for fallen angel ETF (shorter history, EM1A.DE - use daily freq)
+    const em1aRes = await yahooChart(ETF_ASSETS.EM1ADE.symbol, { range: "15y", interval: "1d" });
+    if (em1aRes && !em1aRes.unavailable && em1aRes.rows?.length >= 100) {
+      const lp = logPriceBps(em1aRes.rows);
+      const em1aMap = Object.fromEntries(em1aRes.rows.map((x, j) => [x.date, lp[j] / 100]));
+      const em1aRaw = lp;
+      const em1aFc = buildForecast(["EM1ADE"], { EM1ADE: em1aMap }, { freq: "days", scale: 100, floorAt: -Infinity });
+      if (em1aFc.ok) {
+        const costs = tradeCostBasis(em1aRaw, { name: "EM1ADE", unit: "days", pnlScale: PRICE_SCALE });
+        pure.push(straddleAsset(em1aFc, {
+          id: "EM1ADE", name: ETF_ASSETS.EM1ADE.label,
+          standsFor: `${ETF_ASSETS.EM1ADE.label} — straddle on the price (USD)`,
+          w: weightFor(em1aFc.fit.K, 0), costs, pnlScale: PRICE_SCALE, riskFree: EUR_RF,
+        }));
+      }
+    }
+
     markets.countries = { pure, spread };
   }
 
