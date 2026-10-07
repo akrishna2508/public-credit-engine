@@ -2,8 +2,7 @@
 
 Evaluates and surfaces opportunities in **public** debt markets: US IG/HY
 corporate bonds, European corporate bonds, emerging-market sovereign/corporate
-debt, plus a liquid ML credit screen. The private credit pipeline was
-**completely removed** — no private-deal underwriting code exists in this repo.
+debt, plus a liquid ML credit screen.
 
 ## Setup
 
