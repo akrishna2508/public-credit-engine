@@ -71,7 +71,9 @@ jobs:
           if ! git diff --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git push https://${GH_PAT}@github.com/akrishna2508/public-credit-engine.git master
+            # Use x-access-token format for authentication (more reliable than token in URL)
+            git remote set-url origin https://x-access-token:${GH_PAT}@github.com/akrishna2508/public-credit-engine.git
+            git push origin master
             echo "Changes pushed to GitHub master"
           else
             echo "No changes detected — nothing to push"
