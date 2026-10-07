@@ -1,6 +1,6 @@
 {
  "status": "OK",
- "generated": "2026-10-07T06:28:20.580Z",
+ "generated": "2026-10-07T17:44:55.580Z",
  "schema": "signals.v1",
  "features": [
   {
@@ -8,15 +8,15 @@
    "name": "IV-RV premium signal",
    "what": "The board's options leg: the z-score of credit-ETF ATM implied vol vs realized vol, accrued daily from real listed options chains (IV floor gate 0.02 keeps degraded feeds out).",
    "autoGoLive": true,
-   "live": true,
-   "status": "live",
+   "live": false,
+   "status": "accruing",
    "progress": {
-    "accrued": 21,
+    "accrued": 5,
     "needed": 20
    },
-   "goLiveDate": null,
-   "note": "LIVE — the premium z-series feeds the board and the walk-forward battery automatically.",
-   "dateNote": null
+   "goLiveDate": "2026-09-08",
+   "note": "Accruing real daily snapshots (weekday 18:00 launchd). Per ticker: HYG 4/20 · LQD 4/20 · TLT 5/20 · EMB 4/20 · ANGL 2/20 · JNK 2/20.",
+   "dateNote": "Weekday estimate from the last real snapshot; a degraded-feed day (IV gate) adds a day. The leg unlocks itself the day the 20th real snapshot lands."
   },
   {
    "id": "cot_hy",
@@ -80,7 +80,7 @@
   }
  ],
  "snapshot": {
-  "lastDate": "2026-10-06",
+  "lastDate": "2026-08-18",
   "source": "api/iv_history.json (refreshed daily by the accrual daemon via npm run seed)"
  }
 }
