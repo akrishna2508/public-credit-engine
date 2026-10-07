@@ -19,21 +19,7 @@ explanations).
 The system answers: *where is compensation in public credit markets right now,
 and what is the expected payoff of trading volatility in those segments?*
 
-## 2. What this project is NOT
-
-The **private credit pipeline has been completely removed** and must never be
-reintroduced:
-
-- Removed: `private_credit_data.py`, `credit_ratios.py`, `private_credit.py`,
-  `global_private_credit.py`, `ml_credit_engine.py` (NeuralCox private-deal
-  super-learner), `risk_simulation_engine.py` (deal-level EV/CVaR with
-  hardcoded cash flows / PD curves / LGD), and notebook markets 3 & 6.
-- No MOIC, IRR, NAV unsmoothing, all-in-yield, covenants, private deal
-  cash-flow modeling, or synthetic random deal data exists anywhere.
-- Do not copy private-credit code back in. If a request asks for it, decline
-  and point at this file.
-
-## 3. Architecture
+## 2. Architecture
 
 ```
 Public Credit/
@@ -142,7 +128,7 @@ threshold-only agreement (no magic weights) -> backtest battery validates
 each leg walk-forward (publication lag + 1-day execution delay, no
 look-ahead).
 
-## 4. Data sources
+## 3. Data sources
 
 - **FRED (key in `.env`)**: ICE BofA option-adjusted spreads per grade
   (`BAMLC0A*` IG, `BAMLH0A*` HY), default rates (`DRBLACBS`, `DRCCLACBS`),
@@ -302,7 +288,7 @@ look-ahead).
   fixed 2026-08-11); the Redis parse-cache is mtime-keyed (no TTL
   constants), falling back to the JSON-file parse when unset or broken.
 
-## 5. Secrets
+## 4. Secrets
 
 - `FRED_API_KEY` lives **only** in `.env` (class placeholder name as per user
   instruction; user fills it in). `.env` is git-ignored.
@@ -328,7 +314,7 @@ look-ahead).
   `sources/polygon.py` / `sources/ndl.py`). **RESOLVED 2026-08-12**: user
   replaced the key in `.env` and the Vercel env var.
 
-## 6. Calibration audit log (every surviving number, its justification)
+## 5. Calibration audit log (every surviving number, its justification)
 
 | Constant | Value | Source / justification | Live override |
 |---|---|---|---|
@@ -378,7 +364,7 @@ look-ahead).
 asset names, synthetic cash-flow/pd_curve arrays, all interactive
 `input()` prompts.
 
-## 7. How to run
+## 6. How to run
 
 ```bash
 cp .env.example .env   # paste FRED_API_KEY
@@ -458,7 +444,7 @@ schema once with `psql "$DATABASE_URL" -f sql/heatmap_schema.sql`, then
 `--market atlas --db`. The docker daemon is not a launchd service: run
 `open -a Docker` after a reboot before `docker compose up -d`.
 
-## 8. Testing
+## 7. Testing
 
 `tests/` are pure-logic (no network): spread math, forecast stationarity
 differencing, markup floor, revised prepared-data cast-path, secret
@@ -490,7 +476,7 @@ API key), and the IV-RV unlock proofs (`tests/test_options_surface.py`:
 **149 tests**;
 CI-free by design; run `pytest tests/ -q`.
 
-## 9. Known gaps
+## 8. Known gaps
 
 1. ~~**dealer_markup.json provenance**~~ **RESOLVED 2026-08-09**: the
    committed constant-value series (4.189 repeating) has been overwritten by
@@ -651,7 +637,7 @@ CI-free by design; run `pytest tests/ -q`.
     Verified: all untouched features byte-identical; map renders Taiwan and
     Hong Kong as separate regions from China.
 
-## 10. Pending items (yet to be done)
+## 9. Pending items (yet to be done)
 
 1. ~~**ECB `C_N_T` live verification**~~ **RESOLVED 2026-08-10**: the
    corporate keys never existed in the YC dataflow; replaced by the live
@@ -761,7 +747,7 @@ CI-free by design; run `pytest tests/ -q`.
     LONG_TIPS; CURVE VALIDATED (+1, 0.215); APPETITE REJECTED (−1, −0.198);
     EM-CARRY VALIDATED (+1, 0.060) (lambda bug fixed, see §9.12c).
 
-## 11. Session script
+## 10. Session script
 
 1. Read this file.
 2. Re-run `git status`-style cleanliness (`rg` scan for embedded keys in
@@ -777,7 +763,7 @@ CI-free by design; run `pytest tests/ -q`.
    with date + evidence, so the registry always reflects the last run —
    never a summary older than the current state.
 
-## 12. Instruction record-keeping protocol (every session, mandatory)
+## 11. Instruction record-keeping protocol (every session, mandatory)
 
 Every user instruction and its execution must be traceable. Two documents
 own the record; nothing is recorded anywhere else:
