@@ -52,10 +52,11 @@ jobs:
       - name: Execute daily refresh
         run: |
           set -euo pipefail
-          cd /Users/krishnalalagarwal/Public\ Credit
-          # Export FRED key for this session (already in env, but explicit)
+          # Use GITHUB_WORKSPACE (set by GitHub Actions to the repo root)
+          cd "$GITHUB_WORKSPACE"
+          # Export FRED key for this session
           export FRED_API_KEY="${{ env.FRED_API_KEY }}"
-          # Run the refresh script; it will commit only data files
+          # Run the refresh script; it will commit data files
           bash scripts/daily_refresh.sh
 
       # ---- 5. Git push (if changes exist) ----
@@ -65,7 +66,7 @@ jobs:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           set -euo pipefail
-          cd /Users/krishnalalagarwal/Public\ Credit
+          cd "$GITHUB_WORKSPACE"
           # Only push if there are changes (git diff --quiet means no changes)
           if ! git diff --quiet; then
             git config user.name "github-actions[bot]"
