@@ -1,0 +1,87 @@
+name: Daily Public Credit Refresh
+
+on:
+  schedule:
+    # Run daily at 18:00 UTC (after US market close; matches launchd plist 18:00 PDT)
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+    # Also allow manual trigger from Actions tab
+    inputs:
+      reason:
+        description: 'Reason for manual trigger'
+        required: false
+        default: 'Manual daily refresh trigger'
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      # Make FRED API key available to all steps; set via GitHub Secrets
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+      # Optional: add other free-tier keys here if needed
+      # FINRA_API_CLIENT_ID: ${{ secrets.FINRA_API_CLIENT_ID }}
+      # FINRA_API_SECRET: ${{ secrets.FINRA_API_SECRET }}
+      # ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
+      # ALPACA_API_SECRET: ${{ secrets.ALPACA_API_SECRET }}
+
+    steps:
+      # ---- 1. Checkout repo ----
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch depth needed for git push; full history for clean commits
+          fetch-depth: 0
+
+      # ---- 2. Set up Python ----
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      # ---- 3. Install dependencies ----
+      - name: Install Python dependencies
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # ---- 4. Run daily refresh script ----
+      - name: Execute daily refresh
+        run: |
+          set -euo pipefail
+          cd /Users/krishnalalagarwal/Public\ Credit
+          # Export FRED key for this session (already in env, but explicit)
+          export FRED_API_KEY="${{ env.FRED_API_KEY }}"
+          # Run the refresh script; it will commit only data files
+          bash scripts/daily_refresh.sh
+
+      # ---- 5. Git push (if changes exist) ----
+      - name: Push changes to GitHub
+        env:
+          # Personal Access Token for pushing; keep as GitHub Secret: GH_PAT
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          cd /Users/krishnalalagarwal/Public\ Credit
+          # Only push if there are changes (git diff --quiet means no changes)
+          if ! git diff --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git push https://${GH_PAT}@github.com/akrishna2508/public-credit-engine.git master
+            echo "Changes pushed to GitHub master"
+          else
+            echo "No changes detected — nothing to push"
+          fi
+
+      # ---- 6. Vercel auto-deploys on push ----
+      # Note: Vercel is configured to deploy on pushes to master branch.
+      # The vercel.json already includes: "includeFiles": "public/data/**"
+      # So bundle.json, status.json, atlas.json etc. are automatically picked up.
+      - name: Verify Vercel deployment trigger
+        run: |
+          echo "✅ On push to master, Vercel auto-deploys using web/public/data/ files"
+          echo "✅ bundle.json and status.json in web/public/data/ are the committed fallbacks"
+          echo "✅ API handlers in web/api/ read from these files via file fallback"
