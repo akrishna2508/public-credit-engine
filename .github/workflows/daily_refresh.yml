@@ -61,9 +61,6 @@ jobs:
 
       # ---- 5. Git push (if changes exist) ----
       - name: Push changes to GitHub
-        env:
-          # Personal Access Token for pushing; keep as GitHub Secret: GH_PAT
-          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           set -euo pipefail
           cd "$GITHUB_WORKSPACE"
@@ -71,8 +68,7 @@ jobs:
           if ! git diff --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            # Use x-access-token format for authentication (more reliable than token in URL)
-            git remote set-url origin https://x-access-token:${GH_PAT}@github.com/akrishna2508/public-credit-engine.git
+            # Use the built-in GITHUB_TOKEN for pushing (no PAT needed for same-repo pushes)
             git push origin master
             echo "Changes pushed to GitHub master"
           else
