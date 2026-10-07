@@ -1,0 +1,30 @@
+{
+  "AAA": {
+    "avg_default_rate": 0.0127,
+    "avg_lgd": 0.4
+  },
+  "AA": {
+    "avg_default_rate": 0.0127,
+    "avg_lgd": 0.4
+  },
+  "A": {
+    "avg_default_rate": 0.0127,
+    "avg_lgd": 0.414
+  },
+  "BBB": {
+    "avg_default_rate": 0.0127,
+    "avg_lgd": 0.435
+  },
+  "BB": {
+    "avg_default_rate": 0.0285,
+    "avg_lgd": 0.519
+  },
+  "B": {
+    "avg_default_rate": 0.0285,
+    "avg_lgd": 0.621
+  },
+  "CCC": {
+    "avg_default_rate": 0.0285,
+    "avg_lgd": 0.682
+  }
+}
