@@ -12,6 +12,9 @@ on:
         required: false
         default: 'Manual daily refresh trigger'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   refresh:
     runs-on: ubuntu-latest
