@@ -61,15 +61,49 @@ jobs:
           fi
           echo "✅ FRED_API_KEY is set (length: ${#FRED_API_KEY})"
 
-      # ---- 6. Run daily refresh script ----
+      # ---- 6. Quick test: fetch DGS10 to verify FRED works ----
+      - name: Test FRED fetch (DGS10)
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          source .venv/bin/activate
+          export FRED_API_KEY="${{ env.FRED_API_KEY }}"
+          python - <<'PY'
+          import sys
+          from engine.data_engine import fetch_fred_series
+          s = fetch_fred_series("DGS10")
+          if s.empty:
+              print("❌ DGS10 fetch returned empty series")
+              sys.exit(1)
+          print(f"✅ DGS10 latest: {s.index.max().date()} = {s.iloc[-1]:.4f}%")
+PY
+
+      # ---- 7. Run daily refresh script ----
       - name: Execute daily refresh
         run: |
           set -euo pipefail
           cd "$GITHUB_WORKSPACE"
+          source .venv/bin/activate
           export FRED_API_KEY="${{ env.FRED_API_KEY }}"
           bash scripts/daily_refresh.sh
 
-      # ---- 7. Git push (if changes exist) ----
+      # ---- 8. Show atlas summary (debug) ----
+      - name: Show atlas summary
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          if [ -f data/atlas.json ]; then
+            echo "Atlas generated at: $(jq -r .generated data/atlas.json 2>/dev/null || echo 'unknown')"
+            # US 10y yield from bond_curve
+            us_10y=$(jq -r '.countries["US"].instruments.bond_curve["10y_pct"] // empty' data/atlas.json 2>/dev/null)
+            if [ -n "$us_10y" ]; then
+              echo "US 10y yield: ${us_10y}%"
+            else
+              echo "US 10y yield: not found in atlas"
+            fi
+          else
+            echo "❌ atlas.json not found"
+          fi
+
+      # ---- 9. Git push (if changes exist) ----
       - name: Push changes to GitHub
         run: |
           set -euo pipefail
@@ -84,7 +118,7 @@ jobs:
             echo "No changes detected — nothing to push"
           fi
 
-      # ---- 8. Vercel auto-deploys on push ----
+      # ---- 10. Vercel auto-deploys on push ----
       # Note: Vercel is configured to deploy on pushes to master branch.
       # The vercel.json already includes: "includeFiles": "public/data/**"
       # So bundle.json, status.json, atlas.json etc. are automatically picked up.
