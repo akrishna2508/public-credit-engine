@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      # Make FRED API key available to all steps; set via GitHub Secrets
+      # FRED API key – set this once in Settings → Secrets → Actions → New repository secret
       FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
       # Optional: add other free-tier keys here if needed
       # FINRA_API_CLIENT_ID: ${{ secrets.FINRA_API_CLIENT_ID }}
@@ -30,8 +30,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Fetch depth needed for git push; full history for clean commits
-          fetch-depth: 0
+          fetch-depth: 0   # needed for later push
 
       # ---- 2. Set up Python ----
       - name: Set up Python 3.11
@@ -48,38 +47,44 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      # ---- 4. Run daily refresh script ----
+      # ---- 4. Clear FRED cache (force fresh fetch) ----
+      - name: Clear FRED cache
+        run: |
+          rm -rf data/cache/fred_ext* data/cache/fred* 2>/dev/null || true
+
+      # ---- 5. Verify FRED API key is set ----
+      - name: Check FRED API key
+        run: |
+          if [ -z "${FRED_API_KEY}" ]; then
+            echo "❌ FRED_API_KEY is empty. Please set the secret in GitHub Secrets."
+            exit 1
+          fi
+          echo "✅ FRED_API_KEY is set (length: ${#FRED_API_KEY})"
+
+      # ---- 6. Run daily refresh script ----
       - name: Execute daily refresh
         run: |
           set -euo pipefail
-          # Use GITHUB_WORKSPACE (set by GitHub Actions to the repo root)
           cd "$GITHUB_WORKSPACE"
-          # Export FRED key for this session
           export FRED_API_KEY="${{ env.FRED_API_KEY }}"
-          # Run the refresh script; it will commit data files
           bash scripts/daily_refresh.sh
 
-      # ---- 5. Git push (if changes exist) ----
+      # ---- 7. Git push (if changes exist) ----
       - name: Push changes to GitHub
-        env:
-          # Personal Access Token for pushing; keep as GitHub Secret: GH_PAT
-          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           set -euo pipefail
           cd "$GITHUB_WORKSPACE"
-          # Only push if there are changes (git diff --quiet means no changes)
           if ! git diff --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            # Use the PAT in the URL for authentication
-            git remote set-url origin https://${GH_PAT}@github.com/akrishna2508/public-credit-engine.git
+            # Use the built‑in GITHUB_TOKEN for pushing (no PAT needed for same‑repo pushes)
             git push origin master
             echo "Changes pushed to GitHub master"
           else
             echo "No changes detected — nothing to push"
           fi
 
-      # ---- 6. Vercel auto-deploys on push ----
+      # ---- 8. Vercel auto-deploys on push ----
       # Note: Vercel is configured to deploy on pushes to master branch.
       # The vercel.json already includes: "includeFiles": "public/data/**"
       # So bundle.json, status.json, atlas.json etc. are automatically picked up.
