@@ -75,7 +75,7 @@ jobs:
               print("❌ DGS10 fetch returned empty series")
               sys.exit(1)
           print(f"✅ DGS10 latest: {s.index.max().date()} = {s.iloc[-1]:.4f}%")
-PY
+          PY
 
       # ---- 7. Run daily refresh script ----
       - name: Execute daily refresh
