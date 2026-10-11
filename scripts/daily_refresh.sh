@@ -16,8 +16,8 @@ echo "========================================="
 
 # 1. Regenerate atlas/heatmap data
 echo "-- Regenerating atlas (15 countries + 168 markets)..."
-python cli.py --market atlas > /dev/null 2>&1 || {
-    echo "  WARN: atlas regeneration had issues"
+python cli.py --market atlas
+echo "  DONE atlas"
 }
 echo "  DONE atlas"
 
