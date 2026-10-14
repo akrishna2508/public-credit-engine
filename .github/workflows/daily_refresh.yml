@@ -19,6 +19,8 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    permissions:
+      contents: write
     env:
       # FRED API key – set this once in Settings → Secrets → Actions → New repository secret
       FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
@@ -111,7 +113,7 @@ jobs:
         run: |
           set -euo pipefail
           cd "$GITHUB_WORKSPACE"
-          if ! git diff --quiet; then
+          if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             # Use the built‑in GITHUB_TOKEN for pushing (no PAT needed for same‑repo pushes)

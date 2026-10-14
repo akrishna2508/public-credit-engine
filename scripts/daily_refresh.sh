@@ -18,8 +18,6 @@ echo "========================================="
 echo "-- Regenerating atlas (15 countries + 168 markets)..."
 python cli.py --market atlas
 echo "  DONE atlas"
-}
-echo "  DONE atlas"
 
 # 2. US pipeline (yields, spreads, EL, VAR, volatility spectra, return curves)
 echo "-- Running US public pipeline..."
