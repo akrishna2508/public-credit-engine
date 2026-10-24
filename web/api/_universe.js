@@ -5,9 +5,13 @@
  * return data for it (probed 2026-08-13, 2026-08-18 — the 2026-08-18 pass
  * added 34 Africa / Central Asia markets, every FX cross verified live).
  *
- *   yield   FRED series id for a 10-year government bond yield, monthly.
- *           Most follow the OECD MEI pattern IRLTLT01<ISO2>M156N; India and
- *           Colombia only exist under the <ISO3>IRLTLT01STM form. Countries
+ *   yield   FRED series id for a 10-year government bond yield. Most follow
+ *           the monthly OECD MEI pattern IRLTLT01<ISO2>M156N; India and
+ *           Colombia only exist under the <ISO3>IRLTLT01STM form. The United
+ *           States uses the DAILY DGS10 10-year Treasury constant maturity
+ *           (the OECD US series lags by 1-2 months) and is marked
+ *           `yieldDaily: true` so month-counted consumers collapse it to one
+ *           observation per month (see _shared.collapseToMonthly). Countries
  *           with NO free 10Y series (China, Brazil, Indonesia, Turkey,
  *           Thailand, Malaysia, Philippines, Taiwan, Singapore, Vietnam,
  *           Peru, Argentina, Gulf states) carry `yield: null` and report the
@@ -21,6 +25,8 @@
  *           corporate credit. Developed markets have no EM regional index and
  *           report the credit leg as UNAVAILABLE.
  */
+
+import { fredCsv, usYieldSeries } from "./_shared.js";
 
 export const REGION_LABELS = {
   namerica: "North America",
@@ -39,9 +45,26 @@ export const REGION_LABELS = {
 const fxOf = (ccy) => ({ symbol: `USD${ccy}=X`, invert: true, ccy });
 const fxDirect = (ccy) => ({ symbol: `${ccy}USD=X`, invert: false, ccy });
 
+/**
+ * Fetch a country's 10Y yield series.
+ *
+ * The US prefers the same-day keyless Treasury par-yield curve (FRED history
+ * merged with the current year, Treasury winning overlaps), which publishes a
+ * day ahead of FRED's DGS10; it falls back to FRED DGS10 if Treasury is
+ * unreachable. Every other country keeps its FRED series (monthly OECD, or the
+ * ECB long-term rate via history.js).
+ */
+export async function fetchCountryYield(spec, opts = {}) {
+  if (spec && spec.yieldSource === "treasury10y") {
+    const us = await usYieldSeries({ fredId: spec.yield, treasuryLabel: "10 Yr", start: opts.start });
+    if (!us.unavailable && us.rows?.length) return us;
+  }
+  return fredCsv(spec.yield, opts);
+}
+
 export const COUNTRIES = {
   /* ---------------- North America ---------------- */
-  US: { name: "United States", iso3: "USA", region: "namerica", yield: "IRLTLT01USM156N", etf: "SPY", fx: null, credit: null },
+  US: { name: "United States", iso3: "USA", region: "namerica", yield: "DGS10", yieldDaily: true, yieldSource: "treasury10y", etf: "SPY", fx: null, credit: null },
   CA: { name: "Canada", iso3: "CAN", region: "namerica", yield: "IRLTLT01CAM156N", etf: "EWC", fx: fxOf("CAD"), credit: null },
 
   /* ---------------- Latin America ---------------- */

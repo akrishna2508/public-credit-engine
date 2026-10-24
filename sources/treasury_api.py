@@ -69,6 +69,66 @@ def fetch_auctions(limit: int = 250) -> pd.DataFrame:
     return df
 
 
+def parse_par_yield_csv(text: str) -> pd.DataFrame:
+    """Parse the daily_treasury_yield_curve CSV into a date-indexed frame with
+    one column per tenor ('10 Yr', '2 Yr', ...). Pure (no I/O); raises
+    SourceUnavailable on a payload it cannot trust."""
+    from datetime import datetime
+    lines = [l for l in text.replace("\r", "").strip().split("\n") if l.strip()]
+    if not lines or "Date" not in lines[0]:
+        raise SourceUnavailable("treasury_api", "par-yield payload unexpected",
+                                "re-check the daily_treasury_yield_curve CSV")
+    header = [h.strip().strip('"') for h in lines[0].split(",")]
+    out: list[dict] = []
+    for line in lines[1:]:
+        cols = line.split(",")
+        try:
+            d = datetime.strptime(cols[0].strip().strip('"'), "%m/%d/%Y").date()
+        except (ValueError, IndexError):
+            continue
+        rec: dict = {"date": d.isoformat()}
+        for i in range(1, min(len(header), len(cols))):
+            v = _clean(cols[i].strip().strip('"'))
+            if v == v:  # not NaN
+                rec[header[i]] = v
+        out.append(rec)
+    if not out:
+        raise SourceUnavailable("treasury_api", "par-yield CSV had no rows")
+    df = pd.DataFrame(out)
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
+    df = df.dropna(subset=["date"]).set_index("date").sort_index()
+    # keep every tenor the header declared, NaN where a row left it blank —
+    # a sparse row must not silently drop a column
+    return df.reindex(columns=header[1:])
+
+
+def fetch_par_yield_curve(year: int | None = None) -> pd.DataFrame:
+    """Official daily US Treasury par yield curve (keyless, home.treasury.gov).
+
+    Publishes the SAME business day (~4pm ET) — a day ahead of FRED's DGS
+    constant-maturity series, which are derived from it. The raw CSV text is
+    cached 0.2d (JSON-serializable); raises SourceUnavailable (never a
+    fabricated number) if the endpoint blocks or the CSV schema changes."""
+    from datetime import datetime, timezone
+    year = year or datetime.now(timezone.utc).year
+
+    def _loader() -> str:
+        url = (f"https://home.treasury.gov/resource-center/data-chart-center/"
+               f"interest-rates/daily-treasury-rates.csv/{year}/all"
+               f"?type=daily_treasury_yield_curve&field_tdr_date_value={year}"
+               f"&page&_format=csv")
+        try:
+            resp = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (PublicCredit/1.0)"},
+                                timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise SourceUnavailable("treasury_api", f"par-yield request failed: {e}",
+                                    "keyless endpoint; verify connectivity") from e
+        return resp.text
+
+    return parse_par_yield_csv(cache_json(f"treasury_par_yield_text_{year}", 0.2, _loader))
+
+
 def fetch_debt_to_penny() -> pd.DataFrame:
     """Daily total public debt outstanding (record_date, amount). The dataset
     has been renamed/removed before; a 404 surfaces as UNAVAILABLE, never a

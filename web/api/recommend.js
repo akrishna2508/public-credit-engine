@@ -12,13 +12,13 @@
  */
 import {
   fredCsv, json, pmap, worldBank, cachedJson, CACHE_TTL,
-  SPREAD_DURATION, BOND_DURATION,
+  SPREAD_DURATION, BOND_DURATION, collapseToMonthly,
 } from "./_shared.js";
 import { totalReturnSeries, computeMetrics, METRIC_META, METRIC_KEYS } from "./_metrics.js";
 import { standardise, pca, kmeans, contributions } from "./_unsup.js";
 import {
   RATING_ORDER, US_GRADES, CREDIT_PANEL, COUNTRIES, REGION_LABELS,
-  DR_SERIES, DR_MAPPING, expectedLossByGrade,
+  DR_SERIES, DR_MAPPING, expectedLossByGrade, fetchCountryYield,
 } from "./_universe.js";
 
 export const config = { runtime: "nodejs" };
@@ -116,26 +116,28 @@ async function build() {
   /* ---- sovereign 10-year curves ---- */
   {
     const isos = Object.keys(COUNTRIES).filter((i) => COUNTRIES[i].yield);
-    const res = await pmap(isos, 6, (iso) => fredCsv(COUNTRIES[iso].yield, { start: "1990-01-01" }));
+    const res = await pmap(isos, 6, (iso) => fetchCountryYield(COUNTRIES[iso], { start: "1990-01-01" }));
     isos.forEach((iso, i) => {
       const r = res[i];
       if (!r || r.unavailable || !r.rows?.length) return;
-      const series = totalReturnSeries(r.rows, BOND_DURATION, 12);
+      // month-counted metrics: collapse the daily US benchmark to month-end
+      const rows = COUNTRIES[iso].yieldDaily ? collapseToMonthly(r.rows) : r.rows;
+      const series = totalReturnSeries(rows, BOND_DURATION, 12);
       // a yield return is a TOTAL return, so the bill rate does come off
       const m = computeMetrics(series, 12, riskFreePct);
       if (!m) return;
-      const y = r.rows[r.rows.length - 1].v * 100;
+      const y = rows[rows.length - 1].v * 100;
       items.push({
         id: iso,
         name: COUNTRIES[iso].name,
         label: `${COUNTRIES[iso].name} 10-year government bond`,
         kind: "sovereign",
         group: REGION_LABELS[COUNTRIES[iso].region] || COUNTRIES[iso].region,
-        asOf: r.rows[r.rows.length - 1].date,
+        asOf: rows[rows.length - 1].date,
         metrics: {
           ...m,
           carry_now_bps: y,
-          cheap_z: lastZ(r.rows),
+          cheap_z: lastZ(rows),
           carry_to_vol: m.ann_vol_pct > 0 ? y / 100 / m.ann_vol_pct : NaN,
         },
       });

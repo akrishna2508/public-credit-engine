@@ -19,8 +19,8 @@
  * relative-value screen computed from real observations, deliberately NOT a
  * blended "opportunity score" with invented weights.
  */
-import { fredCsv, json, pmap, zLast, pctReturn, worldBank } from "./_shared.js";
-import { COUNTRIES, CREDIT_PANEL, WB_INDICATORS, CREDIT_SPREAD_DURATION, REGION_LABELS } from "./_universe.js";
+import { fredCsv, json, pmap, zLast, pctReturn, worldBank, collapseToMonthly } from "./_shared.js";
+import { COUNTRIES, CREDIT_PANEL, WB_INDICATORS, CREDIT_SPREAD_DURATION, REGION_LABELS, fetchCountryYield } from "./_universe.js";
 
 export const config = { runtime: "nodejs" };
 
@@ -98,11 +98,13 @@ export default async function handler(req, res) {
 
   /* ---------------- sovereign book ---------------- */
   const sovIsos = Object.keys(COUNTRIES).filter((iso) => COUNTRIES[iso].yield);
-  const sovRes = await pmap(sovIsos, 6, (iso) => fredCsv(COUNTRIES[iso].yield, { start: "2005-01-01" }));
+  const sovRes = await pmap(sovIsos, 6, (iso) => fetchCountryYield(COUNTRIES[iso], { start: "2005-01-01" }));
   const sovRows = {};
   sovIsos.forEach((iso, i) => {
     const r = sovRes[i];
-    if (r && !r.unavailable && r.rows?.length) sovRows[iso] = r.rows;
+    if (!r || r.unavailable || !r.rows?.length) return;
+    // month-counted book: collapse a daily benchmark (US DGS10) to month-end
+    sovRows[iso] = COUNTRIES[iso].yieldDaily ? collapseToMonthly(r.rows) : r.rows;
   });
   const usRows = sovRows.US;
   const us10 = usRows ? usRows[usRows.length - 1].v : null;

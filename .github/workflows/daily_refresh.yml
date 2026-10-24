@@ -116,9 +116,12 @@ jobs:
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            # daily_refresh.sh stages the regenerated data files; they must be
+            # committed before pushing — a bare `git push` sends no changes.
+            git commit -m "daily refresh: $(date -u +%Y-%m-%d) automated data refresh"
             # Use the built‑in GITHUB_TOKEN for pushing (no PAT needed for same‑repo pushes)
             git push origin master
-            echo "Changes pushed to GitHub master"
+            echo "Changes committed and pushed to GitHub master"
           else
             echo "No changes detected — nothing to push"
           fi

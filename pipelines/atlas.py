@@ -34,9 +34,53 @@ from engine import atlas, data_engine, futures_layer
 
 IV_HISTORY_FILE = os.path.join("data", "iv_history.json")
 
+# FRED DGS id -> Treasury par-yield CSV column, for the same-day US overlay.
+_TREASURY_TENOR = {"DGS2": "2 Yr", "DGS5": "5 Yr", "DGS10": "10 Yr", "DGS30": "30 Yr"}
+_TREASURY_CURVE: pd.DataFrame | None = None
+_TREASURY_LOADED = False
+
+
+def _us_treasury_curve() -> pd.DataFrame | None:
+    """Same-day US Treasury par-yield curve (keyless), fetched at most once."""
+    global _TREASURY_CURVE, _TREASURY_LOADED
+    if not _TREASURY_LOADED:
+        _TREASURY_LOADED = True
+        try:
+            from sources.treasury_api import fetch_par_yield_curve
+            df = fetch_par_yield_curve()
+            _TREASURY_CURVE = df if not df.empty else None
+            if _TREASURY_CURVE is not None:
+                print(f"  [OK] US Treasury par-yield curve: {len(df)} obs, "
+                      f"latest {df.index.max().date()}")
+        except Exception as e:
+            _TREASURY_CURVE = None
+            print(f"  [UNAVAILABLE] US Treasury par-yield curve (FRED only): {e}")
+    return _TREASURY_CURVE
+
+
+def _merge_us(s: pd.Series, label: str) -> pd.Series:
+    """Overlay the same-day Treasury tenor onto a FRED DGS series.
+
+    Treasury publishes the same business day; FRED's DGS series lag a day. On
+    any overlapping date the Treasury observation wins, so the series keeps the
+    latest value while retaining FRED's long history."""
+    t = _us_treasury_curve()
+    if t is None or not label or label not in t.columns:
+        return s
+    series = t[label].dropna()
+    if series.empty:
+        return s
+    out = s.copy() if not s.empty else pd.Series(dtype=float)
+    for d, v in series.items():
+        out.loc[d] = float(v)
+    return out.sort_index()
+
 
 def _fred_yield(iso: str) -> pd.Series:
-    return data_engine.fetch_fred_series(config.ATLAS_COUNTRY_YIELDS[iso])
+    s = data_engine.fetch_fred_series(config.ATLAS_COUNTRY_YIELDS[iso])
+    if iso == "US":
+        s = _merge_us(s, "10 Yr")  # freshest same-day 10Y close
+    return s
 
 
 def _etf_returns(ticker: str) -> dict:
@@ -67,22 +111,28 @@ def _rv_30d(close: pd.Series, window: int | None = None) -> float | None:
 
 
 def _monthly_bundle(iso: str, us_yield: float | None) -> dict:
-    """Per-country metrics from the OECD monthly 10Y series."""
+    """Per-country metrics from the 10Y series (OECD monthly, or daily DGS10
+    for the US — collapsed to month-end for the month-counted change/z math)."""
     s = _fred_yield(iso)
     if s.empty:
         return {"available": False, "iso": iso}
+    sm = atlas.to_monthly(s)
     yld = float(s.iloc[-1])
     b = {
         "available": True,
         "iso": iso,
         "yield_pct": round(yld, 3),
         "as_of": str(s.index.max().date()),
-        "yields": atlas.yield_changes_bps(s),
-        "yield_z": atlas.rolling_z_last(s),
+        "yields": atlas.yield_changes_bps(sm),
+        "yield_z": atlas.rolling_z_last(sm),
         "us_yield_pct": us_yield,
         "spread_us_bps": round((yld - us_yield) * 100.0, 2) if us_yield is not None else None,
         "spread_us_z": None,
     }
+    if atlas.is_daily(s):
+        b["bonds_notes"] = ("10Y benchmark government bond yield — US 10Y "
+                            "Treasury (FRED DGS10 + same-day Treasury par-yield; "
+                            "month-end for changes/z)")
     dy1 = b["yields"].get(1) if "yields" in b else None
     b["bond_1m_pct"] = atlas.price_return_proxy(dy1)
     etf = config.ATLAS_COUNTRY_ETFS.get(iso)
@@ -99,12 +149,12 @@ def _us_extra_sections(us_10y_pct: float | None) -> dict:
     curve: dict = {}
     try:
         for sid, label in config.ATLAS_US_CURVE.items():
-            s = data_engine.fetch_fred_series(sid)
+            s = _merge_us(data_engine.fetch_fred_series(sid), _TREASURY_TENOR.get(sid, ""))
             if not s.empty:
                 curve[label + "_pct"] = round(float(s.dropna().iloc[-1]), 3)
         if curve.get("10y_pct"):
-            dgs10 = data_engine.fetch_fred_series("DGS10")
-            dgs2 = data_engine.fetch_fred_series("DGS2")
+            dgs10 = _merge_us(data_engine.fetch_fred_series("DGS10"), "10 Yr")
+            dgs2 = _merge_us(data_engine.fetch_fred_series("DGS2"), "2 Yr")
             brek = data_engine.fetch_fred_series(config.ATLAS_US_BREAKEVEN)
             if not brek.empty:
                 curve["real_10y_pct"] = atlas.real_yield(
@@ -118,8 +168,8 @@ def _us_extra_sections(us_10y_pct: float | None) -> dict:
         out["bond_curve"] = curve
     # 2s10s daily leg (US only; DGS2 does not exist per country on FRED)
     try:
-        dgs10 = data_engine.fetch_fred_series("DGS10")
-        dgs2 = data_engine.fetch_fred_series("DGS2")
+        dgs10 = _merge_us(data_engine.fetch_fred_series("DGS10"), "10 Yr")
+        dgs2 = _merge_us(data_engine.fetch_fred_series("DGS2"), "2 Yr")
         if not dgs10.empty and not dgs2.empty:
             slope = (dgs10 - dgs2).dropna()
             out["yield_spreads"] = {

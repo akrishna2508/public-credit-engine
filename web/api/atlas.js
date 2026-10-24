@@ -23,7 +23,7 @@ import {
 } from "./_shared.js";
 import {
   COUNTRIES, REGION_LABELS, CREDIT_INDICES, WB_INDICATORS, DURATION, CREDIT_SPREAD_DURATION,
-  FALLEN_ANGEL_ETFS,
+  FALLEN_ANGEL_ETFS, fetchCountryYield,
 } from "./_universe.js";
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -86,7 +86,7 @@ async function buildAtlas() {
   /* ---------------- 1. sovereign yields (FRED, monthly) ---------------- */
   const yieldJobs = isoList.filter((iso) => COUNTRIES[iso].yield);
   const yieldRes = await pmap(yieldJobs, 6, (iso) =>
-    fredCsv(COUNTRIES[iso].yield, { start: "2005-01-01" })
+    fetchCountryYield(COUNTRIES[iso], { start: "2005-01-01" })
   );
   const yieldRows = {};
   yieldJobs.forEach((iso, i) => {
@@ -171,7 +171,12 @@ async function buildAtlas() {
   });
 
   /* ---------------- 7. assemble ---------------- */
-  const usMonthly = yieldRows.US ? yieldRows.US : null;
+  // The US benchmark is a daily series (DGS10); every country's yields are
+  // monthly, so collapse the US to one observation per month before it is used
+  // as the comparison leg — the latest month keeps the latest daily value.
+  const usMonthly = yieldRows.US
+    ? (COUNTRIES.US.yieldDaily ? toMonthly(yieldRows.US) : yieldRows.US)
+    : null;
   const us10Pct = usMonthly ? usMonthly[usMonthly.length - 1].v : null;
 
   const countries = {};
@@ -181,7 +186,7 @@ async function buildAtlas() {
     const instruments = {};
 
     /* --- bond leg --- */
-    const rows = yieldRows[iso];
+    const rows = spec.yieldDaily ? toMonthly(yieldRows[iso]) : yieldRows[iso];
     let bondLocal1m = null;
     if (rows?.length) {
       const yieldPct = rows[rows.length - 1].v;
@@ -190,7 +195,9 @@ async function buildAtlas() {
       instruments.bonds = {
         status: "OK",
         seriesId: spec.yield,
-        notes: "10Y government bond yield — OECD long-term rate via FRED, monthly",
+        notes: spec.yieldDaily
+          ? "10Y benchmark government bond yield — US 10Y Treasury (FRED DGS10 history + same-day US Treasury par-yield curve, month-collapsed)"
+          : "10Y government bond yield — OECD long-term rate via FRED, monthly",
         yield_pct: yieldPct,
         asOf: rows[rows.length - 1].date,
         yield_chg_bps: changes || { status: "UNAVAILABLE" },
@@ -473,7 +480,7 @@ async function buildAtlas() {
       withFallenAngelEtf: withFallen,
     },
     sources: [
-      "FRED — OECD long-term (10Y) government bond yields, monthly",
+      "FRED — 10Y government bond yields: OECD long-term rates (monthly) and the US 10Y Treasury DGS10 (daily, month-collapsed)",
       "FRED — ICE BofA emerging-market corporate OAS by region, daily",
       "ECB Data Portal — euro-area AAA government curve, keyless",
       "Yahoo Finance — single-country equity ETFs, fallen-angel ETFs (ANGL / EM1A.DE / GFA.L) and FX crosses, daily",

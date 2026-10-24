@@ -110,7 +110,7 @@ export function unavailable(res, why, status = 200, rest = {}) {
 // the last-known data. Local runs (serve.mjs) persist the same files
 // — running the system once populates the cache for every later user
 // in the same window.
-import { readFileSync, writeFileSync, renameSync, mkdirSync, statSync } from "node:fs";
+import { readFileSync, writeFileSync, renameSync, mkdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -130,6 +130,9 @@ export const CACHE_TTL = {
   ECB: 24 * 3600 * 1000,
   YAHOO_CHART: 12 * 3600 * 1000,
   YAHOO_ATMIV: 3 * 3600 * 1000,
+  // US Treasury par-yield curve is keyless and publishes same business day
+  // (~4pm ET); a shorter window picks the close up sooner than FRED's 12h.
+  TREASURY: 4 * 3600 * 1000,
   // derived documents (fitted models, forecast paths, the atlas fan-out).
   // Six hours: the slowest input is a monthly yield and the fastest a daily
   // OAS, so nothing underneath moves more than once a day.
@@ -157,19 +160,40 @@ function cachePath(kind, key) {
 function readOne(root, kind, key) {
   try {
     const p = cacheFile(root, kind, key);
-    return { mtime: statSync(p).mtimeMs, doc: JSON.parse(readFileSync(p, "utf8")) };
+    return { doc: JSON.parse(readFileSync(p, "utf8")) };
   } catch {
     return null;
   }
 }
 
-/** newest of {/tmp refresh, bundled seed}; ttlMs=0 means "any age" */
+/** Age of a cached document in ms from its OWN `updated` stamp. Unknown or
+ *  missing => Infinity, i.e. stale, so a refetch is attempted and the copy
+ *  survives only as the error fallback. */
+function cacheAgeMs(rec) {
+  const t = rec && rec.doc && rec.doc.updated ? Date.parse(rec.doc.updated) : NaN;
+  return Number.isFinite(t) ? Date.now() - t : Infinity;
+}
+
+/** newest of {/tmp refresh, bundled seed}; ttlMs=0 means "any age".
+ *
+ *  Freshness is judged by the document's OWN `updated` stamp, not the file
+ *  mtime. A bundled seed's mtime is whatever checkout/build assigned it, so an
+ *  mtime test reads a months-old snapshot as brand new and serves it without
+ *  ever hitting upstream — that is how the committed FRED/ECB/Yahoo cache
+ *  stayed frozen while every request reported a "fresh" hit. cachedJson was
+ *  already fixed this way; this is the same fix for the fetch memo. */
 function readCached(kind, key, ttlMs) {
   const a = readOne(WRITE_ROOT, kind, key);
   const b = WRITE_ROOT === SEED_ROOT ? null : readOne(SEED_ROOT, kind, key);
-  const best = !a ? b : !b ? a : a.mtime >= b.mtime ? a : b;
+  let best = null;
+  let bestAge = Infinity;
+  for (const rec of [a, b]) {
+    if (!rec) continue;
+    const age = cacheAgeMs(rec);
+    if (age < bestAge) { bestAge = age; best = rec; }
+  }
   if (!best) return null;
-  if (ttlMs && Date.now() - best.mtime > ttlMs) return null;
+  if (ttlMs && !(bestAge < ttlMs)) return null;
   return best.doc;
 }
 
@@ -208,6 +232,11 @@ function writeCache(kind, key, data) {
  * than making the caller wait, so a cold instance is slow at most once.
  */
 export async function cachedJson(kind, key, ttlMs, buildFn) {
+  // The seed generator sets PC_FORCE_REBUILD=1: it must capture the freshly
+  // rebuilt document, not the stale copy this function normally serves while a
+  // refresh runs in the background. Without it the seed writes the previous
+  // document (with the previous data) and the fresh one lands after it.
+  const force = process.env.PC_FORCE_REBUILD === "1";
   // Freshness comes from the document's OWN `updated` stamp, not the file's
   // mtime. A seeded document is bundled into the function by vercel.json, and
   // its mtime on a serverless instance is whatever the build assigned rather
@@ -216,7 +245,7 @@ export async function cachedJson(kind, key, ttlMs, buildFn) {
   // background rebuild of data that was minutes old.
   const stale = readCached(kind, key, 0); // any age; judge it ourselves
   const age = stale?.updated ? Date.now() - Date.parse(stale.updated) : Infinity;
-  if (stale?.doc && Number.isFinite(age) && age >= 0 && age < ttlMs) {
+  if (!force && stale?.doc && Number.isFinite(age) && age >= 0 && age < ttlMs) {
     return { doc: stale.doc, fromCache: true, stale: false };
   }
 
@@ -241,7 +270,7 @@ export async function cachedJson(kind, key, ttlMs, buildFn) {
   // one. Its rejection is swallowed here on purpose — nobody is awaiting it,
   // and an unhandled rejection would take the whole function down for a
   // refresh that simply failed.
-  if (stale?.doc) {
+  if (!force && stale?.doc) {
     job.catch(() => {});
     return { doc: stale.doc, fromCache: true, stale: true, refreshing: true };
   }
@@ -381,6 +410,79 @@ export async function ecbCsv(fullKey, { start = "2005-01-01" } = {}) {
 }
 
 /* ------------------------------------------------------------------ */
+/* US Treasury par-yield curve (keyless, home.treasury.gov)             */
+/* ------------------------------------------------------------------ */
+/**
+ * The official daily Treasury par yield curve, current year only (the
+ * multi-year "all" export is blocked; per-year CSV is the working form).
+ *
+ * This is the source FRED's DGS constant-maturity series are derived from, but
+ * it publishes the SAME business day (~4pm ET) while FRED's DGS series lag a
+ * day. So it is the freshest free/keyless US yield available. Returns one row
+ * per date carrying every tenor: {date, v: {"10 Yr": 5.00, ...}}.
+ */
+export async function treasuryCurveYear(year = new Date().getUTCFullYear()) {
+  const key = String(year);
+  const cached = await cachedRows("treasury", key, CACHE_TTL.TREASURY, async () => {
+    const url = `https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/${year}/all?type=daily_treasury_yield_curve&field_tdr_date_value=${year}&page&_format=csv`;
+    const r = await fetchWithRetry(url, {
+      headers: { "User-Agent": UA, Accept: "text/csv" }, timeoutMs: 25000,
+    });
+    if (r.unavailable) return { unavailable: `Treasury ${year}: ${r.why}` };
+    if (!r.ok) return { unavailable: `Treasury ${year}: HTTP ${r.status}` };
+    const text = await r.text();
+    const lines = text.replace(/\r/g, "").trim().split("\n");
+    if (!lines.length || !/Date/i.test(lines[0])) {
+      return { unavailable: `Treasury ${year}: unexpected payload` };
+    }
+    const header = lines[0].split(",").map((h) => h.replace(/^"|"$/g, "").trim());
+    const rows = [];
+    for (const line of lines.slice(1)) {
+      const cols = line.split(",");
+      const m = (cols[0] || "").replace(/^"|"$/g, "").trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (!m) continue;
+      const date = `${m[3]}-${m[1].padStart(2, "0")}-${m[2].padStart(2, "0")}`;
+      const curve = {};
+      for (let i = 1; i < header.length; i++) {
+        const v = Number(cols[i]);
+        if (Number.isFinite(v)) curve[header[i]] = v;
+      }
+      rows.push({ date, v: curve });
+    }
+    if (!rows.length) return { unavailable: `Treasury ${year}: no rows` };
+    return { rows };
+  });
+  if (cached.unavailable) return { unavailable: cached.unavailable };
+  return { rows: cached.rows || [] };
+}
+
+/**
+ * A US Treasury constant-maturity series: FRED history (long) with the current
+ * year's same-day Treasury par-yield observations merged on top (Treasury wins
+ * on any overlapping date). Whichever source is live is used; if only FRED is
+ * available the result is exactly the old DGS series.
+ */
+export async function usYieldSeries({ fredId, treasuryLabel, start = "2005-01-01" } = {}) {
+  const [fr, tr] = await Promise.all([
+    fredId ? fredCsv(fredId, { start }) : Promise.resolve({ unavailable: "no FRED id" }),
+    treasuryCurveYear(),
+  ]);
+  const byDate = new Map();
+  if (fr && !fr.unavailable) for (const r of fr.rows || []) byDate.set(r.date, r);
+  if (tr && !tr.unavailable) {
+    for (const r of tr.rows || []) {
+      const v = r.v && r.v[treasuryLabel];
+      if (Number.isFinite(v)) byDate.set(r.date, { date: r.date, v });
+    }
+  }
+  const rows = [...byDate.values()]
+    .filter((r) => r.date >= start)
+    .sort((a, b) => a.date.localeCompare(b.date));
+  if (!rows.length) return { unavailable: `US ${fredId || treasuryLabel}: no rows (FRED + Treasury empty)` };
+  return { rows };
+}
+
+/* ------------------------------------------------------------------ */
 /* Yahoo v8 chart + v7 options (server-side; no SDK, no auth)          */
 /* ------------------------------------------------------------------ */
 
@@ -496,6 +598,26 @@ export async function worldBank(indicator, iso3List) {
 /* ------------------------------------------------------------------ */
 /* Series helpers shared by the atlas / opportunities / forecast legs   */
 /* ------------------------------------------------------------------ */
+
+/**
+ * Collapse a date-keyed row series to one observation per calendar month
+ * (the month's last observation, keeping its real date).
+ *
+ * The sovereign book is monthly by construction: every change, z-score and VAR
+ * window is counted in calendar months, matching the OECD `IRLTLT01*M156N`
+ * series. A few countries, however, only have a DAILY benchmark on FRED — the
+ * United States is the one that matters (DGS10). Feeding that daily series
+ * straight into month-counted code would make "1 month ago" mean one trading
+ * day and a 126-observation z-window mean half a year. Collapsing first keeps
+ * the latest observation while restoring calendar-month semantics. On a series
+ * that is already monthly this is a no-op.
+ */
+export function collapseToMonthly(rows) {
+  if (!rows || !rows.length) return rows;
+  const byM = new Map();
+  for (const r of rows) byM.set(String(r.date).slice(0, 7), r);
+  return [...byM.values()].sort((a, b) => a.date.localeCompare(b.date));
+}
 
 /** % return between the close `back` observations ago and the last close */
 export function pctReturn(rows, back) {

@@ -23,7 +23,7 @@
 import {
   fredCsv, yahooChart, yahooAtmIv, ecbCsv, json, pmap, worldBank,
   toBps, logPriceBps, tradeCostBasis, cachedJson, CACHE_TTL,
-  SPREAD_DURATION, BOND_DURATION, PRICE_SCALE,
+  SPREAD_DURATION, BOND_DURATION, PRICE_SCALE, collapseToMonthly,
 } from "./_shared.js";
 import {
   buildForecast, combinationSamples, combinationLevel0, weightFor, stepSdFor,
@@ -31,7 +31,7 @@ import {
 } from "./_forecastpath.js";
 import {
   RATING_ORDER, US_GRADES, DR_SERIES, DR_MAPPING, ADJACENT_PAIRS,
-  expectedLossByGrade, CREDIT_PANEL, COUNTRIES, WB_INDICATORS,
+  expectedLossByGrade, CREDIT_PANEL, COUNTRIES, WB_INDICATORS, fetchCountryYield,
 } from "./_universe.js";
 
 export const config = { runtime: "nodejs" };
@@ -256,7 +256,7 @@ async function buildHoldBook(market) {
 
   if (market === "countries" || market === "all") {
     const isos = Object.keys(COUNTRIES).filter((i) => COUNTRIES[i].yield);
-    const res = await pmap(isos, 6, (iso) => fredCsv(COUNTRIES[iso].yield, { start: "1990-01-01" }));
+    const res = await pmap(isos, 6, (iso) => fetchCountryYield(COUNTRIES[iso], { start: "1990-01-01" }));
     const infl = await worldBank(WB_INDICATORS.inflation.id, isos.map((i) => COUNTRIES[i].iso3));
     const inflLatest = infl && !infl.unavailable ? infl.latest : null;
 
@@ -264,7 +264,12 @@ async function buildHoldBook(market) {
     // 34-variable panel would need far more history than any of them has,
     // and a univariate fit would miss the common rates cycle entirely
     const usRows = res[isos.indexOf("US")];
-    const usMap = usRows && !usRows.unavailable ? asMap(usRows.rows) : null;
+    // the country book is a monthly VAR (freq: "months"); the US benchmark is
+    // daily DGS10, so collapse it to month-end before it enters the panel
+    const usMonthly = usRows && !usRows.unavailable
+      ? (COUNTRIES.US.yieldDaily ? collapseToMonthly(usRows.rows) : usRows.rows)
+      : null;
+    const usMap = usMonthly ? asMap(usMonthly) : null;
 
     const pure = [];
     let modelNote = null;
@@ -273,7 +278,8 @@ async function buildHoldBook(market) {
       const r = res[i];
       if (!r || r.unavailable || !r.rows?.length) continue;
       const cols = iso === "US" || !usMap ? [iso] : [iso, "US"];
-      const sm = { [iso]: asMap(r.rows) };
+      const isoRows = COUNTRIES[iso].yieldDaily ? collapseToMonthly(r.rows) : r.rows;
+      const sm = { [iso]: asMap(isoRows) };
       if (cols.length === 2) sm.US = usMap;
       const fc = buildForecast(cols, sm, { freq: "months", scale: 100, floorAt: -Infinity });
       if (!fc.ok) {

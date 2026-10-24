@@ -66,6 +66,34 @@ def rolling_z_last(s: pd.Series, window: int = MONTHLY_Z_WINDOW,
     return round((clean.iloc[-1] - mean) / sd, 3)
 
 
+def is_daily(s: pd.Series) -> bool:
+    """True when the series is published daily (median spacing well under a month)."""
+    clean = s.dropna()
+    if len(clean) < 4:
+        return False
+    gaps = clean.index.to_series().diff().dt.days.dropna()
+    return not gaps.empty and float(gaps.median()) < 20
+
+
+def to_monthly(s: pd.Series) -> pd.Series:
+    """Month-end series for a daily input; pass a monthly input through.
+
+    The US benchmark is the daily DGS10 while every other country is the
+    monthly OECD long-term rate. `yield_changes_bps` works in calendar months
+    so it is frequency-safe on its own, but `rolling_z_last` counts
+    OBSERVATIONS (its 126-observation window is ~10y of monthly data; on a
+    daily series the same window is only ~6 months). Collapsing a daily series
+    to month-end restores the intended semantics while keeping the latest
+    value — the current month's last observation."""
+    clean = s.dropna()
+    if len(clean) < 4:
+        return clean
+    gaps = clean.index.to_series().diff().dt.days.dropna()
+    if gaps.empty or float(gaps.median()) >= 20:
+        return clean  # already monthly (or coarser)
+    return clean.resample("ME").last().dropna()
+
+
 def sovereign_spread_proxy(country_yield_pct: float | None,
                            us_yield_pct: float | None) -> dict:
     """CDS proxy: 10Y yield minus US 10Y (labeled, not a real CDS)."""
@@ -93,9 +121,11 @@ def assemble_country(country_name: str, iso: str, region: str,
     metrics = {yield_pct, yields: {h: bps}, yield_z, bond_1m_pct,
                etf_1m_pct, etf_3m_pct, etf_12m_pct, spread_us_bps, ...}
     """
-    debt = {"notes": "10Y OECD sovereign yield (FRED, monthly)"}
+    debt = {"notes": metrics.get("bonds_notes")
+            or "10Y OECD sovereign yield (FRED, monthly)"}
     if metrics.get("yield_pct") is not None:
         debt["yield_pct"] = metrics["yield_pct"]
+        debt["as_of"] = metrics.get("as_of")
         debt["yield_chg_bps"] = metrics.get("yields", {})
         debt["yield_z"] = metrics.get("yield_z")
         debt["bond_price_1m_pct"] = metrics.get("bond_1m_pct")

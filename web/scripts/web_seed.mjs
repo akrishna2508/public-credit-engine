@@ -22,6 +22,11 @@ const repo = resolve(root, "..");
 const dataDir = resolve(root, "public", "data");
 mkdirSync(dataDir, { recursive: true });
 
+// The seed must snapshot FRESHLY built documents, not the stale copies the
+// read path serves while a background refresh runs (cachedJson's normal
+// behavior). Force every cachedJson build to complete synchronously.
+process.env.PC_FORCE_REBUILD = "1";
+
 /* ---- load .env so the handlers see FRED_API_KEY, exactly like serve.mjs ---- */
 {
   const envPath = resolve(repo, ".env");
@@ -68,6 +73,11 @@ try {
   if (atlas?.status !== "OK") throw new Error(atlas?.why || "atlas returned no data");
   write("bundle.json", {
     ...atlas,
+    // Stamp the snapshot with when it was actually built. The handler returns
+    // the PREVIOUS bundle's `generated` (STATIC_GENERATED), so that the site
+    // can show the data's own date rather than the request time — but with no
+    // override here that becomes a fixed point and the stamp never advances.
+    generated: new Date().toISOString(),
     note: "Seed snapshot produced by running the live /api/atlas handler locally. The deployed site prefers the live endpoint; this file only serves a cold or rate-limited deployment.",
   });
   console.log(`bundle.json written — ${Object.keys(atlas.countries).length} markets, schema ${atlas.schema}`);

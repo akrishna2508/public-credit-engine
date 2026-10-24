@@ -151,6 +151,20 @@ look-ahead).
   already uses the JSON API (`config.FRED_BASE_URL` +
   `engine/data_engine.py` `fetch_fred_series`; re-verified live
   2026-08-12 — zero `fredgraph` references in the Python tree, §9.18).
+- **US Treasury daily par-yield curve (keyless, home.treasury.gov)** — added
+  2026-10-24. The official daily Treasury yield curve publishes the SAME
+  business day (~4pm ET); FRED's `DGS*` constant-maturity series are derived
+  from it but lag a day. Both layers now merge it over FRED history for the US
+  benchmark (Treasury wins on overlapping dates, FRED supplies the long
+  history): web `web/api/_shared.js` (`treasuryCurveYear` + `usYieldSeries`,
+  used by `fetchCountryYield` in `_universe.js` and the history curve) and
+  engine `sources/treasury_api.fetch_par_yield_curve` (used by
+  `pipelines/atlas.py`). Live proof 2026-10-24: FRED DGS10 10/22 = 4.96 vs the
+  same-day Treasury 10/23 = 5.00; the US atlas/opportunities/history/returns
+  surfaces all report 5.00 @ 2026-10-23. Non-US sovereigns keep the OECD
+  monthly series — no fresher free per-country source exists. The multi-year
+  Treasury CSV export is blocked; only the per-year form works, so FRED
+  provides history and Treasury the recent same-day tail.
 - **ECB Data Portal (keyless)**: euro-area GOVERNMENT yield curves
   (`YC.B.U2.EUR.4F.G_N_A.SV_C_YM.SR_10Y` AAA 10Y and `G_N_C` all-ratings
   10Y, `?format=csvdata`; 5603 obs, verified live 2026-08-10). Two fixes

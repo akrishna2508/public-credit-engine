@@ -6,8 +6,8 @@
  *   /api/history?country=DE           -> 20y monthly 10Y (OECD/ECB)
  *   /api/history?kind=curve           -> US nominal curve 2/5/10/30 (weekly)
  */
-import { fredCsv, ecbCsv, json, unavailable } from "./_shared.js";
-import { COUNTRIES } from "./_universe.js";
+import { fredCsv, ecbCsv, json, unavailable, collapseToMonthly, usYieldSeries } from "./_shared.js";
+import { COUNTRIES, fetchCountryYield } from "./_universe.js";
 
 export const config = { runtime: "nodejs" };
 
@@ -25,6 +25,8 @@ const DEFAULTS = {
   DR_HY: { id: "DRCCLACBS", standsFor: "12-month trailing default rate — speculative grade (Moody's, quarterly)" },
 };
 const CURVE = { DGS2: "US 2-year Treasury yield (FRED, daily)", DGS5: "US 5-year Treasury yield", DGS10: "US 10-year Treasury yield", DGS30: "US 30-year Treasury yield" };
+// Treasury par-yield column labels, used to merge the same-day curve on top of FRED
+const TREASURY_LABEL = { DGS2: "2 Yr", DGS5: "5 Yr", DGS10: "10 Yr", DGS30: "30 Yr" };
 const OECD_COUNTRIES = {
   US: "United States", GB: "United Kingdom", JP: "Japan", AU: "Australia",
   CA: "Canada", FR: "France", DE: "Germany", IT: "Italy", ES: "Spain",
@@ -63,10 +65,15 @@ export default async function handler(req, res) {
     // OECD pattern IRLTLT01<ISO2>M156N, but India and Colombia only exist
     // under the <ISO3>IRLTLT01STM form, and some have no series at all
     if (spec?.yield) {
-      const fred = await fredCsv(spec.yield, { start: "2005-01-01" });
-      if (!fred.unavailable && fred.rows?.length) {
-        rows = fred.rows;
-        source = `FRED ${spec.yield} (OECD long-term 10Y rate, monthly)`;
+      const y = await fetchCountryYield(spec, { start: "2005-01-01" });
+      if (!y.unavailable && y.rows?.length) {
+        // US is a daily benchmark (FRED DGS10 + same-day Treasury close);
+        // collapse to month-end so the series stays comparable with the monthly
+        // OECD rates in the same selector
+        rows = spec.yieldDaily ? collapseToMonthly(y.rows) : y.rows;
+        source = spec.yieldDaily
+          ? `US 10Y Treasury — FRED ${spec.yield} + same-day US Treasury par-yield curve (month-end observations)`
+          : `FRED ${spec.yield} (OECD long-term 10Y rate, monthly)`;
       }
     }
     if (!rows && ["DE", "FR", "IT", "ES", "NL", "BE", "AT", "PT", "IE", "FI", "GR"].includes(iso)) {
@@ -109,7 +116,8 @@ export default async function handler(req, res) {
   if (kind === "curve") {
     const series = {};
     for (const [id, standsFor] of Object.entries(CURVE)) {
-      const r = await fredCsv(id, { start: "2005-01-01" });
+      // same-day Treasury par-yield merged over FRED history (fresher last point)
+      const r = await usYieldSeries({ fredId: id, treasuryLabel: TREASURY_LABEL[id], start: "2005-01-01" });
       if (r.rows) series[id] = { standsFor, points: weekly(r.rows).map((x) => [x.date, x.v]) };
     }
     if (!Object.keys(series).length) return unavailable(res, "FRED_API_KEY not configured — US curve needs the FRED key");

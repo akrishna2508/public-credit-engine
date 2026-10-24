@@ -60,7 +60,8 @@ echo "  DONE web seed"
 echo "-- Staging data changes for git..."
 git add data/atlas.json data/dealer_markup.json data/iv_history.json \
         data/expected_loss_by_grade.json \
-        web/public/data/bundle.json web/public/data/status.json api/iv_history.json 2>/dev/null || true
+        web/public/data/bundle.json web/public/data/status.json api/iv_history.json \
+        web/public/data/cache 2>/dev/null || true
 
 # Check if anything was staged
 STAGED=$(git diff --staged --quiet 2>/dev/null && echo "NO" || echo "YES")

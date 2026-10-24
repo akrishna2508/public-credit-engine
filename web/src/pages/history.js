@@ -41,7 +41,7 @@ export async function render(root) {
     <div class="col-12">
       <div class="pc-card pc-card-pad">
         <div class="pc-card-title">Sovereign 10-year yields — actual history</div>
-        <div class="pc-card-sub">Monthly OECD long-term rates (FRED), or the ECB long-term rate for euro-area members — real monthly observations. ${SOVEREIGNS.length} markets have a free 10-year series; those that do not are scored on the map through their equity and credit legs instead.</div>
+        <div class="pc-card-sub">Monthly OECD long-term rates (FRED), the ECB long-term rate for euro-area members, and the daily US 10Y Treasury (DGS10) — real observations, no extrapolation. ${SOVEREIGNS.length} markets have a free 10-year series; those that do not are scored on the map through their equity and credit legs instead.</div>
         <div class="pc-controls" style="margin-bottom:12px">
           <select id="sovereign-sel" class="pc-btn">
             ${(() => {

@@ -62,6 +62,45 @@ class TestRollingZ:
         assert atlas.rolling_z_last(s) is None
 
 
+class TestFrequencyCollapse:
+    """The US benchmark (DGS10) is daily; the month-counted z/change math must
+    collapse it to month-end without losing the latest value."""
+
+    def test_daily_series_is_detected(self):
+        idx = pd.date_range("2026-06-01", periods=80, freq="B")
+        s = pd.Series(np.arange(80.0), index=idx)
+        assert atlas.is_daily(s)
+
+    def test_monthly_series_is_not_daily(self):
+        assert not atlas.is_daily(_monthly([3.0] * 30))
+
+    def test_to_monthly_keeps_latest_value(self):
+        idx = pd.date_range("2026-06-01", periods=100, freq="B")  # into Oct 2026
+        s = pd.Series(np.linspace(4.0, 5.1, len(idx)), index=idx)
+        m = atlas.to_monthly(s)
+        assert len(m) == 5  # Jun, Jul, Aug, Sep, Oct
+        assert m.iloc[-1] == pytest.approx(s.iloc[-1])  # latest daily survives
+        # one observation per calendar month
+        months = {(t.year, t.month) for t in m.index}
+        assert len(months) == len(m)
+
+    def test_to_monthly_is_noop_for_monthly(self):
+        s = _monthly([3.0, 3.1, 3.2])
+        result = atlas.to_monthly(s)
+        assert list(result.values) == [3.0, 3.1, 3.2]
+        assert len(result) == 3
+
+    def test_daily_z_window_is_calendar_correct(self):
+        # a daily series with a late spike: after collapse the z-window is
+        # measured in months, so a 5-year daily history does not read as if it
+        # had 126 months of observations
+        idx = pd.date_range("2021-01-01", periods=1200, freq="B")
+        s = pd.Series([3.0] * len(idx), index=idx)
+        s.iloc[-1] = 6.0
+        z_daily = atlas.rolling_z_last(atlas.to_monthly(s))
+        assert z_daily is not None and z_daily > 2
+
+
 class TestSovereignSpreadProxy:
     def test_proxy_label_and_math(self):
         proxy = atlas.sovereign_spread_proxy(8.7, 4.47)
