@@ -2,58 +2,58 @@
   {
     "name": "fred_ext.treasury_curve",
     "available": true,
-    "as_of": "2026-10-22",
+    "as_of": "2026-10-30",
     "gap_days": null,
-    "detail": "6583 observations"
+    "detail": "6589 observations"
   },
   {
     "name": "fred_ext.moodys",
     "available": true,
-    "as_of": "2026-09-01",
+    "as_of": "2026-10-01",
     "gap_days": null,
-    "detail": "1293 observations"
+    "detail": "1294 observations"
   },
   {
     "name": "fred_ext.tips",
     "available": true,
-    "as_of": "2026-10-22",
+    "as_of": "2026-10-30",
     "gap_days": null,
-    "detail": "6211 observations"
+    "detail": "6217 observations"
   },
   {
     "name": "fred_ext.macro_anchors",
     "available": true,
-    "as_of": "2026-09-01",
+    "as_of": "2026-10-01",
     "gap_days": null,
-    "detail": "867 observations"
+    "detail": "868 observations"
   },
   {
     "name": "fred_ext.regional_credit",
     "available": true,
-    "as_of": "2026-10-22",
+    "as_of": "2026-11-02",
     "gap_days": null,
-    "detail": "794 observations"
+    "detail": "792 observations"
   },
   {
     "name": "fred_ext.global_sovereign",
     "available": true,
-    "as_of": "2026-10-22",
+    "as_of": "2026-10-30",
     "gap_days": null,
-    "detail": "16908 observations"
+    "detail": "16914 observations"
   },
   {
     "name": "fred_ext.em_sector_credit",
     "available": true,
-    "as_of": "2026-10-22",
+    "as_of": "2026-11-02",
     "gap_days": null,
-    "detail": "794 observations"
+    "detail": "792 observations"
   },
   {
     "name": "fred_ext.inflation",
     "available": true,
-    "as_of": "2026-10-22",
+    "as_of": "2026-10-30",
     "gap_days": null,
-    "detail": "6211 observations"
+    "detail": "6217 observations"
   },
   {
     "name": "treasury_api.auctions",
@@ -72,16 +72,16 @@
   {
     "name": "cftc.cot",
     "available": true,
-    "as_of": "2026-10-13",
+    "as_of": "2026-10-20",
     "gap_days": null,
-    "detail": "3625 observations"
+    "detail": "3724 observations"
   },
   {
     "name": "ecb.corp_yields",
     "available": true,
-    "as_of": "2026-10-21",
+    "as_of": "2026-10-30",
     "gap_days": null,
-    "detail": "5657 observations"
+    "detail": "5664 observations"
   },
   {
     "name": "world_bank.debt",
@@ -114,44 +114,44 @@
   {
     "name": "yf_futures.panel",
     "available": true,
-    "as_of": "2026-10-23",
+    "as_of": "2026-11-03",
     "gap_days": null,
-    "detail": "2218 observations"
+    "detail": "2225 observations"
   },
   {
     "name": "yf_options.snapshot",
     "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "[{'ticker': 'HYG', 'as_of': '2026-10-23', 'expiry': '2026-10-30', 'underlying': 77.1, 'atm_strike': 77.0, 'atm_iv': 0.08"
+    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-03', 'expiry': '2026-11-06', 'underlying': 76.975, 'atm_strike': 77.0, 'atm_iv': 0."
   },
   {
     "name": "yf_fx.panel",
     "available": true,
-    "as_of": "2026-10-23",
+    "as_of": "2026-11-03",
     "gap_days": null,
-    "detail": "2813 observations"
+    "detail": "2820 observations"
   },
   {
     "name": "finra.trace",
-    "available": false,
+    "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "SourceUnavailable: finra UNAVAILABLE: breadth: HTTPSConnectionPool(host='ews.fip.finra.org', port=443): Max retries exceeded with url: /fip/rest/ews/oauth2/access_token?grant_type=client_credentials (Caused by NameResol"
+    "detail": "3060 observations"
   },
   {
     "name": "optional.alpaca",
-    "available": false,
+    "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "ConnectionError: HTTPSConnectionPool(host='data.alpaca.markets', port=443): Max retries exceeded with url: /v2/stocks/trades/latest?symbols=SGOV&feed=iex (Caused by NameResolutionError(\"HTTPSConnection(host='data.alpa"
+    "detail": "1 keys"
   },
   {
     "name": "ndl.yield_curve",
     "available": false,
     "as_of": null,
     "gap_days": null,
-    "detail": "SourceUnavailable: ndl UNAVAILABLE: USTREASURY/YIELD: HTTPSConnectionPool(host='data.nasdaq.com', port=443): Max retries exceeded with url: /api/v3/datasets/USTREASURY/YIELD.json?api_key=***&rows=120 (Caused by NameReso"
+    "detail": "SourceUnavailable: ndl UNAVAILABLE: USTREASURY/YIELD: 403 Client Error: Forbidden for url: https://data.nasdaq.com/api/v3/datasets/USTREASURY/YIELD.json?api_key=***&rows=120"
   },
   {
     "name": "polygon.options",
