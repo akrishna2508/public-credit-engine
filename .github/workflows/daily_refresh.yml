@@ -2,8 +2,10 @@ name: Daily Public Credit Refresh
 
 on:
   schedule:
-    # Run daily at 18:00 UTC (after US market close; matches launchd plist 18:00 PDT)
-    - cron: '0 18 * * *'
+    # 22:00 UTC = after the US Treasury par-yield publish (~4pm ET) and FRED's
+    # DGS update, so the same-day close is available. (18:00 UTC ran before the
+    # close and only ever captured the prior day.)
+    - cron: '0 22 * * *'
   workflow_dispatch:
     # Also allow manual trigger from Actions tab
     inputs:
@@ -52,10 +54,17 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      # ---- 4. Clear FRED cache (force fresh fetch) ----
-      - name: Clear FRED cache
+      # ---- 4. Force fresh upstream reads ----
+      # Cache files are content-hash named (data/cache/<sha1>.json), so the old
+      # `rm -rf data/cache/fred*` matched nothing. Worse, a freshly checked-out
+      # cache carries the checkout mtime, which the Python TTL test reads as
+      # "just fetched" — so day-old cached values were reused and the data
+      # froze (e.g. the Treasury curve stuck at its captured date). Age every
+      # cached file so the loaders re-fetch and rewrite it.
+      - name: Force fresh upstream reads (age the cache)
         run: |
-          rm -rf data/cache/fred_ext* data/cache/fred* 2>/dev/null || true
+          find data/cache -type f -exec touch -t 200001010000 {} + 2>/dev/null || true
+          echo "Aged $(find data/cache -type f | wc -l) cache files so upstreams re-fetch"
 
       # ---- 5. Verify FRED API key is set ----
       - name: Check FRED API key

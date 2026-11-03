@@ -14,6 +14,14 @@ echo "========================================="
 echo "Daily refresh started: $TIMESTAMP"
 echo "========================================="
 
+# 0. Daily IV-RV accrual + source probe. The board's IV-RV z-score leg only
+#    unlocks after IV_Z_MIN_OBS (20) accrued days, and this is the only place
+#    CI accrues them — without it the deployed IV history never advances.
+#    Also refreshes the board's source-availability truth.
+echo "-- Accruing IV-RV snapshots + probing sources..."
+python -m sources.probe || echo "  WARN: source probe / IV accrual had issues"
+echo "  DONE probe"
+
 # 1. Regenerate atlas/heatmap data
 echo "-- Regenerating atlas (15 countries + 168 markets)..."
 python cli.py --market atlas
@@ -56,12 +64,22 @@ echo "-- Warming web seed bundle..."
 }
 echo "  DONE web seed"
 
-# 9. Stage all changed data files for git commit
+# 9. Stage all changed data files for git commit.
+#    `git add` is all-or-nothing across its pathspecs: one unmatched path makes
+#    it stage NOTHING. The old line listed `api/iv_history.json` (the real path
+#    is web/api/iv_history.json) and hid the fatal with `|| true`, so every run
+#    staged nothing and the deployed data never updated. Build the list from
+#    paths that actually exist and let a real failure surface.
 echo "-- Staging data changes for git..."
-git add data/atlas.json data/dealer_markup.json data/iv_history.json \
-        data/expected_loss_by_grade.json \
-        web/public/data/bundle.json web/public/data/status.json api/iv_history.json \
-        web/public/data/cache 2>/dev/null || true
+STAGE_PATHS="data/atlas.json data/dealer_markup.json data/iv_history.json \
+data/source_probe.json data/expected_loss_by_grade.json \
+web/public/data/bundle.json web/public/data/status.json web/api/iv_history.json \
+web/public/data/cache"
+EXISTING=""
+for p in $STAGE_PATHS; do
+    if [ -e "$p" ]; then EXISTING="$EXISTING $p"; fi
+done
+git add -- $EXISTING
 
 # Check if anything was staged
 STAGED=$(git diff --staged --quiet 2>/dev/null && echo "NO" || echo "YES")
@@ -72,8 +90,8 @@ echo "  Staged changes: $STAGED"
 # We leave files staged so the workflow can pick them up.
 
 echo "-- Daily refresh complete (git commit/push delegated to GitHub Actions workflow)"
-echo "  Files staged for: atlas.json, dealer_markup.json, iv_history.json,"
-echo "  bundle.json, status.json, iv_history.json (api)"
+echo "  Files staged: atlas.json, dealer_markup.json, iv_history.json,"
+echo "  source_probe.json, bundle.json, status.json, web/api/iv_history.json, web cache"
 
 echo "$(date): Daily refresh complete."
 echo "========================================="
