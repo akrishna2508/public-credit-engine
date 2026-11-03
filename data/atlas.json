@@ -55,19 +55,19 @@
      "ES=F/^GSPC": {
       "status": "ok",
       "as_of": "2026-11-03",
-      "future_last": 7614.5,
-      "spot_last": 7585.83,
+      "future_last": 7605.75,
+      "spot_last": 7582.66,
       "dte_days": 17,
-      "basis_ann": 0.0811,
+      "basis_ann": 0.0654,
       "note": "CME third-Friday expiry rule; annualized basis yield = (F-S)/S * 365/DTE (heatmap spec \u00a73.4)"
      },
      "NQ=F/^NDX": {
       "status": "ok",
       "as_of": "2026-11-03",
-      "future_last": 28380.0,
-      "spot_last": 28245.0,
+      "future_last": 28327.5,
+      "spot_last": 28235.68,
       "dte_days": 17,
-      "basis_ann": 0.1026,
+      "basis_ann": 0.0698,
       "note": "CME third-Friday expiry rule; annualized basis yield = (F-S)/S * 365/DTE (heatmap spec \u00a73.4)"
      },
      "ZT=F": {
@@ -82,26 +82,26 @@
      },
      "ZN=F": {
       "as_of": "2026-11-03",
-      "last": 106.515625,
-      "mom_21d": 0.022038980509745176
+      "last": 106.53125,
+      "mom_21d": 0.022188905547226412
      },
      "ZB=F": {
       "as_of": "2026-11-03",
-      "last": 107.5,
-      "mom_21d": 0.051987767584097844
+      "last": 107.53125,
+      "mom_21d": 0.05229357798165135
      },
      "UB=F": {
       "as_of": "2026-11-03",
-      "last": 108.90625,
-      "mom_21d": 0.05670103092783507
+      "last": 108.9375,
+      "mom_21d": 0.05700424499696788
      },
      "SR3=F": {
       "as_of": "2026-11-03",
-      "last": 95.83999633789062
+      "last": 95.84500122070312
      }
     },
     "irf_spreads": {
-     "sofr_implied_3m_bps": 416.0,
+     "sofr_implied_3m_bps": 415.5,
      "note": "back-month SOFR contracts are not listed on yfinance (404 verified 2026-08-10); strip slope UNAVAILABLE"
     },
     "options": {
@@ -109,8 +109,8 @@
       "obs_days": 20,
       "atm_iv_last": 0.0693,
       "as_of": "2026-11-03",
-      "straddle_yield_ann": 0.0545,
-      "straddle_price_usd": 0.38,
+      "straddle_yield_ann": 0.0559,
+      "straddle_price_usd": 0.39,
       "rv_30d": 0.0445,
       "vrp": 0.0248,
       "iv_z": -0.547,
@@ -118,53 +118,53 @@
      },
      "LQD": {
       "obs_days": 20,
-      "atm_iv_last": 0.103,
+      "atm_iv_last": 0.106,
       "as_of": "2026-11-03",
       "straddle_yield_ann": 0.1404,
       "straddle_price_usd": 1.32,
       "rv_30d": 0.068,
-      "vrp": 0.035,
-      "iv_z": -0.81,
+      "vrp": 0.038,
+      "iv_z": -0.797,
       "put_call_oi_ratio": 0.9056
      },
      "TLT": {
       "obs_days": 20,
-      "atm_iv_last": 0.1543,
+      "atm_iv_last": 0.1563,
       "as_of": "2026-11-03",
-      "straddle_yield_ann": 0.14,
-      "straddle_price_usd": 1.03,
+      "straddle_yield_ann": 0.1414,
+      "straddle_price_usd": 1.04,
       "rv_30d": 0.1169,
-      "vrp": 0.0374,
-      "iv_z": 0.572,
+      "vrp": 0.0394,
+      "iv_z": 0.63,
       "put_call_oi_ratio": 0.4513
      },
      "EMB": {
       "obs_days": 20,
-      "atm_iv_last": 0.1526,
+      "atm_iv_last": 0.1531,
       "as_of": "2026-11-03",
       "straddle_yield_ann": 0.0809,
       "straddle_price_usd": 1.6,
-      "rv_30d": 0.0648,
-      "vrp": 0.0878,
-      "iv_z": -0.309,
+      "rv_30d": 0.0649,
+      "vrp": 0.0882,
+      "iv_z": -0.301,
       "put_call_oi_ratio": 0.6203
      },
      "ANGL": {
       "obs_days": 11,
-      "atm_iv_last": 0.4561,
+      "atm_iv_last": 0.4541,
       "as_of": "2026-11-03",
-      "rv_30d": 0.0509,
-      "vrp": 0.4052
+      "rv_30d": 0.0511,
+      "vrp": 0.403
      },
      "JNK": {
       "obs_days": 20,
-      "atm_iv_last": 0.3452,
+      "atm_iv_last": 0.345,
       "as_of": "2026-11-03",
       "straddle_yield_ann": 0.0853,
       "straddle_price_usd": 1.7,
       "rv_30d": 0.0492,
-      "vrp": 0.296,
-      "iv_z": 1.482,
+      "vrp": 0.2958,
+      "iv_z": 1.48,
       "put_call_oi_ratio": 2.4048
      }
     }
@@ -617,29 +617,29 @@
    "name": "Euro Area",
    "iso": "EZ",
    "region": "europe",
-   "heat": 1.841,
+   "heat": 1.168,
    "instruments": {
     "bonds": {
-     "yield_pct": 3.365,
+     "yield_pct": 3.327,
      "source": "ECB AAA 10Y (daily)",
      "yield_chg_bps": {
-      "1": -21.66,
-      "3": 16.44,
-      "12": 64.89
+      "1": -13.74,
+      "3": 9.92,
+      "12": 60.49
      },
      "curve": {
-      "1y_pct": 2.877,
-      "2y_pct": 3.005,
-      "5y_pct": 3.101,
-      "10y_pct": 3.365,
-      "30y_pct": 3.615,
-      "2s10s_bps": 36.0,
+      "1y_pct": 2.885,
+      "2y_pct": 2.994,
+      "5y_pct": 3.067,
+      "10y_pct": 3.327,
+      "30y_pct": 3.589,
+      "2s10s_bps": 33.3,
       "note": "real yield UNAVAILABLE: no free euro-area breakeven series"
      }
     },
     "yield_spreads": {
-     "2s10s_bps": 35.99,
-     "2s10s_z": -1.427
+     "2s10s_bps": 33.3,
+     "2s10s_z": -1.563
     },
     "cds": {
      "status": "UNAVAILABLE"

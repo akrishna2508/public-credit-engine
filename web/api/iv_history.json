@@ -246,7 +246,7 @@
    "atm_strike": 77,
    "atm_iv": 0.06934524414062501,
    "put_call_oi_ratio": 0.9945,
-   "atm_straddle_price": 0.38,
+   "atm_straddle_price": 0.39,
    "dte_days": 3
   }
  },
@@ -493,9 +493,9 @@
    "ticker": "LQD",
    "as_of": "2026-11-03",
    "expiry": "2026-11-06",
-   "underlying": 103.695,
+   "underlying": 103.725,
    "atm_strike": 103.5,
-   "atm_iv": 0.10303631347656249,
+   "atm_iv": 0.10596597167968749,
    "put_call_oi_ratio": 0.9056,
    "atm_straddle_price": 1.32,
    "dte_days": 3
@@ -744,11 +744,11 @@
    "ticker": "TLT",
    "as_of": "2026-11-03",
    "expiry": "2026-11-06",
-   "underlying": 81.13,
+   "underlying": 81.155,
    "atm_strike": 81,
-   "atm_iv": 0.15430533203125002,
+   "atm_iv": 0.1562584375,
    "put_call_oi_ratio": 0.4513,
-   "atm_straddle_price": 1.03,
+   "atm_straddle_price": 1.04,
    "dte_days": 3
   }
  },
@@ -995,9 +995,9 @@
    "ticker": "EMB",
    "as_of": "2026-11-03",
    "expiry": "2026-11-20",
-   "underlying": 91.595,
+   "underlying": 91.5899,
    "atm_strike": 92,
-   "atm_iv": 0.15259636474609378,
+   "atm_iv": 0.1530846411132813,
    "put_call_oi_ratio": 0.6203,
    "atm_straddle_price": 1.6,
    "dte_days": 17
@@ -1116,9 +1116,9 @@
    "ticker": "ANGL",
    "as_of": "2026-11-03",
    "expiry": "2026-11-20",
-   "underlying": 27.525,
+   "underlying": 27.535,
    "atm_strike": 28,
-   "atm_iv": 0.45606012695312503,
+   "atm_iv": 0.454107021484375,
    "put_call_oi_ratio": 0,
    "atm_straddle_price": null,
    "dte_days": 17
@@ -1349,9 +1349,9 @@
    "ticker": "JNK",
    "as_of": "2026-11-03",
    "expiry": "2026-11-20",
-   "underlying": 92.355,
+   "underlying": 92.36,
    "atm_strike": 92,
-   "atm_iv": 0.3452213916015625,
+   "atm_iv": 0.34497725341796875,
    "put_call_oi_ratio": 2.4048,
    "atm_straddle_price": 1.7,
    "dte_days": 17

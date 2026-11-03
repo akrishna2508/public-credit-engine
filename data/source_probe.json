@@ -72,16 +72,16 @@
   {
     "name": "cftc.cot",
     "available": true,
-    "as_of": "2026-10-20",
+    "as_of": "2026-10-27",
     "gap_days": null,
-    "detail": "3724 observations"
+    "detail": "3824 observations"
   },
   {
     "name": "ecb.corp_yields",
     "available": true,
-    "as_of": "2026-10-30",
+    "as_of": "2026-11-02",
     "gap_days": null,
-    "detail": "5664 observations"
+    "detail": "5665 observations"
   },
   {
     "name": "world_bank.debt",
