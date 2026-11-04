@@ -2,9 +2,9 @@
   {
     "name": "fred_ext.treasury_curve",
     "available": true,
-    "as_of": "2026-10-30",
+    "as_of": "2026-11-02",
     "gap_days": null,
-    "detail": "6589 observations"
+    "detail": "6590 observations"
   },
   {
     "name": "fred_ext.moodys",
@@ -16,9 +16,9 @@
   {
     "name": "fred_ext.tips",
     "available": true,
-    "as_of": "2026-10-30",
+    "as_of": "2026-11-02",
     "gap_days": null,
-    "detail": "6217 observations"
+    "detail": "6218 observations"
   },
   {
     "name": "fred_ext.macro_anchors",
@@ -37,9 +37,9 @@
   {
     "name": "fred_ext.global_sovereign",
     "available": true,
-    "as_of": "2026-10-30",
+    "as_of": "2026-11-02",
     "gap_days": null,
-    "detail": "16914 observations"
+    "detail": "16915 observations"
   },
   {
     "name": "fred_ext.em_sector_credit",
@@ -51,9 +51,9 @@
   {
     "name": "fred_ext.inflation",
     "available": true,
-    "as_of": "2026-10-30",
+    "as_of": "2026-11-02",
     "gap_days": null,
-    "detail": "6217 observations"
+    "detail": "6218 observations"
   },
   {
     "name": "treasury_api.auctions",
@@ -107,7 +107,7 @@
   {
     "name": "bcb.selic",
     "available": true,
-    "as_of": "2026-10-01",
+    "as_of": "2026-11-01",
     "gap_days": null,
     "detail": "1 observations"
   },
@@ -123,21 +123,21 @@
     "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-03', 'expiry': '2026-11-06', 'underlying': 76.975, 'atm_strike': 77.0, 'atm_iv': 0."
+    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-04', 'expiry': '2026-11-06', 'underlying': 76.89, 'atm_strike': 77.0, 'atm_iv': 0.1"
   },
   {
     "name": "yf_fx.panel",
     "available": true,
-    "as_of": "2026-11-03",
+    "as_of": "2026-11-04",
     "gap_days": null,
-    "detail": "2820 observations"
+    "detail": "2821 observations"
   },
   {
     "name": "finra.trace",
     "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "3060 observations"
+    "detail": "3064 observations"
   },
   {
     "name": "optional.alpaca",

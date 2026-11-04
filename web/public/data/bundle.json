@@ -1,6 +1,6 @@
 {
  "status": "OK",
- "generated": "2026-11-03T19:24:23.559Z",
+ "generated": "2026-11-04T01:57:21.571Z",
  "schema": "atlas.v2",
  "heatDefinition": "1-month total-return proxy in USD: the unweighted mean of the available legs — sovereign bond price proxy converted to USD, country equity ETF return, regional EM corporate credit carry, the fallen-angel ETF proxy, and, for markets with no free sovereign curve, the currency return against the dollar. Green means positive compensation over the last month, red negative.",
  "countries": {
@@ -10,11 +10,11 @@
    "iso3": "USA",
    "region": "namerica",
    "regionLabel": "North America",
-   "heat": -0.798,
+   "heat": -0.912,
    "heatLegs": [
     {
      "leg": "bond",
-     "value": 0.255
+     "value": -0.085
     },
     {
      "leg": "equity",
@@ -31,17 +31,17 @@
      "status": "OK",
      "seriesId": "DGS10",
      "notes": "10Y benchmark government bond yield — US 10Y Treasury (FRED DGS10 history + same-day US Treasury par-yield curve, month-collapsed)",
-     "yield_pct": 4.91,
-     "asOf": "2026-11-02",
+     "yield_pct": 4.95,
+     "asOf": "2026-11-03",
      "yield_chg_bps": {
-      "1": -3,
-      "3": 16,
-      "12": 89
+      "1": 1,
+      "3": 20,
+      "12": 93
      },
-     "yield_z": 1.605,
-     "bond_price_1m_pct": 0.255,
+     "yield_z": 1.636,
+     "bond_price_1m_pct": -0.085,
      "duration_assumed": 8.5,
-     "bond_price_1m_usd_pct": 0.255,
+     "bond_price_1m_usd_pct": -0.085,
      "usd_note": "no currency leg — the local price proxy is used as-is"
     },
     "fx": {
@@ -164,7 +164,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -102.75,
+     "vs_us_10y_bps": -106.75,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -261,7 +261,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": 444,
+     "vs_us_10y_bps": 440,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -436,7 +436,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": 110,
+     "vs_us_10y_bps": 106,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -523,7 +523,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": 782,
+     "vs_us_10y_bps": 778,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -766,7 +766,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": 137.06,
+     "vs_us_10y_bps": 133.06,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -2418,7 +2418,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -144.05,
+     "vs_us_10y_bps": -148.05,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -2518,7 +2518,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -43.29,
+     "vs_us_10y_bps": -47.29,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -2618,7 +2618,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -92.4,
+     "vs_us_10y_bps": -96.4,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -2718,7 +2718,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -98.7,
+     "vs_us_10y_bps": -102.7,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -2818,7 +2818,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -162.5,
+     "vs_us_10y_bps": -166.5,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -2908,7 +2908,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -115,
+     "vs_us_10y_bps": -119,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -2998,7 +2998,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -149.75,
+     "vs_us_10y_bps": -153.75,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -3088,7 +3088,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -106,
+     "vs_us_10y_bps": -110,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -3178,7 +3178,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -156,
+     "vs_us_10y_bps": -160,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -3268,7 +3268,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -111.05,
+     "vs_us_10y_bps": -115.05,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -3368,7 +3368,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -68,
+     "vs_us_10y_bps": -72,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -3458,7 +3458,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -106.04,
+     "vs_us_10y_bps": -110.04,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -3548,7 +3548,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -137,
+     "vs_us_10y_bps": -141,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -3638,7 +3638,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -150.9,
+     "vs_us_10y_bps": -154.9,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -3738,7 +3738,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": 33.21,
+     "vs_us_10y_bps": 29.21,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -3838,7 +3838,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -432,
+     "vs_us_10y_bps": -436,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -3928,7 +3928,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -50.42,
+     "vs_us_10y_bps": -54.42,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -4018,7 +4018,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -171.76,
+     "vs_us_10y_bps": -175.76,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -4108,7 +4108,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -190,
+     "vs_us_10y_bps": -194,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -4600,7 +4600,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": 132,
+     "vs_us_10y_bps": 128,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -4687,7 +4687,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": 0.17,
+     "vs_us_10y_bps": -3.83,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -4774,7 +4774,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": 55,
+     "vs_us_10y_bps": 51,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -4939,7 +4939,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -109,
+     "vs_us_10y_bps": -113,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -5026,7 +5026,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -203,
+     "vs_us_10y_bps": -207,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -6315,7 +6315,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -83,
+     "vs_us_10y_bps": -87,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -7212,7 +7212,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": 403.71,
+     "vs_us_10y_bps": 399.71,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -10683,7 +10683,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -186,
+     "vs_us_10y_bps": -190,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -10780,7 +10780,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -45.6,
+     "vs_us_10y_bps": -49.6,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -11101,7 +11101,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": 37.3,
+     "vs_us_10y_bps": 33.3,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -11178,7 +11178,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": 3,
+     "vs_us_10y_bps": -1,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -11601,7 +11601,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": 215,
+     "vs_us_10y_bps": 211,
      "note": "10Y yield minus the US 10Y — a sovereign risk proxy, not a traded CDS quote (no free CDS source exists)"
     },
     "structural": {
@@ -12687,7 +12687,7 @@
     },
     "sovereign_spread": {
      "status": "proxy",
-     "vs_us_10y_bps": -158.35,
+     "vs_us_10y_bps": -162.35,
      "note": "euro-area AAA 10Y minus the US 10Y"
     },
     "structural": {
@@ -12699,7 +12699,7 @@
  "regions": {
   "namerica": {
    "label": "North America",
-   "heat": 0.214,
+   "heat": 0.157,
    "countries": 2
   },
   "latam": {
