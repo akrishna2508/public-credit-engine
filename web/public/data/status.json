@@ -1,6 +1,6 @@
 {
  "status": "OK",
- "generated": "2026-11-04T01:57:21.573Z",
+ "generated": "2026-11-05T02:08:06.657Z",
  "schema": "signals.v1",
  "features": [
   {
@@ -11,7 +11,7 @@
    "live": true,
    "status": "live",
    "progress": {
-    "accrued": 24,
+    "accrued": 25,
     "needed": 20
    },
    "goLiveDate": null,
@@ -80,7 +80,7 @@
   }
  ],
  "snapshot": {
-  "lastDate": "2026-11-04",
+  "lastDate": "2026-11-05",
   "source": "api/iv_history.json (refreshed daily by the accrual daemon via npm run seed)"
  }
 }
