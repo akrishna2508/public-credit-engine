@@ -123,7 +123,7 @@
     "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-07', 'expiry': '2026-11-13', 'underlying': 77.23, 'atm_strike': 77.0, 'atm_iv': 0.1"
+    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-08', 'expiry': '2026-11-13', 'underlying': 77.23, 'atm_strike': 77.0, 'atm_iv': 0.1"
   },
   {
     "name": "yf_fx.panel",

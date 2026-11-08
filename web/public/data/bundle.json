@@ -1,6 +1,6 @@
 {
  "status": "OK",
- "generated": "2026-11-07T01:41:08.532Z",
+ "generated": "2026-11-08T01:09:24.143Z",
  "schema": "atlas.v2",
  "heatDefinition": "1-month total-return proxy in USD: the unweighted mean of the available legs — sovereign bond price proxy converted to USD, country equity ETF return, regional EM corporate credit carry, the fallen-angel ETF proxy, and, for markets with no free sovereign curve, the currency return against the dollar. Green means positive compensation over the last month, red negative.",
  "countries": {
@@ -10,7 +10,7 @@
    "iso3": "USA",
    "region": "namerica",
    "regionLabel": "North America",
-   "heat": -1.377,
+   "heat": -1.437,
    "heatLegs": [
     {
      "leg": "bond",
@@ -22,7 +22,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.18
+     "value": 0
     }
    ],
    "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: bond, equity, fallen_angel",
@@ -67,12 +67,12 @@
      "ticker": "ANGL",
      "label": "VanEck Fallen Angel High Yield Bond ETF (ANGL) — US fallen-angel market",
      "quote_ccy": "USD",
-     "last": 27.690000534057617,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.18,
-     "ret_1m_usd_pct": 0.18,
-     "ret_3m_usd_pct": -4.58,
-     "ret_12m_usd_pct": -5.27,
+     "last": 27.639999389648438,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 0,
+     "ret_1m_usd_pct": 0,
+     "ret_3m_usd_pct": -4.56,
+     "ret_12m_usd_pct": -5.41,
      "note": "VanEck Fallen Angel High Yield Bond ETF (ANGL) — US fallen-angel market. Regional proxy — not country-specific. USD-quoted — the return already embeds the currency."
     },
     "sovereign_spread": {
@@ -190,11 +190,11 @@
    "iso3": "MEX",
    "region": "latam",
    "regionLabel": "Latin America",
-   "heat": 0.744,
+   "heat": 1.469,
    "heatLegs": [
     {
      "leg": "bond",
-     "value": -4.734
+     "value": -2.559
     },
     {
      "leg": "equity",
@@ -221,18 +221,18 @@
      "yield_z": 1.155,
      "bond_price_1m_pct": -1.615,
      "duration_assumed": 8.5,
-     "bond_price_1m_usd_pct": -4.734,
+     "bond_price_1m_usd_pct": -2.559,
      "usd_note": "local price proxy compounded with the 1-month currency move"
     },
     "fx": {
      "status": "OK",
      "symbol": "USDMXN=X",
      "currency": "MXN",
-     "quote": 18.780879974365234,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": -3.17,
-     "ret_3m_pct": -9.32,
-     "ret_12m_pct": -2.47,
+     "quote": 18.59749984741211,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": -0.96,
+     "ret_3m_pct": -8.41,
+     "ret_12m_pct": -1.24,
      "note": "MXN return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -308,11 +308,11 @@
      "status": "OK",
      "symbol": "USDBRL=X",
      "currency": "BRL",
-     "quote": 5.503499984741211,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": -9.4,
-     "ret_3m_pct": -5.89,
-     "ret_12m_pct": -3.11,
+     "quote": 5.4959001541137695,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": -9.3,
+     "ret_3m_pct": -5.14,
+     "ret_12m_pct": -1.71,
      "note": "BRL return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -365,11 +365,11 @@
    "iso3": "CHL",
    "region": "latam",
    "regionLabel": "Latin America",
-   "heat": -2.73,
+   "heat": -2.734,
    "heatLegs": [
     {
      "leg": "bond",
-     "value": -2.756
+     "value": -2.766
     },
     {
      "leg": "equity",
@@ -396,18 +396,18 @@
      "yield_z": 1.065,
      "bond_price_1m_pct": -2.805,
      "duration_assumed": 8.5,
-     "bond_price_1m_usd_pct": -2.756,
+     "bond_price_1m_usd_pct": -2.766,
      "usd_note": "local price proxy compounded with the 1-month currency move"
     },
     "fx": {
      "status": "OK",
      "symbol": "USDCLP=X",
      "currency": "CLP",
-     "quote": 977.6699829101562,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": 0.05,
-     "ret_3m_pct": -6.51,
-     "ret_12m_pct": -4.68,
+     "quote": 975.739990234375,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": 0.04,
+     "ret_3m_pct": -6.32,
+     "ret_12m_pct": -4.49,
      "note": "CLP return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -462,11 +462,11 @@
    "iso3": "COL",
    "region": "latam",
    "regionLabel": "Latin America",
-   "heat": -3.02,
+   "heat": -3.153,
    "heatLegs": [
     {
      "leg": "bond",
-     "value": -5.724
+     "value": -5.99
     },
     {
      "leg": "credit",
@@ -489,18 +489,18 @@
      "yield_z": 1.401,
      "bond_price_1m_pct": -4.675,
      "duration_assumed": 8.5,
-     "bond_price_1m_usd_pct": -5.724,
+     "bond_price_1m_usd_pct": -5.99,
      "usd_note": "local price proxy compounded with the 1-month currency move"
     },
     "fx": {
      "status": "OK",
      "symbol": "USDCOP=X",
      "currency": "COP",
-     "quote": 3238.3798828125,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": -1.1,
-     "ret_3m_pct": -3.74,
-     "ret_12m_pct": 16.17,
+     "quote": 3239.5,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": -1.38,
+     "ret_3m_pct": -3.03,
+     "ret_12m_pct": 14.76,
      "note": "COP return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -1476,11 +1476,11 @@
    "iso3": "NIC",
    "region": "latam",
    "regionLabel": "Latin America",
-   "heat": -2.64,
+   "heat": 0.07,
    "heatLegs": [
     {
      "leg": "fx",
-     "value": -2.64
+     "value": 0.07
     }
    ],
    "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
@@ -1494,10 +1494,10 @@
      "symbol": "USDNIO=X",
      "currency": "NIO",
      "quote": 36.624298095703125,
-     "asOf": "2026-11-07",
-     "ret_1m_pct": -2.64,
-     "ret_3m_pct": -0.63,
-     "ret_12m_pct": -0.34,
+     "asOf": "2026-11-08",
+     "ret_1m_pct": 0.07,
+     "ret_3m_pct": -0.8,
+     "ret_12m_pct": -0.7,
      "note": "NIO return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -1724,11 +1724,11 @@
    "iso3": "BRB",
    "region": "latam",
    "regionLabel": "Latin America",
-   "heat": -2.41,
+   "heat": -2.47,
    "heatLegs": [
     {
      "leg": "fx",
-     "value": -2.41
+     "value": -2.47
     }
    ],
    "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
@@ -1742,10 +1742,10 @@
      "symbol": "USDBBD=X",
      "currency": "BBD",
      "quote": 2,
-     "asOf": "2026-11-07",
-     "ret_1m_pct": -2.41,
-     "ret_3m_pct": -1.38,
-     "ret_12m_pct": -1.45,
+     "asOf": "2026-11-08",
+     "ret_1m_pct": -2.47,
+     "ret_3m_pct": -1.57,
+     "ret_12m_pct": -1.44,
      "note": "BBD return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -1990,7 +1990,7 @@
      "symbol": "USDXCD=X",
      "currency": "XCD",
      "quote": 2.700000047683716,
-     "asOf": "2026-11-07",
+     "asOf": "2026-11-08",
      "ret_1m_pct": -0.44,
      "ret_3m_pct": -0.44,
      "ret_12m_pct": -0.44,
@@ -2052,7 +2052,7 @@
      "symbol": "USDXCD=X",
      "currency": "XCD",
      "quote": 2.700000047683716,
-     "asOf": "2026-11-07",
+     "asOf": "2026-11-08",
      "ret_1m_pct": -0.44,
      "ret_3m_pct": -0.44,
      "ret_12m_pct": -0.44,
@@ -2114,7 +2114,7 @@
      "symbol": "USDXCD=X",
      "currency": "XCD",
      "quote": 2.700000047683716,
-     "asOf": "2026-11-07",
+     "asOf": "2026-11-08",
      "ret_1m_pct": -0.44,
      "ret_3m_pct": -0.44,
      "ret_12m_pct": -0.44,
@@ -2176,7 +2176,7 @@
      "symbol": "USDXCD=X",
      "currency": "XCD",
      "quote": 2.700000047683716,
-     "asOf": "2026-11-07",
+     "asOf": "2026-11-08",
      "ret_1m_pct": -0.44,
      "ret_3m_pct": -0.44,
      "ret_12m_pct": -0.44,
@@ -2238,7 +2238,7 @@
      "symbol": "USDXCD=X",
      "currency": "XCD",
      "quote": 2.700000047683716,
-     "asOf": "2026-11-07",
+     "asOf": "2026-11-08",
      "ret_1m_pct": -0.44,
      "ret_3m_pct": -0.44,
      "ret_12m_pct": -0.44,
@@ -2282,11 +2282,11 @@
    "iso3": "CUB",
    "region": "latam",
    "regionLabel": "Latin America",
-   "heat": -0.07,
+   "heat": -0.13,
    "heatLegs": [
     {
      "leg": "fx",
-     "value": -0.07
+     "value": -0.13
     }
    ],
    "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
@@ -2300,10 +2300,10 @@
      "symbol": "USDCUP=X",
      "currency": "CUP",
      "quote": 24,
-     "asOf": "2026-11-07",
-     "ret_1m_pct": -0.07,
-     "ret_3m_pct": -0.03,
-     "ret_12m_pct": -0.1,
+     "asOf": "2026-11-08",
+     "ret_1m_pct": -0.13,
+     "ret_3m_pct": -0.23,
+     "ret_12m_pct": -0.09,
      "note": "CUP return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -2344,7 +2344,7 @@
    "iso3": "DEU",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 0.299,
+   "heat": 0.479,
    "heatLegs": [
     {
      "leg": "bond",
@@ -2356,7 +2356,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: bond, equity, fallen_angel",
@@ -2408,12 +2408,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -2444,7 +2444,7 @@
    "iso3": "FRA",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 0.359,
+   "heat": 0.54,
    "heatLegs": [
     {
      "leg": "bond",
@@ -2456,7 +2456,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: bond, equity, fallen_angel",
@@ -2508,12 +2508,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -2544,7 +2544,7 @@
    "iso3": "ITA",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 0.346,
+   "heat": 0.526,
    "heatLegs": [
     {
      "leg": "bond",
@@ -2556,7 +2556,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: bond, equity, fallen_angel",
@@ -2608,12 +2608,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -2644,7 +2644,7 @@
    "iso3": "ESP",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": -0.475,
+   "heat": -0.295,
    "heatLegs": [
     {
      "leg": "bond",
@@ -2656,7 +2656,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: bond, equity, fallen_angel",
@@ -2708,12 +2708,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -2744,7 +2744,7 @@
    "iso3": "NLD",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": -1.308,
+   "heat": -1.128,
    "heatLegs": [
     {
      "leg": "bond",
@@ -2756,7 +2756,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: bond, equity, fallen_angel",
@@ -2808,12 +2808,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -2844,7 +2844,7 @@
    "iso3": "BEL",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 0.025,
+   "heat": 0.296,
    "heatLegs": [
     {
      "leg": "bond",
@@ -2852,7 +2852,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, fallen_angel",
@@ -2898,12 +2898,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -2934,7 +2934,7 @@
    "iso3": "AUT",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 0.159,
+   "heat": 0.429,
    "heatLegs": [
     {
      "leg": "bond",
@@ -2942,7 +2942,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, fallen_angel",
@@ -2988,12 +2988,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -3024,7 +3024,7 @@
    "iso3": "PRT",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": -0.784,
+   "heat": -0.514,
    "heatLegs": [
     {
      "leg": "bond",
@@ -3032,7 +3032,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, fallen_angel",
@@ -3078,12 +3078,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -3114,7 +3114,7 @@
    "iso3": "IRL",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 0.131,
+   "heat": 0.401,
    "heatLegs": [
     {
      "leg": "bond",
@@ -3122,7 +3122,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, fallen_angel",
@@ -3168,12 +3168,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -3204,7 +3204,7 @@
    "iso3": "FIN",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": -0.649,
+   "heat": -0.378,
    "heatLegs": [
     {
      "leg": "bond",
@@ -3212,7 +3212,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, fallen_angel",
@@ -3258,12 +3258,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -3294,7 +3294,7 @@
    "iso3": "GRC",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": -0.841,
+   "heat": -0.661,
    "heatLegs": [
     {
      "leg": "bond",
@@ -3306,7 +3306,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: bond, equity, fallen_angel",
@@ -3358,12 +3358,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -3394,7 +3394,7 @@
    "iso3": "SVK",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 0.026,
+   "heat": 0.296,
    "heatLegs": [
     {
      "leg": "bond",
@@ -3402,7 +3402,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, fallen_angel",
@@ -3448,12 +3448,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -3484,7 +3484,7 @@
    "iso3": "SVN",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": -0.188,
+   "heat": 0.083,
    "heatLegs": [
     {
      "leg": "bond",
@@ -3492,7 +3492,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, fallen_angel",
@@ -3538,12 +3538,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -3574,7 +3574,7 @@
    "iso3": "LUX",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 0.123,
+   "heat": 0.393,
    "heatLegs": [
     {
      "leg": "bond",
@@ -3582,7 +3582,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, fallen_angel",
@@ -3628,12 +3628,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -3664,7 +3664,7 @@
    "iso3": "GBR",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 1.685,
+   "heat": 1.499,
    "heatLegs": [
     {
      "leg": "bond",
@@ -3676,7 +3676,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 3.388
+     "value": 2.829
     }
    ],
    "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: bond, equity, fallen_angel",
@@ -3728,12 +3728,12 @@
      "ticker": "GFA.L",
      "label": "VanEck Global Fallen Angel High Yield Bond UCITS ETF (GFA.L) — GBP-quoted global fallen-angel market",
      "quote_ccy": "GBP",
-     "last": 74.27999877929688,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 1.64,
-     "ret_1m_usd_pct": 3.388,
-     "ret_3m_usd_pct": -1.026,
-     "ret_12m_usd_pct": 4.751,
+     "last": 73.98500061035156,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.09,
+     "ret_1m_usd_pct": 2.829,
+     "ret_3m_usd_pct": -1.077,
+     "ret_12m_usd_pct": 4.161,
      "note": "VanEck Global Fallen Angel High Yield Bond UCITS ETF (GFA.L) — GBP-quoted global fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -3764,7 +3764,7 @@
    "iso3": "CHE",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 3.581,
+   "heat": 3.761,
    "heatLegs": [
     {
      "leg": "bond",
@@ -3776,7 +3776,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: bond, equity, fallen_angel",
@@ -3828,12 +3828,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -3864,7 +3864,7 @@
    "iso3": "NOR",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 0.574,
+   "heat": 0.844,
    "heatLegs": [
     {
      "leg": "bond",
@@ -3872,7 +3872,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, fallen_angel",
@@ -3918,12 +3918,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -3954,7 +3954,7 @@
    "iso3": "SWE",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 0.471,
+   "heat": 0.741,
    "heatLegs": [
     {
      "leg": "bond",
@@ -3962,7 +3962,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, fallen_angel",
@@ -4008,12 +4008,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -4044,7 +4044,7 @@
    "iso3": "DNK",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 0.038,
+   "heat": 0.308,
    "heatLegs": [
     {
      "leg": "bond",
@@ -4052,7 +4052,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: bond, fallen_angel",
@@ -4098,12 +4098,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -4134,7 +4134,7 @@
    "iso3": "ISL",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 0.661,
+   "heat": 0.931,
    "heatLegs": [
     {
      "leg": "fx",
@@ -4142,7 +4142,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: fx, fallen_angel",
@@ -4175,12 +4175,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -4209,7 +4209,7 @@
    "iso3": "CYP",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 0.297,
+   "heat": 0.477,
    "heatLegs": [
     {
      "leg": "fx",
@@ -4221,7 +4221,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: fx, credit, fallen_angel",
@@ -4260,12 +4260,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -4294,7 +4294,7 @@
    "iso3": "MLT",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 0.297,
+   "heat": 0.477,
    "heatLegs": [
     {
      "leg": "fx",
@@ -4306,7 +4306,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 3 live 1-month USD return proxies: fx, credit, fallen_angel",
@@ -4345,12 +4345,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -4379,7 +4379,7 @@
    "iso3": "AND",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 0.536,
+   "heat": 0.806,
    "heatLegs": [
     {
      "leg": "fx",
@@ -4387,7 +4387,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: fx, fallen_angel",
@@ -4420,12 +4420,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -4454,7 +4454,7 @@
    "iso3": "LIE",
    "region": "europe",
    "regionLabel": "Europe",
-   "heat": 1.361,
+   "heat": 1.631,
    "heatLegs": [
     {
      "leg": "fx",
@@ -4462,7 +4462,7 @@
     },
     {
      "leg": "fallen_angel",
-     "value": 0.931
+     "value": 1.472
     }
    ],
    "heatBasis": "unweighted mean of 2 live 1-month USD return proxies: fx, fallen_angel",
@@ -4495,12 +4495,12 @@
      "ticker": "EM1A.DE",
      "label": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market",
      "quote_ccy": "EUR",
-     "last": 21.80500030517578,
-     "asOf": "2026-11-05",
-     "ret_1m_local_pct": 0.79,
-     "ret_1m_usd_pct": 0.931,
-     "ret_3m_usd_pct": 0.43,
-     "ret_12m_usd_pct": 3.194,
+     "last": 21.92099952697754,
+     "asOf": "2026-11-06",
+     "ret_1m_local_pct": 1.33,
+     "ret_1m_usd_pct": 1.472,
+     "ret_3m_usd_pct": 0.811,
+     "ret_12m_usd_pct": 4.426,
      "note": "VanEck US Fallen Angel High Yield Bond UCITS ETF A USD Acc (EM1A.DE) — EUR-quoted wrapper on the US fallen-angel market. Regional proxy — not country-specific. Foreign-quoted, converted to USD with the 1M FX move."
     },
     "sovereign_spread": {
@@ -4529,11 +4529,11 @@
    "iso3": "POL",
    "region": "emeurope",
    "regionLabel": "Emerging Europe",
-   "heat": -1.888,
+   "heat": -2.158,
    "heatLegs": [
     {
      "leg": "bond",
-     "value": -3.985
+     "value": -4.795
     },
     {
      "leg": "equity",
@@ -4560,18 +4560,18 @@
      "yield_z": 1.308,
      "bond_price_1m_pct": -3.57,
      "duration_assumed": 8.5,
-     "bond_price_1m_usd_pct": -3.985,
+     "bond_price_1m_usd_pct": -4.795,
      "usd_note": "local price proxy compounded with the 1-month currency move"
     },
     "fx": {
      "status": "OK",
      "symbol": "USDPLN=X",
      "currency": "PLN",
-     "quote": 3.918210029602051,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": -0.43,
-     "ret_3m_pct": -4.67,
-     "ret_12m_pct": -6.56,
+     "quote": 3.9598000049591064,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": -1.27,
+     "ret_3m_pct": -5.62,
+     "ret_12m_pct": -7.33,
      "note": "PLN return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -4626,11 +4626,11 @@
    "iso3": "CZE",
    "region": "emeurope",
    "regionLabel": "Emerging Europe",
-   "heat": -0.441,
+   "heat": -0.763,
    "heatLegs": [
     {
      "leg": "bond",
-     "value": -0.703
+     "value": -1.347
     },
     {
      "leg": "credit",
@@ -4653,18 +4653,18 @@
      "yield_z": 1.421,
      "bond_price_1m_pct": -1.03,
      "duration_assumed": 8.5,
-     "bond_price_1m_usd_pct": -0.703,
+     "bond_price_1m_usd_pct": -1.347,
      "usd_note": "local price proxy compounded with the 1-month currency move"
     },
     "fx": {
      "status": "OK",
      "symbol": "USDCZK=X",
      "currency": "CZK",
-     "quote": 21.658700942993164,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": 0.33,
-     "ret_3m_pct": -3.14,
-     "ret_12m_pct": -3.4,
+     "quote": 21.819000244140625,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": -0.32,
+     "ret_3m_pct": -3.82,
+     "ret_12m_pct": -3.91,
      "note": "CZK return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -4713,11 +4713,11 @@
    "iso3": "HUN",
    "region": "emeurope",
    "regionLabel": "Emerging Europe",
-   "heat": -0.553,
+   "heat": -0.789,
    "heatLegs": [
     {
      "leg": "bond",
-     "value": -0.926
+     "value": -1.399
     },
     {
      "leg": "credit",
@@ -4740,18 +4740,18 @@
      "yield_z": 0.361,
      "bond_price_1m_pct": -1.36,
      "duration_assumed": 8.5,
-     "bond_price_1m_usd_pct": -0.926,
+     "bond_price_1m_usd_pct": -1.399,
      "usd_note": "local price proxy compounded with the 1-month currency move"
     },
     "fx": {
      "status": "OK",
      "symbol": "USDHUF=X",
      "currency": "HUF",
-     "quote": 324.1080017089844,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": 0.44,
-     "ret_3m_pct": -2.94,
-     "ret_12m_pct": 2.04,
+     "quote": 325.7799987792969,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": -0.04,
+     "ret_3m_pct": -3.37,
+     "ret_12m_pct": 1.65,
      "note": "HUF return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -4821,11 +4821,11 @@
      "status": "OK",
      "symbol": "USDTRY=X",
      "currency": "TRY",
-     "quote": 50.15288162231445,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": -1.66,
-     "ret_3m_pct": -4.53,
-     "ret_12m_pct": -15.57,
+     "quote": 50.134300231933594,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": -1.59,
+     "ret_3m_pct": -4.57,
+     "ret_12m_pct": -15.35,
      "note": "TRY return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -5256,11 +5256,11 @@
    "iso3": "ROU",
    "region": "emeurope",
    "regionLabel": "Emerging Europe",
-   "heat": 0.06,
+   "heat": -0.05,
    "heatLegs": [
     {
      "leg": "fx",
-     "value": 0.3
+     "value": 0.08
     },
     {
      "leg": "credit",
@@ -5277,11 +5277,11 @@
      "status": "OK",
      "symbol": "USDRON=X",
      "currency": "RON",
-     "quote": 4.747399806976318,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": 0.3,
-     "ret_3m_pct": -4.45,
-     "ret_12m_pct": -7.56,
+     "quote": 4.755300045013428,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": 0.08,
+     "ret_3m_pct": -4.63,
+     "ret_12m_pct": -7.37,
      "note": "RON return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -5688,11 +5688,11 @@
    "iso3": "RUS",
    "region": "emeurope",
    "regionLabel": "Emerging Europe",
-   "heat": 2.075,
+   "heat": 1.895,
    "heatLegs": [
     {
      "leg": "fx",
-     "value": 4.33
+     "value": 3.97
     },
     {
      "leg": "credit",
@@ -5709,11 +5709,11 @@
      "status": "OK",
      "symbol": "USDRUB=X",
      "currency": "RUB",
-     "quote": 81.49235534667969,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": 4.33,
-     "ret_3m_pct": 1.17,
-     "ret_12m_pct": -0.3,
+     "quote": 81.92500305175781,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": 3.97,
+     "ret_3m_pct": 1.18,
+     "ret_12m_pct": -1.05,
      "note": "RUB return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -6341,11 +6341,11 @@
    "iso3": "SAU",
    "region": "mideast",
    "regionLabel": "Middle East",
-   "heat": -2.515,
+   "heat": -1.56,
    "heatLegs": [
     {
      "leg": "equity",
-     "value": -4.85
+     "value": -2.94
     },
     {
      "leg": "credit",
@@ -6372,11 +6372,11 @@
     "equity_etf": {
      "status": "OK",
      "label": "KSA",
-     "last": 34.95000076293945,
-     "asOf": "2026-11-05",
-     "ret_1m_pct": -4.85,
-     "ret_3m_pct": -7.17,
-     "ret_12m_pct": -11.92,
+     "last": 35.029998779296875,
+     "asOf": "2026-11-06",
+     "ret_1m_pct": -2.94,
+     "ret_3m_pct": -7.45,
+     "ret_12m_pct": -10.98,
      "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
     },
     "credit": {
@@ -6419,11 +6419,11 @@
    "iso3": "ARE",
    "region": "mideast",
    "regionLabel": "Middle East",
-   "heat": -0.295,
+   "heat": 1.36,
    "heatLegs": [
     {
      "leg": "equity",
-     "value": -0.41
+     "value": 2.9
     },
     {
      "leg": "credit",
@@ -6450,11 +6450,11 @@
     "equity_etf": {
      "status": "OK",
      "label": "UAE",
-     "last": 19.65999984741211,
-     "asOf": "2026-11-05",
-     "ret_1m_pct": -0.41,
-     "ret_3m_pct": -0.41,
-     "ret_12m_pct": 1.55,
+     "last": 19.860000610351562,
+     "asOf": "2026-11-06",
+     "ret_1m_pct": 2.9,
+     "ret_3m_pct": 1.07,
+     "ret_12m_pct": 2.64,
      "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
     },
     "credit": {
@@ -6497,11 +6497,11 @@
    "iso3": "QAT",
    "region": "mideast",
    "regionLabel": "Middle East",
-   "heat": 3.6,
+   "heat": 4.795,
    "heatLegs": [
     {
      "leg": "equity",
-     "value": 7.38
+     "value": 9.77
     },
     {
      "leg": "credit",
@@ -6528,11 +6528,11 @@
     "equity_etf": {
      "status": "OK",
      "label": "QAT",
-     "last": 17.469999313354492,
-     "asOf": "2026-11-05",
-     "ret_1m_pct": 7.38,
-     "ret_3m_pct": -1.74,
-     "ret_12m_pct": -10.11,
+     "last": 17.600000381469727,
+     "asOf": "2026-11-06",
+     "ret_1m_pct": 9.77,
+     "ret_3m_pct": -0.71,
+     "ret_12m_pct": -9.35,
      "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
     },
     "credit": {
@@ -7141,11 +7141,11 @@
    "iso3": "ZAF",
    "region": "africa",
    "regionLabel": "Africa",
-   "heat": 1.774,
+   "heat": 1.709,
    "heatLegs": [
     {
      "leg": "bond",
-     "value": -1.517
+     "value": -1.713
     },
     {
      "leg": "equity",
@@ -7172,18 +7172,18 @@
      "yield_z": -0.923,
      "bond_price_1m_pct": -1.684,
      "duration_assumed": 8.5,
-     "bond_price_1m_usd_pct": -1.517,
+     "bond_price_1m_usd_pct": -1.713,
      "usd_note": "local price proxy compounded with the 1-month currency move"
     },
     "fx": {
      "status": "OK",
      "symbol": "USDZAR=X",
      "currency": "ZAR",
-     "quote": 16.517000198364258,
+     "quote": 16.549999237060547,
      "asOf": "2026-11-07",
-     "ret_1m_pct": 0.17,
-     "ret_3m_pct": -2.13,
-     "ret_12m_pct": 5.13,
+     "ret_1m_pct": -0.03,
+     "ret_3m_pct": -2.32,
+     "ret_12m_pct": 4.92,
      "note": "ZAR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -8102,11 +8102,11 @@
    "iso3": "MUS",
    "region": "africa",
    "regionLabel": "Africa",
-   "heat": 0.695,
+   "heat": -0.715,
    "heatLegs": [
     {
      "leg": "fx",
-     "value": 1.57
+     "value": -1.25
     },
     {
      "leg": "credit",
@@ -8123,11 +8123,11 @@
      "status": "OK",
      "symbol": "USDMUR=X",
      "currency": "MUR",
-     "quote": 45.75,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": 1.57,
-     "ret_3m_pct": 0.88,
-     "ret_12m_pct": -2.36,
+     "quote": 46.869998931884766,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": -1.25,
+     "ret_3m_pct": 0.15,
+     "ret_12m_pct": -4.06,
      "note": "MUR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -10622,11 +10622,11 @@
    "iso3": "JPN",
    "region": "asia",
    "regionLabel": "Developed Asia",
-   "heat": -4.944,
+   "heat": -5.192,
    "heatLegs": [
     {
      "leg": "bond",
-     "value": -0.578
+     "value": -1.074
     },
     {
      "leg": "equity",
@@ -10649,18 +10649,18 @@
      "yield_z": 3.302,
      "bond_price_1m_pct": -0.935,
      "duration_assumed": 8.5,
-     "bond_price_1m_usd_pct": -0.578,
+     "bond_price_1m_usd_pct": -1.074,
      "usd_note": "local price proxy compounded with the 1-month currency move"
     },
     "fx": {
      "status": "OK",
      "symbol": "USDJPY=X",
      "currency": "JPY",
-     "quote": 157.4980010986328,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": 0.36,
-     "ret_3m_pct": 1.16,
-     "ret_12m_pct": -1.23,
+     "quote": 158.4250030517578,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": -0.14,
+     "ret_3m_pct": 0.63,
+     "ret_12m_pct": -0.9,
      "note": "JPY return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -11266,11 +11266,11 @@
    "iso3": "PNG",
    "region": "apac",
    "regionLabel": "Asia-Pacific",
-   "heat": -2.31,
+   "heat": 3.2,
    "heatLegs": [
     {
      "leg": "fx",
-     "value": -2.31
+     "value": 3.2
     }
    ],
    "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
@@ -11283,11 +11283,11 @@
      "status": "OK",
      "symbol": "USDPGK=X",
      "currency": "PGK",
-     "quote": 4.485447883605957,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": -2.31,
-     "ret_3m_pct": -3.24,
-     "ret_12m_pct": -7.12,
+     "quote": 4.3246002197265625,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": 3.2,
+     "ret_3m_pct": 0.24,
+     "ret_12m_pct": -4.33,
      "note": "PGK return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -11473,11 +11473,11 @@
      "status": "OK",
      "symbol": "USDCNY=X",
      "currency": "CNY",
-     "quote": 6.688000202178955,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": 0.06,
-     "ret_3m_pct": 0.84,
-     "ret_12m_pct": 6.27,
+     "quote": 6.66480016708374,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": 0.41,
+     "ret_3m_pct": 1.01,
+     "ret_12m_pct": 6.63,
      "note": "CNY return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -11530,15 +11530,15 @@
    "iso3": "IND",
    "region": "emasia",
    "regionLabel": "Emerging Asia",
-   "heat": 3.005,
+   "heat": 3.928,
    "heatLegs": [
     {
      "leg": "bond",
-     "value": 0.534
+     "value": 0.083
     },
     {
      "leg": "equity",
-     "value": 8.48
+     "value": 11.7
     },
     {
      "leg": "credit",
@@ -11561,28 +11561,28 @@
      "yield_z": 0.324,
      "bond_price_1m_pct": -1.87,
      "duration_assumed": 8.5,
-     "bond_price_1m_usd_pct": 0.534,
+     "bond_price_1m_usd_pct": 0.083,
      "usd_note": "local price proxy compounded with the 1-month currency move"
     },
     "fx": {
      "status": "OK",
      "symbol": "USDINR=X",
      "currency": "INR",
-     "quote": 94.45890045166016,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": 2.45,
-     "ret_3m_pct": 1.03,
-     "ret_12m_pct": -6.1,
+     "quote": 93.91000366210938,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": 1.99,
+     "ret_3m_pct": 1.61,
+     "ret_12m_pct": -4.55,
      "note": "INR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
      "status": "OK",
      "label": "INDA",
-     "last": 50.02000045776367,
-     "asOf": "2026-11-05",
-     "ret_1m_pct": 8.48,
-     "ret_3m_pct": -0.69,
-     "ret_12m_pct": -7.4,
+     "last": 50.88999938964844,
+     "asOf": "2026-11-06",
+     "ret_1m_pct": 11.7,
+     "ret_3m_pct": 1.5,
+     "ret_12m_pct": -6.28,
      "note": "US/LN-listed country ETF — USD-denominated, so the currency move is already inside this return"
     },
     "credit": {
@@ -11648,11 +11648,11 @@
      "status": "OK",
      "symbol": "USDIDR=X",
      "currency": "IDR",
-     "quote": 17479.19921875,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": 2.47,
-     "ret_3m_pct": 2.28,
-     "ret_12m_pct": -4.28,
+     "quote": 18103,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": -1.05,
+     "ret_3m_pct": -1.51,
+     "ret_12m_pct": -8.09,
      "note": "IDR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -11804,11 +11804,11 @@
      "status": "OK",
      "symbol": "USDMYR=X",
      "currency": "MYR",
-     "quote": 4.044600009918213,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": 0.95,
-     "ret_3m_pct": 0.93,
-     "ret_12m_pct": 2.7,
+     "quote": 4.05649995803833,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": 0.62,
+     "ret_3m_pct": 0.67,
+     "ret_12m_pct": 2.68,
      "note": "MYR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -11882,11 +11882,11 @@
      "status": "OK",
      "symbol": "USDPHP=X",
      "currency": "PHP",
-     "quote": 62.74599838256836,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": 0.08,
-     "ret_3m_pct": -2.25,
-     "ret_12m_pct": -6.09,
+     "quote": 63.029998779296875,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": -0.54,
+     "ret_3m_pct": -2.56,
+     "ret_12m_pct": -7.07,
      "note": "PHP return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -12305,11 +12305,11 @@
    "iso3": "BGD",
    "region": "emasia",
    "regionLabel": "Emerging Asia",
-   "heat": -0.535,
+   "heat": -2.21,
    "heatLegs": [
     {
      "leg": "fx",
-     "value": -1.07
+     "value": -4.42
     },
     {
      "leg": "credit",
@@ -12326,11 +12326,11 @@
      "status": "OK",
      "symbol": "USDBDT=X",
      "currency": "BDT",
-     "quote": 120.75965881347656,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": -1.07,
-     "ret_3m_pct": 0.43,
-     "ret_12m_pct": -0.01,
+     "quote": 124.81390380859375,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": -4.42,
+     "ret_3m_pct": -1.78,
+     "ret_12m_pct": -3,
      "note": "BDT return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -12377,11 +12377,11 @@
    "iso3": "LKA",
    "region": "emasia",
    "regionLabel": "Emerging Asia",
-   "heat": -0.23,
+   "heat": -1.72,
    "heatLegs": [
     {
      "leg": "fx",
-     "value": -0.46
+     "value": -3.44
     },
     {
      "leg": "credit",
@@ -12398,11 +12398,11 @@
      "status": "OK",
      "symbol": "USDLKR=X",
      "currency": "LKR",
-     "quote": 322.7983093261719,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": -0.46,
-     "ret_3m_pct": 0.6,
-     "ret_12m_pct": -5.58,
+     "quote": 332.53338623046875,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": -3.44,
+     "ret_3m_pct": -2.53,
+     "ret_12m_pct": -8.21,
      "note": "LKR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -12449,11 +12449,11 @@
    "iso3": "PAK",
    "region": "emasia",
    "regionLabel": "Emerging Asia",
-   "heat": 0.05,
+   "heat": -1.495,
    "heatLegs": [
     {
      "leg": "fx",
-     "value": 0.1
+     "value": -2.99
     },
     {
      "leg": "credit",
@@ -12470,11 +12470,11 @@
      "status": "OK",
      "symbol": "USDPKR=X",
      "currency": "PKR",
-     "quote": 268.0084533691406,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": 0.1,
-     "ret_3m_pct": 3.14,
-     "ret_12m_pct": 4.62,
+     "quote": 276.5700988769531,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": -2.99,
+     "ret_3m_pct": 0.29,
+     "ret_12m_pct": 1.69,
      "note": "PKR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -12521,11 +12521,11 @@
    "iso3": "NPL",
    "region": "emasia",
    "regionLabel": "Emerging Asia",
-   "heat": 2.52,
+   "heat": -0.28,
    "heatLegs": [
     {
      "leg": "fx",
-     "value": 2.52
+     "value": -0.28
     }
    ],
    "heatBasis": "unweighted mean of 1 live 1-month USD return proxy: fx",
@@ -12538,11 +12538,11 @@
      "status": "OK",
      "symbol": "USDNPR=X",
      "currency": "NPR",
-     "quote": 146.4652099609375,
-     "asOf": "2026-11-06",
-     "ret_1m_pct": 2.52,
-     "ret_3m_pct": 3.17,
-     "ret_12m_pct": -4.26,
+     "quote": 150.43649291992188,
+     "asOf": "2026-11-07",
+     "ret_1m_pct": -0.28,
+     "ret_3m_pct": 0.34,
+     "ret_12m_pct": -6.86,
      "note": "NPR return against the US dollar (quote inverted: Yahoo prints local units per USD)"
     },
     "equity_etf": {
@@ -12699,22 +12699,22 @@
  "regions": {
   "namerica": {
    "label": "North America",
-   "heat": -0.169,
+   "heat": -0.199,
    "countries": 2
   },
   "latam": {
    "label": "Latin America",
-   "heat": -1.328,
+   "heat": -1.226,
    "countries": 31
   },
   "europe": {
    "label": "Europe",
-   "heat": 0.28,
+   "heat": 0.498,
    "countries": 24
   },
   "emeurope": {
    "label": "Emerging Europe",
-   "heat": -0.169,
+   "heat": -0.228,
    "countries": 19
   },
   "centralasia": {
@@ -12724,27 +12724,27 @@
   },
   "mideast": {
    "label": "Middle East",
-   "heat": -1.302,
+   "heat": -0.985,
    "countries": 12
   },
   "africa": {
    "label": "Africa",
-   "heat": 0.359,
+   "heat": 0.328,
    "countries": 48
   },
   "asia": {
    "label": "Developed Asia",
-   "heat": -4.619,
+   "heat": -4.669,
    "countries": 5
   },
   "apac": {
    "label": "Asia-Pacific",
-   "heat": -1.185,
+   "heat": -0.267,
    "countries": 6
   },
   "emasia": {
    "label": "Emerging Asia",
-   "heat": 0.761,
+   "heat": -0.18,
    "countries": 7
   },
   "seasia": {
