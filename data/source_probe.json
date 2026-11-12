@@ -79,23 +79,23 @@
   {
     "name": "ecb.corp_yields",
     "available": true,
-    "as_of": "2026-11-09",
+    "as_of": "2026-11-10",
     "gap_days": null,
-    "detail": "5670 observations"
+    "detail": "5671 observations"
   },
   {
     "name": "world_bank.debt",
-    "available": true,
+    "available": false,
     "as_of": null,
     "gap_days": null,
-    "detail": "4256 observations"
+    "detail": "ReadTimeout: HTTPSConnectionPool(host='api.worldbank.org', port=443): Read timed out. (read timeout=60)"
   },
   {
     "name": "world_bank.credit_gap_proxy",
-    "available": true,
+    "available": false,
     "as_of": null,
     "gap_days": null,
-    "detail": "5586 observations"
+    "detail": "ReadTimeout: HTTPSConnectionPool(host='api.worldbank.org', port=443): Read timed out. (read timeout=60)"
   },
   {
     "name": "sec_edgar.leverage",
@@ -114,23 +114,23 @@
   {
     "name": "yf_futures.panel",
     "available": true,
-    "as_of": "2026-11-10",
+    "as_of": "2026-11-11",
     "gap_days": null,
-    "detail": "2230 observations"
+    "detail": "2231 observations"
   },
   {
     "name": "yf_options.snapshot",
     "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-11', 'expiry': '2026-11-13', 'underlying': 77.18, 'atm_strike': 77.0, 'atm_iv': 0.1"
+    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-12', 'expiry': '2026-11-20', 'underlying': 77.35, 'atm_strike': 77.5, 'atm_iv': 0.0"
   },
   {
     "name": "yf_fx.panel",
     "available": true,
-    "as_of": "2026-11-11",
+    "as_of": "2026-11-12",
     "gap_days": null,
-    "detail": "2826 observations"
+    "detail": "2827 observations"
   },
   {
     "name": "finra.trace",
