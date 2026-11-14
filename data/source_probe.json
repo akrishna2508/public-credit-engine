@@ -2,9 +2,9 @@
   {
     "name": "fred_ext.treasury_curve",
     "available": true,
-    "as_of": "2026-11-10",
+    "as_of": "2026-11-12",
     "gap_days": null,
-    "detail": "6596 observations"
+    "detail": "6598 observations"
   },
   {
     "name": "fred_ext.moodys",
@@ -16,9 +16,9 @@
   {
     "name": "fred_ext.tips",
     "available": true,
-    "as_of": "2026-11-10",
+    "as_of": "2026-11-12",
     "gap_days": null,
-    "detail": "6224 observations"
+    "detail": "6226 observations"
   },
   {
     "name": "fred_ext.macro_anchors",
@@ -30,30 +30,30 @@
   {
     "name": "fred_ext.regional_credit",
     "available": true,
-    "as_of": "2026-11-11",
+    "as_of": "2026-11-12",
     "gap_days": null,
     "detail": "793 observations"
   },
   {
     "name": "fred_ext.global_sovereign",
     "available": true,
-    "as_of": "2026-11-10",
+    "as_of": "2026-11-12",
     "gap_days": null,
-    "detail": "16921 observations"
+    "detail": "16923 observations"
   },
   {
     "name": "fred_ext.em_sector_credit",
     "available": true,
-    "as_of": "2026-11-11",
+    "as_of": "2026-11-12",
     "gap_days": null,
     "detail": "793 observations"
   },
   {
     "name": "fred_ext.inflation",
     "available": true,
-    "as_of": "2026-11-10",
+    "as_of": "2026-11-12",
     "gap_days": null,
-    "detail": "6224 observations"
+    "detail": "6226 observations"
   },
   {
     "name": "treasury_api.auctions",
@@ -79,16 +79,16 @@
   {
     "name": "ecb.corp_yields",
     "available": true,
-    "as_of": "2026-11-11",
+    "as_of": "2026-11-12",
     "gap_days": null,
-    "detail": "5672 observations"
+    "detail": "5673 observations"
   },
   {
     "name": "world_bank.debt",
-    "available": false,
+    "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "ReadTimeout: HTTPSConnectionPool(host='api.worldbank.org', port=443): Read timed out. (read timeout=60)"
+    "detail": "4256 observations"
   },
   {
     "name": "world_bank.credit_gap_proxy",
@@ -114,16 +114,16 @@
   {
     "name": "yf_futures.panel",
     "available": true,
-    "as_of": "2026-11-12",
+    "as_of": "2026-11-13",
     "gap_days": null,
-    "detail": "2232 observations"
+    "detail": "2233 observations"
   },
   {
     "name": "yf_options.snapshot",
     "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-13', 'expiry': '2026-11-20', 'underlying': 77.35, 'atm_strike': 77.5, 'atm_iv': 0.0"
+    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-14', 'expiry': '2026-11-20', 'underlying': 76.94, 'atm_strike': 77.0, 'atm_iv': 0.1"
   },
   {
     "name": "yf_fx.panel",
