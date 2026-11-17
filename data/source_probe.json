@@ -2,9 +2,9 @@
   {
     "name": "fred_ext.treasury_curve",
     "available": true,
-    "as_of": "2026-11-12",
+    "as_of": "2026-11-13",
     "gap_days": null,
-    "detail": "6598 observations"
+    "detail": "6599 observations"
   },
   {
     "name": "fred_ext.moodys",
@@ -16,9 +16,9 @@
   {
     "name": "fred_ext.tips",
     "available": true,
-    "as_of": "2026-11-12",
+    "as_of": "2026-11-13",
     "gap_days": null,
-    "detail": "6226 observations"
+    "detail": "6227 observations"
   },
   {
     "name": "fred_ext.macro_anchors",
@@ -30,30 +30,30 @@
   {
     "name": "fred_ext.regional_credit",
     "available": true,
-    "as_of": "2026-11-12",
+    "as_of": "2026-11-13",
     "gap_days": null,
-    "detail": "793 observations"
+    "detail": "792 observations"
   },
   {
     "name": "fred_ext.global_sovereign",
     "available": true,
-    "as_of": "2026-11-12",
+    "as_of": "2026-11-13",
     "gap_days": null,
-    "detail": "16923 observations"
+    "detail": "16924 observations"
   },
   {
     "name": "fred_ext.em_sector_credit",
     "available": true,
-    "as_of": "2026-11-12",
+    "as_of": "2026-11-13",
     "gap_days": null,
-    "detail": "793 observations"
+    "detail": "792 observations"
   },
   {
     "name": "fred_ext.inflation",
     "available": true,
-    "as_of": "2026-11-12",
+    "as_of": "2026-11-13",
     "gap_days": null,
-    "detail": "6226 observations"
+    "detail": "6227 observations"
   },
   {
     "name": "treasury_api.auctions",
@@ -72,16 +72,16 @@
   {
     "name": "cftc.cot",
     "available": true,
-    "as_of": "2026-11-03",
+    "as_of": "2026-11-10",
     "gap_days": null,
-    "detail": "3920 observations"
+    "detail": "4018 observations"
   },
   {
     "name": "ecb.corp_yields",
     "available": true,
-    "as_of": "2026-11-12",
+    "as_of": "2026-11-13",
     "gap_days": null,
-    "detail": "5673 observations"
+    "detail": "5674 observations"
   },
   {
     "name": "world_bank.debt",
@@ -114,7 +114,7 @@
   {
     "name": "yf_futures.panel",
     "available": true,
-    "as_of": "2026-11-15",
+    "as_of": "2026-11-16",
     "gap_days": null,
     "detail": "2234 observations"
   },
@@ -123,14 +123,14 @@
     "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-16', 'expiry': '2026-11-20', 'underlying': 76.94, 'atm_strike': 77.0, 'atm_iv': 0.1"
+    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-17', 'expiry': '2026-11-20', 'underlying': 76.73, 'atm_strike': 76.5, 'atm_iv': 0.1"
   },
   {
     "name": "yf_fx.panel",
     "available": true,
-    "as_of": "2026-11-16",
+    "as_of": "2026-11-17",
     "gap_days": null,
-    "detail": "2829 observations"
+    "detail": "2830 observations"
   },
   {
     "name": "finra.trace",

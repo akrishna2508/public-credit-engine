@@ -391,6 +391,17 @@
    "put_call_oi_ratio": 1.4979,
    "atm_straddle_price": 0.38,
    "dte_days": 4
+  },
+  "2026-11-17": {
+   "ticker": "HYG",
+   "as_of": "2026-11-17",
+   "expiry": "2026-11-20",
+   "underlying": 76.73,
+   "atm_strike": 76.5,
+   "atm_iv": 0.1645591357421875,
+   "put_call_oi_ratio": 1.4608,
+   "atm_straddle_price": 0.5,
+   "dte_days": 3
   }
  },
  "LQD": {
@@ -785,6 +796,17 @@
    "put_call_oi_ratio": 0.0011,
    "atm_straddle_price": 0.59,
    "dte_days": 2
+  },
+  "2026-11-17": {
+   "ticker": "LQD",
+   "as_of": "2026-11-17",
+   "expiry": "2026-11-20",
+   "underlying": 102.8,
+   "atm_strike": 103,
+   "atm_iv": 0.11231356445312499,
+   "put_call_oi_ratio": 0.7616,
+   "atm_straddle_price": 0.64,
+   "dte_days": 3
   }
  },
  "TLT": {
@@ -1179,6 +1201,17 @@
    "put_call_oi_ratio": 0.9966,
    "atm_straddle_price": 0.78,
    "dte_days": 2
+  },
+  "2026-11-17": {
+   "ticker": "TLT",
+   "as_of": "2026-11-17",
+   "expiry": "2026-11-20",
+   "underlying": 79.38,
+   "atm_strike": 79.5,
+   "atm_iv": 0.14063359375,
+   "put_call_oi_ratio": 0.7541,
+   "atm_straddle_price": 0.85,
+   "dte_days": 3
   }
  },
  "EMB": {
@@ -1573,6 +1606,17 @@
    "put_call_oi_ratio": 0.5185,
    "atm_straddle_price": 1.2,
    "dte_days": 4
+  },
+  "2026-11-17": {
+   "ticker": "EMB",
+   "as_of": "2026-11-17",
+   "expiry": "2026-11-20",
+   "underlying": 90.72,
+   "atm_strike": 91,
+   "atm_iv": 0.31201859863281245,
+   "put_call_oi_ratio": 0.25,
+   "atm_straddle_price": 1.2,
+   "dte_days": 3
   }
  },
  "ANGL": {
@@ -1793,6 +1837,17 @@
    "put_call_oi_ratio": 0,
    "atm_straddle_price": null,
    "dte_days": 4
+  },
+  "2026-11-17": {
+   "ticker": "ANGL",
+   "as_of": "2026-11-17",
+   "expiry": "2026-11-20",
+   "underlying": 27.29,
+   "atm_strike": 28,
+   "atm_iv": 0.062509375,
+   "put_call_oi_ratio": 0,
+   "atm_straddle_price": null,
+   "dte_days": 3
   }
  },
  "JNK": {
@@ -2169,6 +2224,17 @@
    "put_call_oi_ratio": 4.7436,
    "atm_straddle_price": 1.7,
    "dte_days": 4
+  },
+  "2026-11-17": {
+   "ticker": "JNK",
+   "as_of": "2026-11-17",
+   "expiry": "2026-11-20",
+   "underlying": 92.05,
+   "atm_strike": 92,
+   "atm_iv": 0.21436332519531248,
+   "put_call_oi_ratio": 4.7436,
+   "atm_straddle_price": 1,
+   "dte_days": 3
   }
  }
 }
