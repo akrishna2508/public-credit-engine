@@ -1,8 +1,8 @@
 {
- "generated": "2026-11-17",
+ "generated": "2026-11-18",
  "schema": "per-country instrument grid; heat = unweighted mean of available 1m price-return proxies (bonds + equity leg). Spec legs: term structure (2y/5y/10y/30y + 2s10s), real yield (US T10YIE breakeven only), CDS proxy, RV_30d per country ETF, IV/VRP/ATM-straddle yield (accrued chains), index-futures basis (ES/NQ), SOFR implied rate",
  "regions": {
-  "americas": 0.787,
+  "americas": 0.843,
   "europe": -1.018,
   "asia": 2.291,
   "apac": 0.153,
@@ -16,15 +16,15 @@
    "instruments": {
     "bonds": {
      "notes": "10Y benchmark government bond yield \u2014 US 10Y Treasury (FRED DGS10 + same-day Treasury par-yield; month-end for changes/z)",
-     "yield_pct": 5.12,
-     "as_of": "2026-11-16",
+     "yield_pct": 5.1,
+     "as_of": "2026-11-17",
      "yield_chg_bps": {
-      "1": -17.0,
-      "3": 37.0,
-      "12": 110.0
+      "1": -19.0,
+      "3": 35.0,
+      "12": 108.0
      },
-     "yield_z": 1.766,
-     "bond_price_1m_pct": 1.445
+     "yield_z": 1.751,
+     "bond_price_1m_pct": 1.615
     },
     "cds": {
      "status": "proxy",
@@ -32,8 +32,8 @@
      "note": "US is the base country; corporate CDS proxy = ICE OAS in spreads.py (no free CDS series exist anywhere)"
     },
     "yield_spreads": {
-     "2s10s_bps": 29.0,
-     "2s10s_z": -1.503,
+     "2s10s_bps": 30.0,
+     "2s10s_z": -1.414,
      "vs_us_10y_bps": 0.0
     },
     "equity_etf": {
@@ -43,135 +43,135 @@
      "ret_12m_pct": null
     },
     "bond_curve": {
-     "2y_pct": 4.83,
-     "5y_pct": 4.93,
-     "10y_pct": 5.12,
+     "2y_pct": 4.8,
+     "5y_pct": 4.9,
+     "10y_pct": 5.1,
      "30y_pct": 5.46,
-     "real_10y_pct": 2.92,
-     "breakeven_10y_pct": 2.2,
-     "2s10s_bps": 29.0
+     "real_10y_pct": 2.89,
+     "breakeven_10y_pct": 2.21,
+     "2s10s_bps": 30.0
     },
     "futures": {
      "ES=F/^GSPC": {
       "status": "ok",
-      "as_of": "2026-11-16",
-      "future_last": 7435.75,
-      "spot_last": 7416.59,
-      "dte_days": 4,
-      "basis_ann": 0.2357,
+      "as_of": "2026-11-17",
+      "future_last": 7378.5,
+      "spot_last": 7340.53,
+      "dte_days": 3,
+      "basis_ann": 0.6293,
       "note": "CME third-Friday expiry rule; annualized basis yield = (F-S)/S * 365/DTE (heatmap spec \u00a73.4)"
      },
      "NQ=F/^NDX": {
       "status": "ok",
-      "as_of": "2026-11-16",
-      "future_last": 27366.25,
-      "spot_last": 27197.15,
-      "dte_days": 4,
-      "basis_ann": 0.5673,
+      "as_of": "2026-11-17",
+      "future_last": 27226.75,
+      "spot_last": 27001.79,
+      "dte_days": 3,
+      "basis_ann": 1.0137,
       "note": "CME third-Friday expiry rule; annualized basis yield = (F-S)/S * 365/DTE (heatmap spec \u00a73.4)"
      },
      "ZT=F": {
-      "as_of": "2026-11-16",
-      "last": 101.8671875,
-      "mom_21d": -0.0009960159362549792
+      "as_of": "2026-11-17",
+      "last": 101.90625,
+      "mom_21d": -0.00019162227417313105
      },
      "ZF=F": {
-      "as_of": "2026-11-16",
-      "last": 104.0546875,
-      "mom_21d": -0.00037526268387866324
+      "as_of": "2026-11-17",
+      "last": 104.1796875,
+      "mom_21d": 0.0019535652565931816
      },
      "ZN=F": {
-      "as_of": "2026-11-16",
-      "last": 105.421875,
-      "mom_21d": -0.0002963401985479619
+      "as_of": "2026-11-17",
+      "last": 105.640625,
+      "mom_21d": 0.003711401425178229
      },
      "ZB=F": {
-      "as_of": "2026-11-16",
-      "last": 105.40625,
-      "mom_21d": 0.0
+      "as_of": "2026-11-17",
+      "last": 105.78125,
+      "mom_21d": 0.008040500297796349
      },
      "UB=F": {
-      "as_of": "2026-11-16",
-      "last": 106.375,
-      "mom_21d": -0.00613138686131387
+      "as_of": "2026-11-17",
+      "last": 106.90625,
+      "mom_21d": 0.004109186968006995
      },
      "SR3=F": {
-      "as_of": "2026-11-16",
-      "last": 95.7074966430664
+      "as_of": "2026-11-17",
+      "last": 95.70999908447266
      }
     },
     "irf_spreads": {
-     "sofr_implied_3m_bps": 429.25,
+     "sofr_implied_3m_bps": 429.0,
      "note": "back-month SOFR contracts are not listed on yfinance (404 verified 2026-08-10); strip slope UNAVAILABLE"
     },
     "options": {
      "HYG": {
       "obs_days": 20,
-      "atm_iv_last": 0.1646,
-      "as_of": "2026-11-17",
-      "straddle_yield_ann": 0.0719,
-      "straddle_price_usd": 0.5,
-      "rv_30d": 0.0448,
-      "vrp": 0.1198,
-      "iv_z": 0.19,
-      "put_call_oi_ratio": 1.4608
+      "atm_iv_last": 0.1377,
+      "as_of": "2026-11-18",
+      "straddle_yield_ann": 0.0758,
+      "straddle_price_usd": 0.43,
+      "rv_30d": 0.0436,
+      "vrp": 0.0941,
+      "iv_z": -0.05,
+      "put_call_oi_ratio": 1.4418
      },
      "LQD": {
       "obs_days": 20,
-      "atm_iv_last": 0.1123,
-      "as_of": "2026-11-17",
-      "straddle_yield_ann": 0.0687,
-      "straddle_price_usd": 0.64,
-      "rv_30d": 0.0628,
-      "vrp": 0.0495,
-      "iv_z": -0.562,
-      "put_call_oi_ratio": 0.7616
+      "atm_iv_last": 0.3062,
+      "as_of": "2026-11-18",
+      "straddle_yield_ann": 0.2459,
+      "straddle_price_usd": 1.87,
+      "rv_30d": 0.0624,
+      "vrp": 0.2438,
+      "iv_z": 1.605,
+      "put_call_oi_ratio": 0.7358
      },
      "TLT": {
       "obs_days": 20,
-      "atm_iv_last": 0.1406,
-      "as_of": "2026-11-17",
-      "straddle_yield_ann": 0.1181,
-      "straddle_price_usd": 0.85,
+      "atm_iv_last": 0.165,
+      "as_of": "2026-11-18",
+      "straddle_yield_ann": 0.1376,
+      "straddle_price_usd": 0.81,
       "rv_30d": 0.1118,
-      "vrp": 0.0288,
-      "iv_z": 0.42,
-      "put_call_oi_ratio": 0.7541
+      "vrp": 0.0532,
+      "iv_z": 1.333,
+      "put_call_oi_ratio": 0.7369
      },
      "EMB": {
       "obs_days": 20,
-      "atm_iv_last": 0.312,
-      "as_of": "2026-11-17",
-      "straddle_yield_ann": 0.1459,
-      "straddle_price_usd": 1.2,
-      "rv_30d": 0.0667,
-      "vrp": 0.2453,
-      "iv_z": 1.106,
-      "put_call_oi_ratio": 0.25
+      "atm_iv_last": 0.4219,
+      "as_of": "2026-11-18",
+      "straddle_yield_ann": 0.0819,
+      "straddle_price_usd": 0.55,
+      "rv_30d": 0.0639,
+      "vrp": 0.358,
+      "iv_z": 2.275,
+      "put_call_oi_ratio": 0.2625
      },
      "ANGL": {
       "obs_days": 20,
-      "atm_iv_last": 0.0625,
-      "as_of": "2026-11-17",
-      "rv_30d": 0.0533,
-      "vrp": 0.0092,
-      "iv_z": -0.796,
+      "atm_iv_last": 0.125,
+      "as_of": "2026-11-18",
+      "rv_30d": 0.0526,
+      "vrp": 0.0724,
+      "iv_z": -0.488,
       "put_call_oi_ratio": 0.0
      },
      "JNK": {
       "obs_days": 20,
-      "atm_iv_last": 0.2144,
-      "as_of": "2026-11-17",
-      "straddle_yield_ann": 0.1198,
-      "straddle_price_usd": 1.0,
-      "rv_30d": 0.0464,
-      "vrp": 0.168,
-      "iv_z": 0.604,
-      "put_call_oi_ratio": 4.7436
+      "atm_iv_last": 0.1607,
+      "as_of": "2026-11-18",
+      "straddle_yield_ann": 0.0808,
+      "straddle_price_usd": 0.55,
+      "rv_30d": 0.0451,
+      "vrp": 0.1156,
+      "iv_z": -0.196,
+      "put_call_oi_ratio": 5.5128
      }
     }
    },
-   "heat": 1.445
+   "heat": 1.615
   },
   "DE": {
    "name": "DE",
@@ -192,10 +192,10 @@
     },
     "cds": {
      "status": "proxy",
-     "sovereign_spread_bps": -170.4
+     "sovereign_spread_bps": -168.4
     },
     "yield_spreads": {
-     "vs_us_10y_bps": -170.41,
+     "vs_us_10y_bps": -168.41,
      "vs_us_10y_z": null
     },
     "equity_etf": {
@@ -226,10 +226,10 @@
     },
     "cds": {
      "status": "proxy",
-     "sovereign_spread_bps": -23.0
+     "sovereign_spread_bps": -21.0
     },
     "yield_spreads": {
-     "vs_us_10y_bps": -23.0,
+     "vs_us_10y_bps": -21.0,
      "vs_us_10y_z": null
     },
     "equity_etf": {
@@ -260,10 +260,10 @@
     },
     "cds": {
      "status": "proxy",
-     "sovereign_spread_bps": -44.0
+     "sovereign_spread_bps": -42.0
     },
     "yield_spreads": {
-     "vs_us_10y_bps": -44.0,
+     "vs_us_10y_bps": -42.0,
      "vs_us_10y_z": null
     },
     "equity_etf": {
@@ -294,10 +294,10 @@
     },
     "cds": {
      "status": "proxy",
-     "sovereign_spread_bps": -104.9
+     "sovereign_spread_bps": -102.9
     },
     "yield_spreads": {
-     "vs_us_10y_bps": -104.85,
+     "vs_us_10y_bps": -102.85,
      "vs_us_10y_z": null
     },
     "equity_etf": {
@@ -328,10 +328,10 @@
     },
     "cds": {
      "status": "proxy",
-     "sovereign_spread_bps": 21.9
+     "sovereign_spread_bps": 23.9
     },
     "yield_spreads": {
-     "vs_us_10y_bps": 21.93,
+     "vs_us_10y_bps": 23.93,
      "vs_us_10y_z": null
     },
     "equity_etf": {
@@ -362,10 +362,10 @@
     },
     "cds": {
      "status": "proxy",
-     "sovereign_spread_bps": -236.5
+     "sovereign_spread_bps": -234.5
     },
     "yield_spreads": {
-     "vs_us_10y_bps": -236.5,
+     "vs_us_10y_bps": -234.5,
      "vs_us_10y_z": null
     },
     "equity_etf": {
@@ -396,10 +396,10 @@
     },
     "cds": {
      "status": "proxy",
-     "sovereign_spread_bps": -124.5
+     "sovereign_spread_bps": -122.5
     },
     "yield_spreads": {
-     "vs_us_10y_bps": -124.52,
+     "vs_us_10y_bps": -122.52,
      "vs_us_10y_z": null
     },
     "equity_etf": {
@@ -430,10 +430,10 @@
     },
     "cds": {
      "status": "proxy",
-     "sovereign_spread_bps": -461.0
+     "sovereign_spread_bps": -459.0
     },
     "yield_spreads": {
-     "vs_us_10y_bps": -461.0,
+     "vs_us_10y_bps": -459.0,
      "vs_us_10y_z": null
     },
     "equity_etf": {
@@ -464,10 +464,10 @@
     },
     "cds": {
      "status": "proxy",
-     "sovereign_spread_bps": 14.5
+     "sovereign_spread_bps": 16.5
     },
     "yield_spreads": {
-     "vs_us_10y_bps": 14.5,
+     "vs_us_10y_bps": 16.5,
      "vs_us_10y_z": null
     },
     "equity_etf": {
@@ -498,10 +498,10 @@
     },
     "cds": {
      "status": "proxy",
-     "sovereign_spread_bps": -158.5
+     "sovereign_spread_bps": -156.5
     },
     "yield_spreads": {
-     "vs_us_10y_bps": -158.5,
+     "vs_us_10y_bps": -156.5,
      "vs_us_10y_z": null
     },
     "equity_etf": {
@@ -532,10 +532,10 @@
     },
     "cds": {
      "status": "proxy",
-     "sovereign_spread_bps": -91.0
+     "sovereign_spread_bps": -89.0
     },
     "yield_spreads": {
-     "vs_us_10y_bps": -91.0,
+     "vs_us_10y_bps": -89.0,
      "vs_us_10y_z": null
     },
     "equity_etf": {
@@ -566,10 +566,10 @@
     },
     "cds": {
      "status": "proxy",
-     "sovereign_spread_bps": 413.0
+     "sovereign_spread_bps": 415.0
     },
     "yield_spreads": {
-     "vs_us_10y_bps": 413.0,
+     "vs_us_10y_bps": 415.0,
      "vs_us_10y_z": null
     },
     "equity_etf": {
@@ -600,10 +600,10 @@
     },
     "cds": {
      "status": "proxy",
-     "sovereign_spread_bps": 382.0
+     "sovereign_spread_bps": 384.0
     },
     "yield_spreads": {
-     "vs_us_10y_bps": 382.0,
+     "vs_us_10y_bps": 384.0,
      "vs_us_10y_z": null
     },
     "equity_etf": {
@@ -619,29 +619,29 @@
    "name": "Euro Area",
    "iso": "EZ",
    "region": "europe",
-   "heat": 0.682,
+   "heat": 0.188,
    "instruments": {
     "bonds": {
-     "yield_pct": 3.412,
+     "yield_pct": 3.422,
      "source": "ECB AAA 10Y (daily)",
      "yield_chg_bps": {
-      "1": -8.02,
-      "3": 25.59,
-      "12": 66.11
+      "1": -2.21,
+      "3": 20.98,
+      "12": 64.12
      },
      "curve": {
-      "1y_pct": 2.956,
-      "2y_pct": 3.072,
-      "5y_pct": 3.148,
-      "10y_pct": 3.412,
+      "1y_pct": 2.987,
+      "2y_pct": 3.109,
+      "5y_pct": 3.174,
+      "10y_pct": 3.422,
       "30y_pct": 3.672,
-      "2s10s_bps": 34.0,
+      "2s10s_bps": 31.3,
       "note": "real yield UNAVAILABLE: no free euro-area breakeven series"
      }
     },
     "yield_spreads": {
-     "2s10s_bps": 33.98,
-     "2s10s_z": -1.522
+     "2s10s_bps": 31.33,
+     "2s10s_z": -1.656
     },
     "cds": {
      "status": "UNAVAILABLE"
