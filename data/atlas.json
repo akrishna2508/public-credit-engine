@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-22",
+ "generated": "2026-11-23",
  "schema": "per-country instrument grid; heat = unweighted mean of available 1m price-return proxies (bonds + equity leg). Spec legs: term structure (2y/5y/10y/30y + 2s10s), real yield (US T10YIE breakeven only), CDS proxy, RV_30d per country ETF, IV/VRP/ATM-straddle yield (accrued chains), index-futures basis (ES/NQ), SOFR implied rate",
  "regions": {
   "americas": 1.353,
@@ -55,119 +55,119 @@
      "ES=F/^GSPC": {
       "status": "ok",
       "as_of": "2026-11-20",
-      "future_last": 6935.0,
+      "future_last": 7076.0,
       "spot_last": 6910.39,
       "dte_days": 28,
-      "basis_ann": 0.0464,
+      "basis_ann": 0.3124,
       "note": "CME third-Friday expiry rule; annualized basis yield = (F-S)/S * 365/DTE (heatmap spec \u00a73.4)"
      },
      "NQ=F/^NDX": {
       "status": "ok",
       "as_of": "2026-11-20",
-      "future_last": 25126.5,
+      "future_last": 25789.0,
       "spot_last": 25028.98,
       "dte_days": 28,
-      "basis_ann": 0.0508,
+      "basis_ann": 0.3958,
       "note": "CME third-Friday expiry rule; annualized basis yield = (F-S)/S * 365/DTE (heatmap spec \u00a73.4)"
      },
      "ZT=F": {
-      "as_of": "2026-11-20",
-      "last": 102.2421875,
-      "mom_21d": 0.0006881786205841234
+      "as_of": "2026-11-22",
+      "last": 102.15625,
+      "mom_21d": 0.0006887579398484611
      },
      "ZF=F": {
-      "as_of": "2026-11-20",
-      "last": 105.0078125,
-      "mom_21d": 0.0032094342439170642
+      "as_of": "2026-11-22",
+      "last": 104.828125,
+      "mom_21d": 0.0030649622486356165
      },
      "ZN=F": {
-      "as_of": "2026-11-20",
-      "last": 106.84375,
-      "mom_21d": 0.004111600587371589
+      "as_of": "2026-11-22",
+      "last": 106.59375,
+      "mom_21d": 0.004121283485428284
      },
      "ZB=F": {
-      "as_of": "2026-11-20",
-      "last": 107.625,
-      "mom_21d": -0.001160092807424573
+      "as_of": "2026-11-22",
+      "last": 107.25,
+      "mom_21d": 0.0
      },
      "UB=F": {
-      "as_of": "2026-11-20",
-      "last": 109.34375,
-      "mom_21d": -0.0019965772960638395
+      "as_of": "2026-11-22",
+      "last": 108.875,
+      "mom_21d": -0.0008603383997706215
      },
      "SR3=F": {
-      "as_of": "2026-11-20",
-      "last": 95.76499938964844
+      "as_of": "2026-11-22",
+      "last": 95.74250030517578
      }
     },
     "irf_spreads": {
-     "sofr_implied_3m_bps": 423.5,
+     "sofr_implied_3m_bps": 425.75,
      "note": "back-month SOFR contracts are not listed on yfinance (404 verified 2026-08-10); strip slope UNAVAILABLE"
     },
     "options": {
      "HYG": {
       "obs_days": 20,
-      "atm_iv_last": 0.187,
-      "as_of": "2026-11-22",
-      "straddle_yield_ann": 0.0537,
+      "atm_iv_last": 0.2051,
+      "as_of": "2026-11-23",
+      "straddle_yield_ann": 0.0601,
       "straddle_price_usd": 0.48,
       "rv_30d": 0.0441,
-      "vrp": 0.1429,
-      "iv_z": 1.857,
+      "vrp": 0.161,
+      "iv_z": 2.004,
       "put_call_oi_ratio": 1.2873
      },
      "LQD": {
       "obs_days": 20,
-      "atm_iv_last": 0.1577,
-      "as_of": "2026-11-22",
+      "atm_iv_last": 0.1821,
+      "as_of": "2026-11-23",
       "rv_30d": 0.0645,
-      "vrp": 0.0932,
-      "iv_z": 0.294,
+      "vrp": 0.1176,
+      "iv_z": 0.71,
       "put_call_oi_ratio": 0.1787
      },
      "TLT": {
       "obs_days": 20,
-      "atm_iv_last": 0.1191,
-      "as_of": "2026-11-22",
-      "straddle_yield_ann": 0.1151,
+      "atm_iv_last": 0.1372,
+      "as_of": "2026-11-23",
+      "straddle_yield_ann": 0.141,
       "straddle_price_usd": 0.85,
       "rv_30d": 0.1165,
-      "vrp": 0.0026,
-      "iv_z": -0.119,
+      "vrp": 0.0207,
+      "iv_z": 0.644,
       "put_call_oi_ratio": 0.7318
      },
      "EMB": {
       "obs_days": 20,
-      "atm_iv_last": 0.177,
-      "as_of": "2026-11-22",
-      "straddle_yield_ann": 0.0808,
+      "atm_iv_last": 0.1803,
+      "as_of": "2026-11-23",
+      "straddle_yield_ann": 0.0824,
       "straddle_price_usd": 1.94,
       "rv_30d": 0.066,
-      "vrp": 0.111,
-      "iv_z": -0.997,
+      "vrp": 0.1143,
+      "iv_z": -0.992,
       "put_call_oi_ratio": 26.9077
      },
      "ANGL": {
       "obs_days": 20,
-      "atm_iv_last": 0.7207,
-      "as_of": "2026-11-22",
-      "straddle_yield_ann": 0.2193,
+      "atm_iv_last": 0.7271,
+      "as_of": "2026-11-23",
+      "straddle_yield_ann": 0.2214,
       "straddle_price_usd": 2.28,
       "rv_30d": 0.0529,
-      "vrp": 0.6678,
-      "iv_z": 1.587,
+      "vrp": 0.6742,
+      "iv_z": 1.514,
       "put_call_oi_ratio": 0.375
      },
      "JNK": {
       "obs_days": 20,
-      "atm_iv_last": 0.117,
-      "as_of": "2026-11-22",
-      "straddle_yield_ann": 0.0798,
+      "atm_iv_last": 0.1193,
+      "as_of": "2026-11-23",
+      "straddle_yield_ann": 0.0814,
       "straddle_price_usd": 1.95,
       "rv_30d": 0.0458,
-      "vrp": 0.0712,
-      "iv_z": -0.867,
-      "put_call_oi_ratio": 52.6684
+      "vrp": 0.0735,
+      "iv_z": -0.801,
+      "put_call_oi_ratio": 52.8041
      }
     }
    },
