@@ -2,9 +2,9 @@
   {
     "name": "fred_ext.treasury_curve",
     "available": true,
-    "as_of": "2026-11-19",
+    "as_of": "2026-11-20",
     "gap_days": null,
-    "detail": "6603 observations"
+    "detail": "6604 observations"
   },
   {
     "name": "fred_ext.moodys",
@@ -16,9 +16,9 @@
   {
     "name": "fred_ext.tips",
     "available": true,
-    "as_of": "2026-11-19",
+    "as_of": "2026-11-20",
     "gap_days": null,
-    "detail": "6231 observations"
+    "detail": "6232 observations"
   },
   {
     "name": "fred_ext.macro_anchors",
@@ -30,30 +30,30 @@
   {
     "name": "fred_ext.regional_credit",
     "available": true,
-    "as_of": "2026-11-19",
+    "as_of": "2026-11-20",
     "gap_days": null,
-    "detail": "794 observations"
+    "detail": "792 observations"
   },
   {
     "name": "fred_ext.global_sovereign",
     "available": true,
-    "as_of": "2026-11-19",
+    "as_of": "2026-11-20",
     "gap_days": null,
-    "detail": "16928 observations"
+    "detail": "16929 observations"
   },
   {
     "name": "fred_ext.em_sector_credit",
     "available": true,
-    "as_of": "2026-11-19",
+    "as_of": "2026-11-20",
     "gap_days": null,
-    "detail": "794 observations"
+    "detail": "792 observations"
   },
   {
     "name": "fred_ext.inflation",
     "available": true,
-    "as_of": "2026-11-19",
+    "as_of": "2026-11-20",
     "gap_days": null,
-    "detail": "6231 observations"
+    "detail": "6232 observations"
   },
   {
     "name": "treasury_api.auctions",
@@ -79,23 +79,23 @@
   {
     "name": "ecb.corp_yields",
     "available": true,
-    "as_of": "2026-11-19",
+    "as_of": "2026-11-20",
     "gap_days": null,
-    "detail": "5678 observations"
+    "detail": "5679 observations"
   },
   {
     "name": "world_bank.debt",
-    "available": false,
+    "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "ReadTimeout: HTTPSConnectionPool(host='api.worldbank.org', port=443): Read timed out. (read timeout=60)"
+    "detail": "4256 observations"
   },
   {
     "name": "world_bank.credit_gap_proxy",
-    "available": false,
+    "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "ReadTimeout: HTTPSConnectionPool(host='api.worldbank.org', port=443): Read timed out. (read timeout=60)"
+    "detail": "5586 observations"
   },
   {
     "name": "sec_edgar.leverage",
@@ -114,23 +114,23 @@
   {
     "name": "yf_futures.panel",
     "available": true,
-    "as_of": "2026-11-22",
+    "as_of": "2026-11-24",
     "gap_days": null,
-    "detail": "2239 observations"
+    "detail": "2240 observations"
   },
   {
     "name": "yf_options.snapshot",
     "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-23', 'expiry': '2026-11-27', 'underlying': 76.33, 'atm_strike': 76.5, 'atm_iv': 0.2"
+    "detail": "[{'ticker': 'ANGL', 'as_of': '2026-11-24', 'expiry': '2027-01-15', 'underlying': 27.11, 'atm_strike': 28.0, 'atm_iv': 0."
   },
   {
     "name": "yf_fx.panel",
     "available": true,
-    "as_of": "2026-11-23",
+    "as_of": "2026-11-24",
     "gap_days": null,
-    "detail": "2834 observations"
+    "detail": "2835 observations"
   },
   {
     "name": "finra.trace",
