@@ -57,17 +57,17 @@
   },
   {
     "name": "treasury_api.auctions",
-    "available": true,
+    "available": false,
     "as_of": null,
     "gap_days": null,
-    "detail": "25 observations"
+    "detail": "SourceUnavailable: treasury_api UNAVAILABLE: request failed: 504 Server Error: Gateway Time-out for url: https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/auctions_query?sort=-auction_date"
   },
   {
     "name": "treasury_api.debt_to_penny",
-    "available": true,
+    "available": false,
     "as_of": null,
     "gap_days": null,
-    "detail": "60 observations"
+    "detail": "SourceUnavailable: treasury_api UNAVAILABLE: request failed: 504 Server Error: Gateway Time-out for url: https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/debt_to_penny?sort=-record_date&l"
   },
   {
     "name": "cftc.cot",
@@ -79,9 +79,9 @@
   {
     "name": "ecb.corp_yields",
     "available": true,
-    "as_of": "2026-11-24",
+    "as_of": "2026-11-25",
     "gap_days": null,
-    "detail": "5681 observations"
+    "detail": "5682 observations"
   },
   {
     "name": "world_bank.debt",
@@ -114,30 +114,30 @@
   {
     "name": "yf_futures.panel",
     "available": true,
-    "as_of": "2026-11-25",
+    "as_of": "2026-11-26",
     "gap_days": null,
-    "detail": "2241 observations"
+    "detail": "2242 observations"
   },
   {
     "name": "yf_options.snapshot",
     "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-26', 'expiry': '2026-12-04', 'underlying': 76.52, 'atm_strike': 76.5, 'atm_iv': 0.0"
+    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-27', 'expiry': '2026-12-04', 'underlying': 76.52, 'atm_strike': 76.5, 'atm_iv': 0.0"
   },
   {
     "name": "yf_fx.panel",
     "available": true,
-    "as_of": "2026-11-26",
+    "as_of": "2026-11-27",
     "gap_days": null,
-    "detail": "2837 observations"
+    "detail": "2838 observations"
   },
   {
     "name": "finra.trace",
     "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "3064 observations"
+    "detail": "3060 observations"
   },
   {
     "name": "optional.alpaca",
