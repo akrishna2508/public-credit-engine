@@ -2,9 +2,9 @@
   {
     "name": "fred_ext.treasury_curve",
     "available": true,
-    "as_of": "2026-11-24",
+    "as_of": "2026-11-25",
     "gap_days": null,
-    "detail": "6606 observations"
+    "detail": "6607 observations"
   },
   {
     "name": "fred_ext.moodys",
@@ -16,9 +16,9 @@
   {
     "name": "fred_ext.tips",
     "available": true,
-    "as_of": "2026-11-24",
+    "as_of": "2026-11-25",
     "gap_days": null,
-    "detail": "6234 observations"
+    "detail": "6235 observations"
   },
   {
     "name": "fred_ext.macro_anchors",
@@ -30,44 +30,44 @@
   {
     "name": "fred_ext.regional_credit",
     "available": true,
-    "as_of": "2026-11-24",
+    "as_of": "2026-11-26",
     "gap_days": null,
-    "detail": "793 observations"
+    "detail": "794 observations"
   },
   {
     "name": "fred_ext.global_sovereign",
     "available": true,
-    "as_of": "2026-11-24",
+    "as_of": "2026-11-25",
     "gap_days": null,
-    "detail": "16931 observations"
+    "detail": "16932 observations"
   },
   {
     "name": "fred_ext.em_sector_credit",
     "available": true,
-    "as_of": "2026-11-24",
+    "as_of": "2026-11-26",
     "gap_days": null,
-    "detail": "793 observations"
+    "detail": "794 observations"
   },
   {
     "name": "fred_ext.inflation",
     "available": true,
-    "as_of": "2026-11-24",
+    "as_of": "2026-11-25",
     "gap_days": null,
-    "detail": "6234 observations"
+    "detail": "6235 observations"
   },
   {
     "name": "treasury_api.auctions",
-    "available": false,
+    "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "SourceUnavailable: treasury_api UNAVAILABLE: request failed: 504 Server Error: Gateway Time-out for url: https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/auctions_query?sort=-auction_date"
+    "detail": "25 observations"
   },
   {
     "name": "treasury_api.debt_to_penny",
-    "available": false,
+    "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "SourceUnavailable: treasury_api UNAVAILABLE: request failed: 504 Server Error: Gateway Time-out for url: https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/debt_to_penny?sort=-record_date&l"
+    "detail": "60 observations"
   },
   {
     "name": "cftc.cot",
@@ -79,9 +79,9 @@
   {
     "name": "ecb.corp_yields",
     "available": true,
-    "as_of": "2026-11-25",
+    "as_of": "2026-11-26",
     "gap_days": null,
-    "detail": "5682 observations"
+    "detail": "5683 observations"
   },
   {
     "name": "world_bank.debt",
@@ -114,7 +114,7 @@
   {
     "name": "yf_futures.panel",
     "available": true,
-    "as_of": "2026-11-26",
+    "as_of": "2026-11-27",
     "gap_days": null,
     "detail": "2242 observations"
   },
@@ -123,7 +123,7 @@
     "available": true,
     "as_of": null,
     "gap_days": null,
-    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-27', 'expiry': '2026-12-04', 'underlying': 76.52, 'atm_strike': 76.5, 'atm_iv': 0.0"
+    "detail": "[{'ticker': 'HYG', 'as_of': '2026-11-28', 'expiry': '2026-12-04', 'underlying': 76.61, 'atm_strike': 76.5, 'atm_iv': 0.0"
   },
   {
     "name": "yf_fx.panel",
